@@ -5,22 +5,34 @@ document.addEventListener('DOMContentLoaded', () => {
   /* =========================
      NAVBAR SCROLL
   ========================== */
-  const navbar = document.getElementById('mainNavbar');
+  (function () {
+  function applyNavbarScroll() {
+    const nav = document.getElementById("mainNavbar");
+    if (!nav) return;
 
-  const handleNavbarScroll = () => {
-    if (!navbar) return;
+    const onScroll = () => {
+      if (window.scrollY > 10) {
+        nav.classList.add("navbar-scrolled");
+        nav.classList.remove("navbar-transparent");
+      } else {
+        nav.classList.remove("navbar-scrolled");
+        nav.classList.add("navbar-transparent");
+      }
+    };
 
-    if (window.scrollY > 10) {
-      navbar.classList.add('navbar-scrolled');
-      navbar.classList.remove('navbar-transparent');
-    } else {
-      navbar.classList.add('navbar-transparent');
-      navbar.classList.remove('navbar-scrolled');
-    }
-  };
+    // init + listen
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
 
-  handleNavbarScroll();
-  window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+  // jalan setelah DOM siap
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyNavbarScroll);
+  } else {
+    applyNavbarScroll();
+  }
+})();
+
 
   /* =========================
      COUNT UP NUMBER
@@ -93,4 +105,30 @@ if (revealEls.length) {
 
     revealEls.forEach(el => observer.observe(el));
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const counters = document.querySelectorAll(".stat-number");
+  const duration = 2000; // 2 detik
+
+  counters.forEach(counter => {
+    const target = +counter.dataset.target;
+    let start = 0;
+    const startTime = performance.now();
+
+    function update(now) {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const value = Math.floor(progress * target);
+
+      counter.textContent = value.toLocaleString("id-ID");
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        counter.textContent = target.toLocaleString("id-ID");
+      }
+    }
+
+    requestAnimationFrame(update);
+  });
 });

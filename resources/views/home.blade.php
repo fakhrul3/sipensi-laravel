@@ -16,7 +16,7 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
             <p class="fs-5 mb-4 text-white reveal d-1">
               Platform terpadu untuk mengakses informasi Inkubator<br>
@@ -37,7 +37,7 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
             <p class="fs-5 mb-4 text-white reveal d-1">
               Platform terpadu untuk mengakses informasi Inkubator<br>
@@ -59,7 +59,7 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
             <p class="fs-5 mb-4 text-white reveal d-1">
               Platform terpadu untuk mengakses informasi Inkubator<br>
@@ -81,7 +81,7 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
             <p class="fs-5 mb-4 text-white reveal d-1">
               Platform terpadu untuk mengakses informasi Inkubator<br>
@@ -103,7 +103,7 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
             <p class="fs-5 mb-4 text-white reveal d-1">
               Platform terpadu untuk mengakses informasi Inkubator<br>

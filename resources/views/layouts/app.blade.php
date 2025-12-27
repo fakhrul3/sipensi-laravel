@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="id">
 <head>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=KoHo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -12,6 +18,7 @@
   {{-- Base CSS (dashboard) --}}
   <link rel="stylesheet" href="{{ asset('css/sipensi.css') }}">
   <link rel="stylesheet" href="{{ asset('css/page-transition.css') }}">
+  
 
   @stack('styles')
 </head>
@@ -27,6 +34,7 @@
 
   {{-- Global JS --}}
   <script src="{{ asset('js/page-transition.js') }}" defer></script>
+  <script src="{{ asset('js/navbar.js') }}" defer></script>
 
   {{-- Home JS only (optional) --}}
   @if (request()->routeIs('home'))
@@ -36,5 +44,6 @@
   @include('partials.footer')
 
   @stack('scripts')
+
 </body>
 </html>

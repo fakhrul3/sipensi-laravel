@@ -57,6 +57,26 @@ html, body {
   color: #000;
 }
 
+/* === FIX: geser menu sedikit ke kiri + bold === */
+#mainNavbar .menu-center {
+  font-weight: 800; /* bold */
+}
+
+/* ===== FIX: active menu tetap putih saat scroll ===== */
+#mainNavbar.navbar-scrolled .menu-center .nav-link.active {
+  color: #fff !important;
+  background: #22466C;
+  border-radius: 8px;
+}
+
+
+@media (min-width: 992px){
+  #mainNavbar .menu-center{
+    transform: translateX(-55px) !important; /* kecilin/naikin angka kalau mau */
+  }
+}
+
+
 /* =========================
    MENU CENTER
 ========================= */
@@ -131,10 +151,7 @@ html, body {
   z-index: 1;
 }
 .hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  z-index: 2;
+  display: none;
 }
 .hero-content {
   position: relative;
@@ -456,4 +473,10 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   color:#fff;
   transform: translateY(-1px);
   box-shadow: 0 10px 26px rgba(0,0,0,.18);
+} 
+
+
+.stat-number {
+  font-weight: 900;
+  font-size: 56px;
 }
