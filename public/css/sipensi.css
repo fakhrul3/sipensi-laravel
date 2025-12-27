@@ -568,6 +568,18 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   opacity: .9;
 }
 
+.footer-contact li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-contact i {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+
 /* RESPONSIVE */
 @media (max-width: 991px){
   .footer-brand-logo{
