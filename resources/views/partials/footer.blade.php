@@ -47,6 +47,12 @@
               @ehub.incubase
             </a>
           </li>
+          <li>
+            <i class="fa-brands fa-whatsapp"></i>
+            <a href="https://wa.me/62811380280" target="_blank" rel="noopener">
+                (+62) 811-380-280
+            </a>
+          </li>
         </ul>
       </div>
 
