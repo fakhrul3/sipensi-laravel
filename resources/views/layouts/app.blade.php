@@ -33,6 +33,8 @@
     <script src="{{ asset('js/home.js') }}" defer></script>
   @endif
 
+  @include('partials.footer')
+
   @stack('scripts')
 </body>
 </html>
