@@ -1,0 +1,6 @@
+# Folder ini digunakan untuk menyimpan file static seperti images, icons, dll.
+# File di folder ini bisa diakses langsung melalui URL root, contoh:
+# /logo.png akan mengakses file /public/logo.png
+
+
+

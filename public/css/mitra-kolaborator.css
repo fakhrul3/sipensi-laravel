@@ -1,0 +1,405 @@
+/* Google Font KoHo */
+@import url('https://fonts.googleapis.com/css2?family=KoHo:wght@400;600;700&display=swap');
+
+/* =========================
+   HERO WRAPPER + BG
+========================= */
+.mitra-hero{
+  position: relative;
+  min-height: 100vh;
+  padding-top: 90px;   /* aman dari navbar */
+  padding-bottom: 80px;
+  overflow: hidden;
+}
+
+.mitra-bg{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.mitra-bg-layer{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.1s ease;
+  transform: scale(1.03);
+}
+
+.mitra-bg-layer.active{ opacity: 1; }
+
+/* Supaya konten di atas background */
+.mitra-hero .container{
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   TITLE
+========================= */
+.mitra-title-wrap{
+  margin-top: 10px;     /* TURUNIN dikit */
+  margin-bottom: 6px;   /* rapetin ke tabs */
+  text-align: center;
+}
+
+.mitra-title{
+  font-family: 'KoHo', sans-serif;
+  font-size: 70px;
+  font-weight: 700;
+  color: #deb95c;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  /* shadow biar kebaca di atas foto */
+  text-shadow:
+    0 2px 6px rgba(0,0,0,.35),
+    0 6px 18px rgba(0,0,0,.25),
+    0 12px 32px rgba(0,0,0,.18);
+
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+.mitra-subtitle{
+  margin: 4px 0 0 0 !important;
+  font-size: 14px;
+  color: rgba(0,0,0,.70);
+  text-shadow: 0 2px 8px rgba(255,255,255,.35);
+}
+
+/* =========================
+   TABS (mirip tombol "Selengkapnya")
+========================= */
+.mitra-tabs{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  margin: 6px 0 18px 0 !important; /* rapetin gap yg kamu tanda merah */
+  padding: 0;
+
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.mitra-tabs::-webkit-scrollbar{ height: 6px; }
+.mitra-tabs::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.15); border-radius: 999px; }
+
+.mitra-tabs .nav-link{
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(170,170,170,.55);
+  color: rgba(20,20,20,.75);
+
+  font-size:14px;
+  font-weight: 600;
+
+  padding: 7px 16px;
+  border-radius: 999px;
+
+  transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  backdrop-filter: blur(6px);
+}
+
+.mitra-tabs .nav-link:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.88);
+}
+
+.mitra-tabs .nav-link.active{
+  background: rgba(255,255,255,.92);
+  border-color: rgba(71,136,171,.55);
+  color: #4788AB;
+}
+
+.mitra-tabs .badge{
+  background: rgba(0,0,0,.08);
+  color: inherit;
+  margin-left: 6px;
+  font-size: 11px;
+  padding: .25em .55em;
+}
+
+/* =========================
+   LOGO WRAP + GRID (3x3)
+========================= */
+.mitra-logos-wrap{
+  position: relative;
+  margin-top: 10px;
+}
+
+.mitra-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  transition: opacity .22s ease, transform .22s ease;
+}
+
+/* transisi paging */
+.mitra-grid.is-fading{
+  opacity: 0;
+  transform: translateX(var(--shift, 0px));
+}
+
+.mitra-card{
+  background: rgba(255,255,255,.92);
+  border-radius: 16px;
+  padding: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.mitra-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.18);
+}
+
+.mitra-card img{
+  max-width: 100%;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+/* hide item non-aktif */
+.mitra-card.is-hidden{ display: none !important; }
+
+/* =========================
+   ARROWS (mirip hero section)
+========================= */
+.mitra-nav-btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  margin: 0;
+
+  font-family: inherit;
+  font-size: 56px;
+  line-height: 1;
+  color: rgba(255,255,255,.9);
+  text-shadow: 0 10px 26px rgba(0,0,0,.35);
+
+  cursor: pointer;
+  z-index: 5;
+  display: none; /* JS yang nyalain kalau pages > 1 */
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.mitra-nav-btn:hover{
+  transform: translateY(-50%) scale(1.08);
+}
+
+.mitra-prev{ left: -22px; }
+.mitra-next{ right: -22px; }
+
+@media (max-width: 992px){
+  .mitra-prev{ left: -10px; }
+  .mitra-next{ right: -10px; }
+  .mitra-nav-btn{ font-size: 52px; }
+}
+
+/* =========================
+   INDICATOR
+========================= */
+.mitra-page-indicator{
+  margin-top: 14px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0,0,0,.65);
+  text-shadow: 0 2px 8px rgba(255,255,255,.30);
+  display: none;
+}
+
+/* =========================
+   ANIMASI SCROLL
+========================= */
+.mitra-animate{
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+.mitra-animate.in-view{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   TAB TRANSITION (SMOOTH)
+========================= */
+
+/* Override bootstrap tab fade biar lebih halus */
+.tab-pane{
+  transition: opacity .35s ease, transform .35s ease;
+  transform: translateY(10px);
+  will-change: opacity, transform;
+}
+
+.tab-pane.show.active{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tab-pane.fade:not(.show){
+  opacity: 0;
+}
+
+/* Smooth untuk semua elemen penting ketika tab berubah */
+.mitra-title-wrap,
+.mitra-tabs,
+.mitra-logos-wrap,
+.mitra-grid,
+.mitra-page-indicator{
+  transition: opacity .35s ease, transform .35s ease;
+  will-change: opacity, transform;
+}
+
+/* state animasi saat ganti tab (di-set oleh JS) */
+.mitra-tab-animating .mitra-title-wrap,
+.mitra-tab-animating .mitra-tabs,
+.mitra-tab-animating .mitra-logos-wrap{
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.mitra-tab-animating.tab-ready .mitra-title-wrap,
+.mitra-tab-animating.tab-ready .mitra-tabs,
+.mitra-tab-animating.tab-ready .mitra-logos-wrap{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* optional: reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .tab-pane,
+  .mitra-title-wrap,
+  .mitra-tabs,
+  .mitra-logos-wrap,
+  .mitra-grid,
+  .mitra-page-indicator{
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ===============================
+   TITLE SMOOTH TRANSITION
+=============================== */
+
+.mitra-title{
+  transition: opacity .35s ease, transform .35s ease;
+  will-change: opacity, transform;
+}
+
+/* saat tab mulai berganti → title fade-out dikit */
+.mitra-tab-animating .mitra-title{
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* saat tab sudah siap → fade-in halus */
+.mitra-tab-animating.tab-ready .mitra-title{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   NO BLINK ON TAB SWITCH
+   - background & title stay
+   - only content cross-fades
+========================= */
+
+/* pastikan background tidak ikut efek apa pun */
+.mitra-bg,
+.mitra-bg-layer{
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+/* TITLE: stay, jangan ikut anim tab */
+.mitra-title-wrap,
+.mitra-title,
+.mitra-subtitle{
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* TAB CONTENT cross-fade (ini kuncinya) */
+.tab-content{
+  position: relative;
+}
+
+/* jangan pakai transisi bootstrap default yang kadang "snap" */
+.tab-pane{
+  display: block !important;         /* tetap ada di flow supaya bisa fade */
+  position: absolute;
+  left: 0; right: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+/* hanya tab aktif yang kelihatan */
+.tab-pane.active{
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* biar tinggi container mengikuti tab aktif */
+.tab-content{
+  min-height: 420px; /* sesuaikan, biar gak jump */
+}
+
+/* optional: reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .tab-pane{ transition: none !important; transform:none !important; }
+}
+
+/* ===============================
+   NAVBAR (match dashboard behavior)
+================================ */
+#mainNavbar{
+  transition: background-color .25s ease, box-shadow .25s ease, backdrop-filter .25s ease;
+}
+
+/* posisi awal di hero */
+#mainNavbar.navbar-transparent{
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* saat discroll */
+#mainNavbar.navbar-scrolled{
+  background: rgba(255,255,255,.92) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(0,0,0,.12) !important;
+}
+
+/* optional: warna teks menu ikut kebaca */
+#mainNavbar.navbar-transparent .nav-link{
+  color: rgba(255,255,255,.92) !important;
+}
+#mainNavbar.navbar-scrolled .nav-link{
+  color: rgba(0,0,0,.75) !important;
+}
+#mainNavbar.navbar-scrolled .nav-link.active{
+  color: rgba(0,0,0,.95) !important;
+}
+
+
+/* smooth tab content enter (tanpa ngedip title/bg) */
+.tab-pane.tab-soft-enter { opacity: 0; transform: translateY(6px); }
+.tab-pane { transition: opacity .22s ease, transform .22s ease; }

@@ -1,0 +1,15 @@
+/* Smooth cross-page transition (dashboard <-> mitra) */
+.app-body {
+  opacity: 1;
+  transition: opacity .25s ease, filter .25s ease;
+}
+
+.app-body.is-leaving {
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.app-body.is-entering {
+  opacity: 0;
+  filter: blur(2px);
+}

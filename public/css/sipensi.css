@@ -1,0 +1,459 @@
+/* =========================
+   GLOBAL FONT
+========================= */
+html, body {
+  font-family: "KoHo", system-ui, -apple-system, "Segoe UI",
+               Roboto, Arial, sans-serif;
+}
+
+/* =========================
+   NAVBAR BASE
+========================= */
+#mainNavbar {
+  min-height: 72px;
+  padding: 10px 0;
+  background: transparent;
+  box-shadow: none;
+  transition:
+    background-color .35s ease,
+    box-shadow .35s ease,
+    backdrop-filter .35s ease;
+}
+
+/* tombol prev & next */
+.carousel-control-prev,
+.carousel-control-next{
+  z-index: 5;
+}
+
+/* Brand */
+#mainNavbar.navbar-scrolled .navbar-brand img{
+  filter: none;
+}
+
+/* =========================
+   NAVBAR STATE: TRANSPARENT
+========================= */
+#mainNavbar.navbar-transparent .nav-link {
+  color: rgba(255,255,255,.92);
+}
+#mainNavbar.navbar-transparent .nav-link:hover {
+  color: #ffffff;
+}
+
+/* =========================
+   NAVBAR STATE: SCROLLED
+========================= */
+#mainNavbar.navbar-scrolled {
+  background-color: #ffffff !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12) !important;
+  padding: 6px 0;
+}
+#mainNavbar.navbar-scrolled .nav-link {
+  color: rgba(0,0,0,.78);
+}
+#mainNavbar.navbar-scrolled .nav-link:hover {
+  color: #000;
+}
+
+/* =========================
+   MENU CENTER
+========================= */
+.menu-center {
+  display: flex;
+  gap: 14px;
+}
+.menu-center .nav-link {
+  position: relative;
+  padding: 6px 14px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  transition: color .25s ease, background-color .25s ease;
+}
+.menu-center .nav-link:hover,
+.menu-center .nav-link.active {
+  background: #22466C;
+  color: #fff !important;
+  border-radius: 8px;
+}
+
+/* underline scroll only */
+#mainNavbar.navbar-scrolled .menu-center .nav-link:not(.active)::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  transform: translateX(-50%);
+  width: 75%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #4788AB, transparent);
+  opacity: .7;
+}
+.menu-center .nav-link:hover::after,
+.menu-center .nav-link.active::after {
+  display: none;
+}
+
+/* tombol masuk */
+.navbar-actions .btn {
+  background: #22466C;
+  border-color: #22466C;
+  font-weight: 600;
+  padding: 6px 18px;
+  transition: background-color .25s ease;
+}
+.navbar-actions .btn:hover {
+  background: #1a3856;
+  border-color: #1a3856;
+}
+
+/* =========================
+   HERO
+========================= */
+.hero {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.hero-carousel,
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item {
+  height: 100vh;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+  z-index: 1;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 2;
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* HERO LOGO */
+.hero-title-logo{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:16px;
+}
+.hero-logo{
+  display:block;
+  width: clamp(180px, 28vw, 420px);
+  height: auto;
+  max-height: 140px;
+  object-fit: contain;
+}
+
+/* =================================
+   BUTTON: HERO (Selengkapnya)
+================================= */
+.btn-selengkapnya:hover,
+.btn-selengkapnya:focus,
+.btn-selengkapnya:active{
+  color: #fff !important;
+}
+
+
+.btn-selengkapnya{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 30px 10px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background: transparent;
+  border: 1.6px solid rgba(255,255,255,.95);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all .25s ease;
+}
+.btn-selengkapnya::after{
+  content: "→";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  opacity: 0;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all .25s ease;
+}
+.btn-selengkapnya:hover{
+  background: #22466C;
+  border-color: #22466C;
+  text-decoration: none;
+}
+.btn-selengkapnya:hover::after{
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* =================================
+   BUTTON: INKUBATOR (PRIMARY)
+================================= */
+/* FIX: tombol inkubator jangan sampai teks jadi hitam saat hover */
+.btn-inkubator,
+.btn-inkubator:visited{
+  color: #fff !important;
+}
+
+.btn-inkubator:hover,
+.btn-inkubator:focus,
+.btn-inkubator:active{
+  color: #fff !important;
+  text-decoration: none;
+}
+
+/* panah ikut putih */
+.btn-inkubator::after,
+.btn-inkubator:hover::after,
+.btn-inkubator:focus::after,
+.btn-inkubator:active::after{
+  color: #fff !important;
+}
+
+
+.btn-inkubator{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 34px 12px 26px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #22466C;
+  border: 1.6px solid #22466C;
+  border-radius: 14px;
+  box-shadow: 0 10px 22px rgba(34,70,108,.25);
+  overflow: hidden;
+  transition: all .25s ease;
+}
+.btn-inkubator::after{
+  content: "→";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  opacity: 0;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all .25s ease;
+}
+.btn-inkubator:hover{
+  background: #1a3856;
+  border-color: #1a3856;
+  box-shadow: 0 14px 28px rgba(34,70,108,.35);
+  text-decoration: none;
+}
+.btn-inkubator:hover::after{
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 991.98px) {
+  .menu-center { padding-top: 10px; }
+  .navbar-actions { margin-top: 10px; }
+}
+@media (min-width: 992px) {
+  .menu-center { transform: translateX(65px); }
+}
+
+/* =========================
+   SECTION: INCUBATOR
+========================= */
+.incubator-section{
+  background: #f4f6f8;
+  padding: 64px 0;
+}
+.incubator-head{
+  max-width: 860px;
+  margin: 0 auto 28px;
+}
+.incubator-title{
+  font-weight: 800;
+  font-size: 54px;
+  line-height: 1.1;
+  color: #4788AB;
+  margin-bottom: 10px;
+}
+.incubator-subtitle{
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 0 auto;
+}
+.incubator-cards{ margin-top: 22px; }
+.incubator-card{
+  position: relative;
+  border-radius: 10px;
+  padding: 36px 26px 28px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 12px 22px rgba(0,0,0,.12);
+  overflow: hidden;
+  min-height: 240px;
+}
+.incubator-card::before,
+.incubator-card::after{
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+}
+.incubator-card::before{ top: -55px; left: -55px; }
+.incubator-card::after{ top: -55px; right: -55px; }
+
+.incubator-card--teal{ background: #4788AB; }
+.incubator-card--gold{ background: #F1D48E; }
+
+.incubator-card-title{
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.incubator-number{
+  font-weight: 900;
+  font-size: 56px;
+  line-height: 1;
+  margin: 10px 0 12px;
+  letter-spacing: .5px;
+}
+.incubator-card-foot{
+  font-size: 14px;
+  opacity: .92;
+}
+
+/* Mobile logo */
+@media (max-width: 576px){
+  .hero-logo{
+    width: clamp(140px, 60vw, 280px);
+    max-height: 90px;
+  }
+}
+
+/* =========================
+   SCROLL ANIMATION – INCUBATOR (ANTI-BLANK)
+   Animasi aktif hanya kalau JS jalan (html.js)
+========================= */
+html.js .reveal{
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .8s ease, transform .8s ease;
+  will-change: opacity, transform;
+}
+
+html.js .reveal-left{ transform: translateX(-24px); }
+html.js .reveal-right{ transform: translateX(24px); }
+
+html.js .reveal.is-visible{
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+html.js .reveal.d-1{ transition-delay: .10s; }
+html.js .reveal.d-2{ transition-delay: .20s; }
+html.js .reveal.d-3{ transition-delay: .30s; }
+
+/* aksesibilitas */
+@media (prefers-reduced-motion: reduce){
+  html.js .reveal{
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* FIX: tombol inkubator jangan sampai teks jadi hitam saat hover */
+.btn-inkubator,
+.btn-inkubator:visited{
+  color: #fff !important;
+}
+.btn-inkubator:hover,
+.btn-inkubator:focus,
+.btn-inkubator:active{
+  color: #fff !important;
+  text-decoration: none;
+}
+.btn-inkubator::after,
+.btn-inkubator:hover::after,
+.btn-inkubator:focus::after,
+.btn-inkubator:active::after{
+  color: #fff !important;
+}
+
+
+/* ===== Page transition (dashboard <-> mitra) ===== */
+.sipensi-page {
+  opacity: 1;
+  transition: opacity .18s ease;
+}
+.sipensi-page.page-leave { opacity: 0; }
+.sipensi-page.page-enter { opacity: 0; }
+.sipensi-page.page-enter.page-enter-active { opacity: 1; }
+
+/* ===== Navbar shared behavior ===== */
+#mainNavbar.navbar {
+  transition: background-color .25s ease, box-shadow .25s ease, backdrop-filter .25s ease, padding .25s ease;
+}
+#mainNavbar.navbar-solid {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.10);
+}
+#mainNavbar .brand-logo { height: 34px; width: auto; }
+#mainNavbar .brand-text { font-weight: 700; letter-spacing: .5px; }
+#mainNavbar .nav-link.active {
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid #4788AB;
+}
+
+/* --- Shared navbar helpers (used by dashboard + mitra) --- */
+.navbar-shell{
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.brand-logo{
+  height: 34px;
+  width: auto;
+  display:block;
+}
+.btn-login{
+  background: #1d4f7a;
+  color:#fff;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 700;
+  text-decoration:none;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn-login:hover{
+  background:#163e60;
+  color:#fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(0,0,0,.18);
+}
