@@ -22,7 +22,7 @@
   <div class="container py-5">
     <div class="mitra-title-wrap mitra-animate">
       <h1 class="mitra-title">65++ Mitra Kolaborator</h1>
-      <p class="mitra-subtitle">Total logo ter-load: <strong>{{ $total ?? 0 }}</strong></p>
+      <!-- <p class="mitra-subtitle">Total logo ter-load: <strong>{{ $total ?? 0 }}</strong></p> -->
     </div>
 
     {{-- Tabs --}}

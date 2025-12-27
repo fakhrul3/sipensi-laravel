@@ -480,3 +480,97 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   font-weight: 900;
   font-size: 56px;
 }
+
+
+/* =========================
+   FOOTER – EHUB STYLE
+========================= */
+.sipensi-footer{
+  background: #22466C;
+  color: #ffffff;
+  padding: 64px 0 32px;
+  font-family: "KoHo", sans-serif;
+}
+
+.sipensi-footer-shell{
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* BRAND */
+.footer-brand-logo{
+  height: 72px;
+  width: auto;
+  margin-bottom: 18px;
+}
+
+.footer-address{
+  max-width: 520px;
+  line-height: 1.7;
+  font-size: 15px;
+  opacity: .95;
+}
+
+/* TITLES */
+.footer-title{
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* LINKS */
+.footer-links,
+.footer-contact{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li,
+.footer-contact li{
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-links a,
+.footer-contact a{
+  color: rgba(255,255,255,.92);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-links a:hover,
+.footer-contact a:hover{
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+/* ICONS */
+.footer-contact i{
+  font-size: 16px;
+  min-width: 18px;
+}
+
+/* DIVIDER */
+.footer-divider{
+  border: 0;
+  height: 1px;
+  background: rgba(255,255,255,.25);
+  margin: 32px 0 18px;
+}
+
+/* BOTTOM */
+.footer-bottom{
+  text-align: center;
+  font-size: 14px;
+  opacity: .9;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px){
+  .footer-brand-logo{
+    height: 64px;
+  }
+}
