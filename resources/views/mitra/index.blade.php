@@ -1,8 +1,11 @@
 @extends('layouts.app')
+@section('title','Mitra Kolaborator')
+{{-- kalau kamu pakai sistem bg-variant di layout --}}
+@section('bg-variant','')
 
 @section('content')
 @php
-  // Background slides (public/img/slide1.JPG ... slide5.JPG)
+  // Background slides (pastikan file ada di public/img/)
   $bgSlides = [
     asset('img/slide1.JPG'),
     asset('img/slide2.JPG'),
@@ -20,13 +23,13 @@
   </div>
 
   <div class="container py-5">
-    <div class="mitra-title-wrap mitra-animate">
+    <div class="mitra-title-wrap">
       <h1 class="mitra-title">65++ Mitra Kolaborator</h1>
-      <!-- <p class="mitra-subtitle">Total logo ter-load: <strong>{{ $total ?? 0 }}</strong></p> -->
+      <p class="mitra-subtitle">Berkolaborasi untuk Wirausaha Indonesia</p>
     </div>
 
     {{-- Tabs --}}
-    <ul class="nav nav-pills mitra-tabs mitra-animate" id="mitraTabs" role="tablist">
+    <ul class="nav nav-pills mitra-tabs" id="mitraTabs" role="tablist">
       @php $i = 0; @endphp
       @foreach($groups as $title => $items)
         @php
@@ -58,12 +61,13 @@
         @endphp
 
         <div class="tab-pane fade {{ $show }}" id="{{ $id }}" role="tabpanel" aria-labelledby="{{ $id }}-btn" tabindex="0">
-          <div class="mitra-logos-wrap mitra-animate" data-mitra-wrap>
+          <div class="mitra-logos-wrap" data-mitra-wrap>
 
-            {{-- Arrows (muncul hanya jika pages>1, di-handle JS) --}}
+            {{-- Arrows --}}
             <button class="mitra-nav-btn mitra-prev" type="button" aria-label="Previous" data-mitra-prev>&lsaquo;</button>
             <button class="mitra-nav-btn mitra-next" type="button" aria-label="Next" data-mitra-next>&rsaquo;</button>
 
+            {{-- Grid --}}
             <div class="mitra-grid" data-mitra-grid>
               @foreach($items as $logo)
                 <div class="mitra-card" data-mitra-item>

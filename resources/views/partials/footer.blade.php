@@ -9,9 +9,9 @@
                alt="EHUB Incubase"
                class="footer-brand-logo">
 
-          <p class="footer-address">
-            Jl. Gatot Subroto No.Kav.94, Pancoran, Kec. Pancoran, Kota Jakarta Selatan,<br>
-            Daerah Khusus Ibukota Jakarta 12780
+          <p class="footer-address " >
+            SME Tower Lt. 14, Jl. Gatot Subroto No. Kav. 94,
+            Pancoran, Kota Jakarta Selatan, DKI Jakarta 12780, Indonesia
           </p>
         </div>
       </div>
@@ -20,7 +20,7 @@
       <div class="col-lg-3">
         <h6 class="footer-title">Navigasi</h6>
         <ul class="footer-links">
-          <li><a href="{{ route('inkubator.index') }}">Inkubator</a></li>
+          <li><a href="{{ route('lembaga.index') }}">Inkubator</a></li>
           <li><a href="{{ route('home') }}">Tentang</a></li>
           <li><a href="{{ route('mitra.index') }}">Mitra</a></li>
           <li><a href="{{ route('home') }}">Kontak</a></li>

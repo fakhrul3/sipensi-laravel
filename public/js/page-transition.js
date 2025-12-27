@@ -52,3 +52,7 @@
   window.addEventListener('hashchange', syncAnchorActive);
   window.addEventListener('load', syncAnchorActive);
 })();
+
+  window.addEventListener("load", () => {
+    document.body.classList.add("page-ready");
+});

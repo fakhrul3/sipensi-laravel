@@ -12,7 +12,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ config('app.name', 'SIPENSI') }}</title>
+  <title>@yield('title', config('app.name','SIPENSI')) - {{ config('app.name','SIPENSI') }}</title>
+
 
   {{-- Bootstrap --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -24,12 +25,18 @@
 
   @stack('styles')
 </head>
+
+
 <body class="app-body">
   @include('partials.navbar')
 
-  <main class="app-main">
-    @yield('content')
-  </main>
+  <div class="app-bg @yield('bg-variant')">
+    <main class="app-main">
+      @yield('content')
+    </main>
+  </div>
+
+  @include('partials.footer')
 
   {{-- Bootstrap JS --}}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -43,9 +50,11 @@
     <script src="{{ asset('js/home.js') }}" defer></script>
   @endif
 
-  @include('partials.footer')
+  {{-- Reveal JS --}}
+  <script src="{{ asset('js/reveal.js') }}" defer></script>
+
 
   @stack('scripts')
-
 </body>
+
 </html>

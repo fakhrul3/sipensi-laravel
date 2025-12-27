@@ -26,8 +26,10 @@
       <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-3 menu-center">
       
         <li class="nav-item">
-          <a class="nav-link {{ $isInkubator ? 'active' : '' }}" href="{{ route('inkubator.index') }}" data-page-link>INKUBATOR</a>
+          <a class="nav-link {{ request()->routeIs('lembaga.*') ? 'active' : '' }}" href="{{ route('lembaga.index') }}" data-page-link>INKUBATOR</a>
         </li>
+
+        
 
         <li class="nav-item">
           <a class="nav-link {{ $isHome ? '' : '' }}" href="{{ route('home') }}#tentang" data-page-link data-anchor="tentang">TENTANG</a>

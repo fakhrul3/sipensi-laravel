@@ -9,6 +9,9 @@ html, body {
 /* =========================
    NAVBAR BASE
 ========================= */
+
+
+
 #mainNavbar {
   min-height: 72px;
   padding: 10px 0;
@@ -69,6 +72,11 @@ html, body {
   border-radius: 8px;
 }
 
+.navbar .nav-link{
+  text-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+
+
 
 @media (min-width: 992px){
   #mainNavbar .menu-center{
@@ -127,6 +135,80 @@ html, body {
   background: #1a3856;
   border-color: #1a3856;
 }
+
+.nav-solid{
+  background: rgba(34,70,108,.92);
+  backdrop-filter: blur(6px);
+}
+
+
+
+
+
+/* =========================
+   GLOBAL BACKGROUND BASE
+   ========================= */
+
+/* wrapper background */
+.app-bg{
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* variant bg gold */
+.app-bg.bg-gold{
+  background: linear-gradient(
+    135deg,
+    rgba(246,226,172,.85) 0%,
+    rgba(246,226,172,.55) 55%,
+    rgba(243,247,249,1) 100%
+  );
+  background-attachment: fixed;
+}
+
+/* bunga overlay */
+.app-bg.bg-gold::after{
+  content:"";
+  position:absolute;
+
+  /* posisi kayak contoh kamu: pojok kanan-atas, agak keluar dikit */
+  top: -400px;
+  left: -440px;
+
+  width: 1000px;
+  height: 1000px;
+
+  background-image: url("/img/bunga_kemenumkm.png");
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: contain;
+
+  opacity: .25;
+  pointer-events:none;
+
+  z-index: 1;
+  transform: translateX(60px) translateY(-20px);
+  filter: blur(0px);
+  transition: transform .9s ease, filter .9s ease;
+}
+
+/* konten harus di atas bunga */
+.app-main{
+  position: relative;
+  z-index: 2;
+}
+
+/* setelah page kebuka, bunganya geser masuk halus */
+body.page-ready .app-bg.bg-gold::after{
+  transform: translateX(0) translateY(0);
+  filter: blur(.2px);
+}
+
+
+
+
+
 
 /* =========================
    HERO
@@ -579,10 +661,21 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   color: #ffffff;
 }
 
-
 /* RESPONSIVE */
 @media (max-width: 991px){
   .footer-brand-logo{
     height: 64px;
   }
 }
+
+.reveal{
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s cubic-bezier(.22,1,.36,1),
+              transform .7s cubic-bezier(.22,1,.36,1);
+}
+.reveal.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+

@@ -1,0 +1,353 @@
+:root{
+  --teal:#2f7f8c;
+  --text:#13343a;
+  --muted:#5f6f75;
+  --line: rgba(0,0,0,.08);
+  --shadow: 0 10px 24px rgba(16,24,40,.10);
+  --radius: 16px;
+}
+
+.li-shell{ max-width: 1200px; padding: 26px 16px 70px; }
+
+/* Wrapper header halaman */
+.li-head{
+  margin-top: -50px;   /* naikkan judul */
+  margin-bottom: 28px;
+}
+
+.li-title{
+  font-size: 56px;   /* naikkan kalau mau lebih besar */
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px 0;
+  color: #2B6685; 
+  text-shadow: 0 2px 0 rgba(255,255,255,.6);
+
+}
+
+
+
+
+
+.li-subtitle{ color: #375b62; font-weight: 500; margin: 6px 0 0; }
+
+.li-toolbar{
+  margin: 22px 0 14px;
+  display:flex;
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.li-search{ flex: 1 1 320px; }
+.li-filter{ flex: 0 0 260px; }
+
+.li-table-wrap{
+  border-radius: var(--radius);
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  background:#fff;
+}
+
+.li-table thead th{
+  background:#fbfcfd !important;
+  padding: 14px 18px !important;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: .6px;
+  color:#53646a;
+}
+.li-table tbody td{
+  padding: 18px 18px !important;
+  vertical-align: middle;
+  border-top: 1px solid rgba(0,0,0,.06);
+}
+
+.li-no-wrap{
+  font-weight: 800;
+  color:#3c5258;
+}
+
+.li-name-wrap{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+
+.li-avatar{
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.06);
+  background: radial-gradient(circle at 30% 30%, rgba(47,127,140,.16), rgba(47,127,140,.03));
+  flex: 0 0 auto;
+}
+
+.li-name{
+  font-weight: 800;
+  color:#1d5ad6;
+  text-decoration:none;
+  letter-spacing: .2px;
+}
+.li-name:hover{ text-decoration: underline; }
+
+.badge-jenis{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+  color:#fff;
+  min-width: 190px;
+}
+
+/* sesuai jenis */
+.badge-pusat{ background:#0f766e; }
+.badge-pemda{ background:#f59e0b; }
+.badge-pendidikan{ background:#11b7d8; }
+.badge-usaha{ background:#6366f1; }
+.badge-masyarakat{ background:#22c55e; }
+
+.li-pagination{
+  margin-top: 18px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+/* DETAIL CARD */
+.li-detail-card{
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  background:#fff;
+  padding: 22px;
+}
+.li-detail-title{
+  font-weight: 900;
+  color: var(--teal);
+  margin: 0 0 10px;
+}
+.li-detail-item{
+  color:#2b4d54;
+  font-weight: 500;
+  margin: 4px 0;
+}
+
+/* Kasih ruang dari navbar */
+.li-shell{
+  padding-top: 120px; /* adjust kalau navbar lebih tinggi */
+}
+
+.li-head{
+  margin-top: 20px;
+}
+
+/* ===========================
+   FIX POSISI JUDUL (NAIK)
+   =========================== */
+
+/* 1) Kurangi jarak atas container halaman */
+.container.li-shell{
+  padding-top: 90px !important;  /* coba 70 dulu */
+}
+
+/* 2) Paksa head naik sedikit (kalau masih kurang) */
+.li-head{
+  transform: translateY(-18px) !important;
+}
+
+/* 3) Rapihin spacing bawah head */
+.li-head .li-title{
+  margin-bottom: 8px !important;
+}
+
+.li-head .li-subtitle{
+  margin-bottom: 18px !important;
+}
+
+/* ===========================
+   PAGINATION SPACING
+   =========================== */
+.li-pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;              /* jarak antar elemen */
+  margin-top: 18px;
+  padding: 10px 0 24px;
+}
+
+.li-page-info{
+  padding: 0 8px;         /* nafas buat teks */
+  font-weight: 600;
+  color: #22466C;
+}
+
+/* biar tombol gak terlalu ketat */
+.li-pagination .btn{
+  padding: 8px 14px;
+  border-radius: 10px;
+}
+
+/* =========================
+   TITLE & SUBTITLE TRANSITION
+========================= */
+
+.li-head{
+  overflow: hidden;
+}
+
+/* initial state */
+.li-title,
+.li-subtitle{
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity .7s ease,
+    transform .7s ease;
+}
+
+/* subtitle lebih halus */
+.li-subtitle{
+  transition-delay: .15s;
+}
+
+/* aktif setelah page ready */
+body.page-ready .li-title,
+body.page-ready .li-subtitle{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   GLOBAL PAGE TRANSITION
+========================= */
+
+/* default state */
+.li-head,
+.li-toolbar,
+.li-table-wrap,
+.li-pagination{
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity .7s ease,
+    transform .7s ease;
+}
+
+/* stagger delay */
+.li-head{ transition-delay: .15s; }
+.li-toolbar{ transition-delay: .30s; }
+.li-table-wrap{ transition-delay: .45s; }
+.li-pagination{ transition-delay: .60s; }
+
+/* aktif */
+body.page-ready .li-head,
+body.page-ready .li-toolbar,
+body.page-ready .li-table-wrap,
+body.page-ready .li-pagination{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.li-table{
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+
+body.page-ready .li-table{
+  opacity: 1;
+}
+
+.li-table tbody tr{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+
+body.page-ready .li-table tbody tr{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* delay bertahap 10 baris */
+.li-table tbody tr:nth-child(1){ transition-delay: .05s; }
+.li-table tbody tr:nth-child(2){ transition-delay: .08s; }
+.li-table tbody tr:nth-child(3){ transition-delay: .11s; }
+.li-table tbody tr:nth-child(4){ transition-delay: .14s; }
+.li-table tbody tr:nth-child(5){ transition-delay: .17s; }
+.li-table tbody tr:nth-child(6){ transition-delay: .20s; }
+.li-table tbody tr:nth-child(7){ transition-delay: .23s; }
+.li-table tbody tr:nth-child(8){ transition-delay: .26s; }
+.li-table tbody tr:nth-child(9){ transition-delay: .29s; }
+.li-table tbody tr:nth-child(10){ transition-delay: .32s; }
+
+.li-pagination{
+  transition-delay: .75s;
+}
+
+/* =========================
+   DETAIL LEMBAGA INKUBATOR
+   Background Gradient + Bunga
+========================= */
+
+.app-bg.bg-detail-inkubator{
+  background: linear-gradient(
+  315deg,
+  #4788AB 0%,
+  #ffffff 100%
+);
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* pattern bunga */
+.app-bg.bg-detail-inkubator::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/img/bunga_kemenumkm.png');
+  background-repeat: no-repeat;
+  background-position: right -400px top -420px;
+  background-size: 900px;
+  opacity: 0.50;          /* lembut, gak ganggu konten */
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* pastikan konten di atas background */
+.app-bg.bg-detail-inkubator .app-main{
+  position: relative;
+  z-index: 2;
+}
+
+/* === Flower transition (page load) === */
+.app-bg.bg-detail-inkubator::after{
+  /* state awal */
+  opacity: 0;
+  transform: translate3d(24px,-16px,0) scale(1.02);
+  transition:
+    opacity 900ms cubic-bezier(.22,1,.36,1),
+    transform 900ms cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform;
+}
+
+/* saat halaman siap */
+body.page-ready .app-bg.bg-detail-inkubator::after{
+  opacity: 0.35; /* samain dengan opacity bunga kamu */
+  transform: translate3d(0,0,0) scale(1);
+}
+
+.li-detail-subtitle{
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(0,0,0,.55);
+}
+
+
+
+
