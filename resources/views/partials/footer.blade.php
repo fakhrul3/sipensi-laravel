@@ -23,7 +23,7 @@
           <li><a href="{{ route('lembaga.index') }}">Inkubator</a></li>
           <li><a href="{{ route('home') }}">Tentang</a></li>
           <li><a href="{{ route('mitra.index') }}">Mitra</a></li>
-          <li><a href="{{ route('home') }}">Kontak</a></li>
+          <li><a href="{{ route('kontak') }}">Kontak</a></li>
         </ul>
       </div>
 

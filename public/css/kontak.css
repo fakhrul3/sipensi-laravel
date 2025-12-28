@@ -1,0 +1,239 @@
+/* =====================================================
+   KONTAK KAMI – SIPENSI (FINAL FIX)
+===================================================== */
+
+.page-kontak{
+  font-family: "KoHo", sans-serif;
+}
+
+/* ===============================
+   LAYOUT
+================================ */
+.contact-top{
+  position: relative;
+  padding: 140px 0 90px;
+
+  background-image: url("../img/bg_kontak.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: -50% 10%;
+}
+
+.contact-top-grid{
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* ===============================
+   LEFT (TITLE & SUBTITLE)
+================================ */
+.page-kontak .contact-top-left .contact-title{
+  font-size: clamp(40px, 4vw, 60px);
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #2f7f8c; /* TEAL */
+  text-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+
+
+/* ===============================
+   MAP
+================================ */
+.contact-map{
+  max-width: 560px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.18),
+    0 4px 10px rgba(0,0,0,.12);
+
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.contact-map:hover{
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.22),
+    0 6px 16px rgba(0,0,0,.14);
+}
+
+.contact-map iframe{
+  width: 100%;
+  height: 260px;
+  border: 0;
+  display: block;
+}
+
+.contact-map-caption{
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #444;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+
+/* ===============================
+   RIGHT – FORM PANEL
+================================ */
+.contact-form-wrap{
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+
+  background: rgba(34, 70, 108, 0.55); /* #22466C transparan */
+
+  padding: 28px;
+
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.25),
+    0 6px 14px rgba(0,0,0,.18);
+
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+
+/* ===============================
+   FORM ELEMENTS (PUTIH)
+================================ */
+.contact-form-wrap input,
+.contact-form-wrap textarea{
+  background-color: #ffffff !important;
+  color: #333333 !important;
+  border: 1px solid #d0d0d0 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-size: 14px;
+}
+
+.contact-form-wrap input::placeholder,
+.contact-form-wrap textarea::placeholder{
+  color: #888888 !important;
+}
+
+.contact-form-wrap input:focus,
+.contact-form-wrap textarea:focus{
+  background-color: #ffffff !important;
+  border-color: #22466C !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.contact-form-wrap textarea{
+  resize: vertical;
+  min-height: 220px;
+}
+
+/* ===============================
+   SUBMIT BUTTON
+================================ */
+.contact-submit{
+  background: rgba(255,255,255,0.18) !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+  color: #ffffff !important;
+  padding: 8px 20px !important;
+  border-radius: 6px !important;
+  font-weight: 600;
+  letter-spacing: .5px;
+}
+
+.contact-submit:hover{
+  filter: brightness(.9);
+}
+
+/* ===============================
+   CAPTCHA
+================================ */
+.contact-captcha{
+  margin-top: 10px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media(max-width: 992px){
+  .contact-top{
+    padding: 120px 0 80px;
+  }
+
+  .contact-top-grid{
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .contact-map{
+    max-width: 100%;
+  }
+
+  .contact-map iframe{
+    height: 300px;
+  }
+}
+
+/* ===============================
+   FORCE SUBTITLE GOLD
+================================ */
+
+.page-kontak .contact-top-left .contact-subtitle,
+.page-kontak .contact-top-left .contact-subtitle--org,
+.page-kontak .contact-top-left p{
+  color: #f3b704 !important; /* GOLD */
+  font-size: 17px;
+  font-weight: bold;
+  text-shadow:
+    0 2px 6px rgba(0,0,0,.10),
+    0 0 1px rgba(0,0,0,.2);
+}
+
+/* ===============================
+   FORM HOVER – SHADOW ONLY
+================================ */
+
+.contact-form-wrap{
+  transition: box-shadow .3s ease;
+}
+
+.contact-form-wrap:hover{
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.30),
+    0 6px 18px rgba(0,0,0,.22);
+}
+
+.contact-form-wrap:hover{
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.24);
+}
+
+/* ===============================
+   BUTTON SUBMIT – SOLID
+================================ */
+
+.contact-submit{
+  background-color: #22466C !important; /* teal solid */
+  border: 1px solid #22466C !important;
+  color: #ffffff !important;
+
+  padding: 10px 22px !important;
+  border-radius: 6px !important;
+  font-weight: 600;
+  letter-spacing: .5px;
+
+  transition: background-color .25s ease, box-shadow .25s ease;
+}
+
+.contact-submit:hover{
+  background-color: #256a74 !important; /* teal lebih gelap */
+  border-color: #256a74 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+.contact-submit:focus{
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(47,127,140,.35);
+}

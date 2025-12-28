@@ -40,7 +40,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ $isHome ? '' : '' }}" href="{{ route('home') }}#kontak" data-page-link data-anchor="kontak">KONTAK</a>
+          <a class="nav-link {{ request()->routeIs('kontak') ? 'active' : '' }}" href="{{ route('kontak') }}">KONTAK</a>
         </li>
       </ul>
 
