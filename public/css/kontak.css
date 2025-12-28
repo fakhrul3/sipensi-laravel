@@ -35,8 +35,8 @@
   font-size: clamp(40px, 4vw, 60px);
   font-weight: 700;
   margin-bottom: 10px;
-  color: #2f7f8c; /* TEAL */
-  text-shadow: 0 2px 6px rgba(0,0,0,.25);
+  color: #F1D48E; 
+  text-shadow: 0 2px 6px rgba(0,0,0,1);
 }
 
 
@@ -183,12 +183,11 @@
 .page-kontak .contact-top-left .contact-subtitle,
 .page-kontak .contact-top-left .contact-subtitle--org,
 .page-kontak .contact-top-left p{
-  color: #f3b704 !important; /* GOLD */
+  color: #ffffff !important; /* GOLD */
   font-size: 17px;
   font-weight: bold;
-  text-shadow:
-    0 2px 6px rgba(0,0,0,.10),
-    0 0 1px rgba(0,0,0,.2);
+  text-shadow: 0 2px 8px rgba(0,0,0,1);
+  
 }
 
 /* ===============================
@@ -215,8 +214,8 @@
 ================================ */
 
 .contact-submit{
-  background-color: #22466C !important; /* teal solid */
-  border: 1px solid #22466C !important;
+  background-color: #3976b7 !important; 
+  border: 1px solid #3976b7 !important;
   color: #ffffff !important;
 
   padding: 10px 22px !important;
@@ -228,8 +227,8 @@
 }
 
 .contact-submit:hover{
-  background-color: #256a74 !important; /* teal lebih gelap */
-  border-color: #256a74 !important;
+  background-color: #2d91a0 !important; /* teal lebih gelap */
+  border-color: #2d91a0 !important;
   box-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
 

@@ -21,6 +21,8 @@
   {{-- Base CSS (dashboard) --}}
   <link rel="stylesheet" href="{{ asset('css/sipensi.css') }}">
   <link rel="stylesheet" href="{{ asset('css/page-transition.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}">
+
   
 
   @stack('styles')
@@ -53,8 +55,59 @@
   {{-- Reveal JS --}}
   <script src="{{ asset('js/reveal.js') }}" defer></script>
 
+  {{-- CHATBOT SIPENSI (GLOBAL) --}}
+  <div class="sipensi-chatbot" id="sipensiChatbot">
+    <button class="chatbot-fab" id="chatbotToggle" aria-label="Tanya SIPENSI">
+      <svg class="chatbot-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <!-- bubble -->
+        <path
+          d="M10 10h28a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H22l-8 6v-6h-4a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linejoin="round"
+        />
+        <!-- dots -->
+        <circle cx="18" cy="24" r="2.2" fill="currentColor"/>
+        <circle cx="24" cy="24" r="2.2" fill="currentColor"/>
+        <circle cx="30" cy="24" r="2.2" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <div class="chatbot-window" id="chatbotWindow" aria-hidden="true">
+      <div class="chatbot-header">
+        <div class="chatbot-title">
+          <strong>Tanya SIPENSI</strong>
+          </div>
+        <button class="chatbot-close" id="chatbotClose" aria-label="Tutup">✕</button>
+      </div>
+
+      <div class="chatbot-body" id="chatbotBody">
+        <div class="bot-msg">
+          Halo! Apa yang bisa aku bantu? <br> Kamu bisa ikuti format berikut ini ya <b>“Jumlah inkubator di Jawa Barat”</b> atau <b>“Inkubator di DKI Jakarta ada berapa?”</b>
+        </div>
+      </div>
+
+      <form class="chatbot-footer" id="chatbotForm">
+        <input
+          type="text"
+          id="chatbotInput"
+          class="chatbot-input"
+          placeholder="Tulis pertanyaan..."
+          autocomplete="off"
+        />
+        <button type="submit" class="chatbot-send">Kirim</button>
+      </form>
+    </div>
+  </div>
+
+  {{-- panggil js chatbot --}}
+  <script src="{{ asset('js/chatbot.js') }}"></script>
+
 
   @stack('scripts')
+
+  
 </body>
 
 </html>
