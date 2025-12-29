@@ -7,7 +7,7 @@
     <div class="col-md-9 col-lg-6 col-xl-5">
 
       <div class="text-center mb-4">
-        <div class="auth-brand-logo">
+        <div class="auth-title-logo">
           <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI3D">
         </div>
       </div>
@@ -30,11 +30,12 @@
               <label class="form-check-label" for="remember">Ingat Saya</label>
             </div>
 
-            <a href="#" class="auth-link" onclick="return false;">Lupa Password?</a>
+            {{-- FIX: LINK BENER --}}
+            <a href="{{ url('/forgot-password') }}" class="auth-link">Lupa Password?</a>
           </div>
 
           <button type="button" class="btn btn-primary w-100 btn-lg auth-btn">
-            Login
+            Masuk
           </button>
         </form>
       </div>
