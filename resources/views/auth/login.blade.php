@@ -8,7 +8,7 @@
 
       <div class="text-center mb-4">
         <div class="auth-title-logo">
-          <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI3D">
+          <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI3D">
         </div>
       </div>
 

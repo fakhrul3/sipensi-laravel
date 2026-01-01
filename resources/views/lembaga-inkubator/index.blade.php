@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('title','Lembaga Inkubator')
-@section('bg-variant','bg-gold')
 
+{{-- GANTI VARIANT KHUSUS LIST (bukan bg-gold lagi) --}}
+@section('bg-variant','bg-li')
 
 @push('styles')
   <link rel="stylesheet" href="{{ asset('css/lembaga-inkubator.css') }}">

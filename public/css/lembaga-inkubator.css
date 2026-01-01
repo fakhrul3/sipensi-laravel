@@ -1,36 +1,171 @@
+/* =====================================================
+   LEMBAGA INKUBATOR (LIST + DETAIL) — SINGLE FILE
+   Kamu cukup ubah di BAGIAN A: THEME
+===================================================== */
+
+/* =========================
+   A) THEME (EDIT DI SINI)
+========================= */
 :root{
+  /* warna umum */
   --teal:#2f7f8c;
   --text:#13343a;
   --muted:#5f6f75;
   --line: rgba(0,0,0,.08);
   --shadow: 0 10px 24px rgba(16,24,40,.10);
   --radius: 16px;
+
+  /* ===== BACKGROUND LIST (bg-li) =====
+     GANTI 2 WARNA INI AJA kalau mau ubah "oren/krem" */
+  --li-bg-1: #fff;  /* atas */
+  --li-bg-2: #89c3e0;  /* bawah */
+
+  /* optional: pattern list (kalau gak mau, kosongkan: none) */
+  --li-pattern-url: url('/img/bunga_kemenumkm.png');
+  --li-pattern-opacity: 0.35;
+  --li-pattern-size: 900px;
+  --li-pattern-pos: left -420px top -350px;
+
+  /* ===== DETAIL (bg-detail-inkubator) ===== */
+  --detail-bg-1: #4788AB;
+  --detail-bg-2: #FFFFFF;
+
+  /* optional: pattern detail */
+  --detail-pattern-url: url('/img/bunga_kemenumkm.png');
+  --detail-pattern-opacity: 0.35;
+  --detail-pattern-size: 900px;
+  --detail-pattern-pos: right -400px top -420px;
 }
+
+/* =========================
+   B) BACKGROUND VARIANTS
+========================= */
+
+/* LIST PAGE background (dipakai oleh @section('bg-variant','bg-li')) */
+.app-bg.bg-li{
+    background: linear-gradient(
+    120deg,
+    var(--li-bg-1) 0%,
+    var(--li-bg-2) 60%
+  );
+
+
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* pattern list */
+.app-bg.bg-li::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--li-pattern-url);
+  background-repeat: no-repeat;
+  background-position: var(--li-pattern-pos);
+  background-size: var(--li-pattern-size);
+  opacity: 0;
+  transform: translate3d(20px,-14px,0) scale(1.02);
+  transition:
+    opacity 900ms cubic-bezier(.22,1,.36,1),
+    transform 900ms cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* saat halaman siap */
+body.page-ready .app-bg.bg-li::after{
+  opacity: var(--li-pattern-opacity);
+  transform: translate3d(0,0,0) scale(1);
+}
+
+/* pastikan konten di atas background */
+.app-bg.bg-li .app-main{
+  position: relative;
+  z-index: 2;
+}
+
+/* DETAIL background (dipakai oleh show.blade.php) */
+.app-bg.bg-detail-inkubator{
+  background: linear-gradient(315deg, var(--detail-bg-1) 0%, var(--detail-bg-2) 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* pattern detail */
+.app-bg.bg-detail-inkubator::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--detail-pattern-url);
+  background-repeat: no-repeat;
+  background-position: var(--detail-pattern-pos);
+  background-size: var(--detail-pattern-size);
+  opacity: 0;
+  transform: translate3d(24px,-16px,0) scale(1.02);
+  transition:
+    opacity 900ms cubic-bezier(.22,1,.36,1),
+    transform 900ms cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* saat halaman siap */
+body.page-ready .app-bg.bg-detail-inkubator::after{
+  opacity: var(--detail-pattern-opacity);
+  transform: translate3d(0,0,0) scale(1);
+}
+
+/* konten di atas background */
+.app-bg.bg-detail-inkubator .app-main{
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   C) LIST / DETAIL STYLES
+========================= */
 
 .li-shell{ max-width: 1200px; padding: 26px 16px 70px; }
 
+/* Kasih ruang dari navbar */
+.li-shell{
+  padding-top: 120px; /* adjust kalau navbar lebih tinggi */
+}
+
 /* Wrapper header halaman */
 .li-head{
-  margin-top: -50px;   /* naikkan judul */
+  margin-top: 20px;
   margin-bottom: 28px;
+  overflow: hidden;
+}
+
+/* FIX POSISI JUDUL (NAIK) */
+.container.li-shell{
+  padding-top: 90px !important;
+}
+.li-head{
+  transform: translateY(-18px) !important;
 }
 
 .li-title{
-  font-size: 56px;   /* naikkan kalau mau lebih besar */
+  font-size: 56px;
   line-height: 1.05;
   font-weight: 800;
   letter-spacing: -0.5px;
-  margin: 0 0 10px 0;
-  color: #2B6685; 
+  margin: 0 0 8px 0 !important;
+  color: #2B6685;
   text-shadow: 0 2px 0 rgba(255,255,255,.6);
-
 }
 
-
-
-
-
-.li-subtitle{ color: #375b62; font-weight: 500; margin: 6px 0 0; }
+.li-subtitle{
+  color: #375b62;
+  font-weight: 500;
+  margin: 6px 0 18px !important;
+}
 
 .li-toolbar{
   margin: 22px 0 14px;
@@ -58,6 +193,7 @@
   letter-spacing: .6px;
   color:#53646a;
 }
+
 .li-table tbody td{
   padding: 18px 18px !important;
   vertical-align: middle;
@@ -111,10 +247,26 @@
 .badge-usaha{ background:#6366f1; }
 .badge-masyarakat{ background:#22c55e; }
 
+/* PAGINATION */
 .li-pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
   margin-top: 18px;
-  display:flex;
-  justify-content:flex-end;
+  padding: 10px 0 24px;
+  transition-delay: .75s;
+}
+
+.li-page-info{
+  padding: 0 8px;
+  font-weight: 600;
+  color: #22466C;
+}
+
+.li-pagination .btn{
+  padding: 8px 14px;
+  border-radius: 10px;
 }
 
 /* DETAIL CARD */
@@ -135,96 +287,29 @@
   font-weight: 500;
   margin: 4px 0;
 }
-
-/* Kasih ruang dari navbar */
-.li-shell{
-  padding-top: 120px; /* adjust kalau navbar lebih tinggi */
-}
-
-.li-head{
-  margin-top: 20px;
-}
-
-/* ===========================
-   FIX POSISI JUDUL (NAIK)
-   =========================== */
-
-/* 1) Kurangi jarak atas container halaman */
-.container.li-shell{
-  padding-top: 90px !important;  /* coba 70 dulu */
-}
-
-/* 2) Paksa head naik sedikit (kalau masih kurang) */
-.li-head{
-  transform: translateY(-18px) !important;
-}
-
-/* 3) Rapihin spacing bawah head */
-.li-head .li-title{
-  margin-bottom: 8px !important;
-}
-
-.li-head .li-subtitle{
-  margin-bottom: 18px !important;
-}
-
-/* ===========================
-   PAGINATION SPACING
-   =========================== */
-.li-pagination{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;              /* jarak antar elemen */
-  margin-top: 18px;
-  padding: 10px 0 24px;
-}
-
-.li-page-info{
-  padding: 0 8px;         /* nafas buat teks */
-  font-weight: 600;
-  color: #22466C;
-}
-
-/* biar tombol gak terlalu ketat */
-.li-pagination .btn{
-  padding: 8px 14px;
-  border-radius: 10px;
+.li-detail-subtitle{
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(0,0,0,.55);
 }
 
 /* =========================
-   TITLE & SUBTITLE TRANSITION
+   D) PAGE TRANSITIONS
 ========================= */
 
-.li-head{
-  overflow: hidden;
-}
-
-/* initial state */
 .li-title,
 .li-subtitle{
   opacity: 0;
   transform: translateY(18px);
-  transition:
-    opacity .7s ease,
-    transform .7s ease;
+  transition: opacity .7s ease, transform .7s ease;
 }
+.li-subtitle{ transition-delay: .15s; }
 
-/* subtitle lebih halus */
-.li-subtitle{
-  transition-delay: .15s;
-}
-
-/* aktif setelah page ready */
 body.page-ready .li-title,
 body.page-ready .li-subtitle{
   opacity: 1;
   transform: translateY(0);
 }
-
-/* =========================
-   GLOBAL PAGE TRANSITION
-========================= */
 
 /* default state */
 .li-head,
@@ -233,9 +318,7 @@ body.page-ready .li-subtitle{
 .li-pagination{
   opacity: 0;
   transform: translateY(20px);
-  transition:
-    opacity .7s ease,
-    transform .7s ease;
+  transition: opacity .7s ease, transform .7s ease;
 }
 
 /* stagger delay */
@@ -257,17 +340,13 @@ body.page-ready .li-pagination{
   opacity: 0;
   transition: opacity .8s ease;
 }
-
-body.page-ready .li-table{
-  opacity: 1;
-}
+body.page-ready .li-table{ opacity: 1; }
 
 .li-table tbody tr{
   opacity: 0;
   transform: translateY(10px);
   transition: opacity .45s ease, transform .45s ease;
 }
-
 body.page-ready .li-table tbody tr{
   opacity: 1;
   transform: translateY(0);
@@ -284,70 +363,5 @@ body.page-ready .li-table tbody tr{
 .li-table tbody tr:nth-child(8){ transition-delay: .26s; }
 .li-table tbody tr:nth-child(9){ transition-delay: .29s; }
 .li-table tbody tr:nth-child(10){ transition-delay: .32s; }
-
-.li-pagination{
-  transition-delay: .75s;
-}
-
-/* =========================
-   DETAIL LEMBAGA INKUBATOR
-   Background Gradient + Bunga
-========================= */
-
-.app-bg.bg-detail-inkubator{
-  background: linear-gradient(
-  315deg,
-  #4788AB 0%,
-  #ffffff 100%
-);
-  background-attachment: fixed;
-  position: relative;
-  overflow: hidden;
-}
-
-/* pattern bunga */
-.app-bg.bg-detail-inkubator::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url('/img/bunga_kemenumkm.png');
-  background-repeat: no-repeat;
-  background-position: right -400px top -420px;
-  background-size: 900px;
-  opacity: 0.50;          /* lembut, gak ganggu konten */
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* pastikan konten di atas background */
-.app-bg.bg-detail-inkubator .app-main{
-  position: relative;
-  z-index: 2;
-}
-
-/* === Flower transition (page load) === */
-.app-bg.bg-detail-inkubator::after{
-  /* state awal */
-  opacity: 0;
-  transform: translate3d(24px,-16px,0) scale(1.02);
-  transition:
-    opacity 900ms cubic-bezier(.22,1,.36,1),
-    transform 900ms cubic-bezier(.22,1,.36,1);
-  will-change: opacity, transform;
-}
-
-/* saat halaman siap */
-body.page-ready .app-bg.bg-detail-inkubator::after{
-  opacity: 0.35; /* samain dengan opacity bunga kamu */
-  transform: translate3d(0,0,0) scale(1);
-}
-
-.li-detail-subtitle{
-  margin-top: 4px;
-  font-size: 13px;
-  color: rgba(0,0,0,.55);
-}
-
-
 
 

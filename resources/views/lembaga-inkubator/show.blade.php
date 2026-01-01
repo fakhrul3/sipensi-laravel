@@ -3,7 +3,7 @@
 {{-- Judul TAB (browser) --}}
 @section('title', 'Detail - ' . ($row->nama ?? 'Lembaga Inkubator'))
 
-{{-- Background variant --}}
+{{-- Background variant detail tetap --}}
 @section('bg-variant','bg-detail-inkubator')
 
 @push('styles')

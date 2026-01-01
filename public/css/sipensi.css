@@ -36,7 +36,6 @@ html, body {
 
 /* =========================
    BRAND LOGO (FIXED)
-   - Ini yang bikin ukuran LOGO beneran membesar
 ========================= */
 #mainNavbar .navbar-brand{
   padding: 0 !important;
@@ -45,7 +44,7 @@ html, body {
 }
 
 #mainNavbar .brand-logo{
-  height: 56px !important;   /* <<< BESARIN DI SINI */
+  height: 56px !important;
   width: auto !important;
   max-height: none !important;
   display: block;
@@ -53,7 +52,6 @@ html, body {
   transition: height .25s ease;
 }
 
-/* pas navbar scrolled, logo sedikit mengecil biar rapih */
 #mainNavbar.navbar-scrolled .brand-logo{
   height: 48px !important;
 }
@@ -84,12 +82,10 @@ html, body {
   color: #000;
 }
 
-/* === FIX: geser menu sedikit ke kiri + bold === */
 #mainNavbar .menu-center {
-  font-weight: 800; /* bold */
+  font-weight: 800;
 }
 
-/* ===== FIX: active menu tetap putih saat scroll ===== */
 #mainNavbar.navbar-scrolled .menu-center .nav-link.active {
   color: #fff !important;
   background: #22466C;
@@ -102,7 +98,7 @@ html, body {
 
 @media (min-width: 992px){
   #mainNavbar .menu-center{
-    transform: translateX(-55px) !important; /* kecilin/naikin angka kalau mau */
+    transform: translateX(-55px) !important;
   }
 }
 
@@ -127,7 +123,6 @@ html, body {
   border-radius: 8px;
 }
 
-/* underline scroll only */
 #mainNavbar.navbar-scrolled .menu-center .nav-link:not(.active)::after {
   content: "";
   position: absolute;
@@ -165,15 +160,12 @@ html, body {
 /* =========================
    GLOBAL BACKGROUND BASE
 ========================= */
-
-/* wrapper background */
 .app-bg{
   min-height: 100vh;
   position: relative;
   overflow: hidden;
 }
 
-/* variant bg gold */
 .app-bg.bg-gold{
   background: linear-gradient(
     135deg,
@@ -184,15 +176,11 @@ html, body {
   background-attachment: fixed;
 }
 
-/* bunga overlay */
 .app-bg.bg-gold::after{
   content:"";
   position:absolute;
-
-  /* posisi kayak contoh kamu: pojok kanan-atas, agak keluar dikit */
   top: -400px;
   left: -440px;
-
   width: 1000px;
   height: 1000px;
 
@@ -210,13 +198,11 @@ html, body {
   transition: transform .9s ease, filter .9s ease;
 }
 
-/* konten harus di atas bunga */
 .app-main{
   position: relative;
   z-index: 2;
 }
 
-/* setelah page kebuka, bunganya geser masuk halus */
 body.page-ready .app-bg.bg-gold::after{
   transform: translateX(0) translateY(0);
   filter: blur(.2px);
@@ -262,7 +248,6 @@ body.page-ready .app-bg.bg-gold::after{
   text-shadow: 0 4px 14px rgba(0,0,0,0.45);
 }
 
-/* HERO LOGO */
 .hero-title-logo{
   display:flex;
   justify-content:center;
@@ -326,20 +311,16 @@ body.page-ready .app-bg.bg-gold::after{
 /* =================================
    BUTTON: INKUBATOR (PRIMARY)
 ================================= */
-/* FIX: tombol inkubator jangan sampai teks jadi hitam saat hover */
 .btn-inkubator,
 .btn-inkubator:visited{
   color: #fff !important;
 }
-
 .btn-inkubator:hover,
 .btn-inkubator:focus,
 .btn-inkubator:active{
   color: #fff !important;
   text-decoration: none;
 }
-
-/* panah ikut putih */
 .btn-inkubator::after,
 .btn-inkubator:hover::after,
 .btn-inkubator:focus::after,
@@ -404,20 +385,85 @@ body.page-ready .app-bg.bg-gold::after{
 .incubator-head{
   max-width: 860px;
   margin: 0 auto 28px;
+  overflow: visible;
 }
 .incubator-title{
-  font-weight: 500;
+  font-weight: 700;
   font-size: 54px;
   line-height: 1.1;
   color: #212121;
   margin-bottom: 10px;
+  text-align: center;
 }
+
+/* wrapper title */
+.incubator-title-wrap{
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  overflow: visible;
+}
+
+/* miring + styling */
+.dotted-title{
+  font-style: italic;
+  letter-spacing: .3px;
+  margin: 0;
+  line-height: 1.1;
+  position: relative;
+  display: inline-block;
+}
+
+/* =========================
+   FIX: DOT IKUT TRANSISI REVEAL
+========================= */
+
+/* pastikan parent jadi reference */
+.incubator-title.dotted-title{
+  position: relative;
+}
+
+/* dot atas & bawah */
+.incubator-title.dotted-title::before,
+.incubator-title.dotted-title::after{
+  content: "\2022\00A0\2022\00A0\2022"; /* • • • */
+  display: block;
+  font-style: normal;
+  font-size: 35px;
+  letter-spacing: 10px;
+  color: rgba(34, 70, 108, 0.648);
+  line-height: 1;
+  pointer-events: none;
+
+  /* 🔑 KUNCI TRANSISI */
+  opacity: inherit;
+  transform: inherit;
+  transition: inherit;
+}
+
+/* jarak dot */
+.incubator-title.dotted-title::before{
+  margin-bottom: 14px;
+}
+
+.incubator-title.dotted-title::after{
+  margin-top: 14px;
+}
+
+/* responsive dikit */
+@media (max-width: 768px){
+  .incubator-title.dotted-title::before{ margin-bottom: 10px; }
+  .incubator-title.dotted-title::after{ margin-top: 10px; }
+}
+
+
 .incubator-subtitle{
   color: #475569;
   font-size: 16px;
   line-height: 1.7;
   margin: 0 auto;
 }
+
 .incubator-cards{ margin-top: 22px; }
 .incubator-card{
   position: relative;
@@ -437,7 +483,7 @@ body.page-ready .app-bg.bg-gold::after{
 }
 
 .incubator-cards .col-12 {
-    display: flex;
+  display: flex;
 }
 
 .incubator-card::before,
@@ -466,17 +512,16 @@ body.page-ready .app-bg.bg-gold::after{
   opacity: .92;
 }
 
-/* Ubah warna teks jadi hitam */
 .incubator-card-title,
 .incubator-number,
 .incubator-card-foot {
-    color: #212529;
+  color: #212529;
 }
 
 .incubator-card-foot {
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-    color: #6c757d;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #6c757d;
 }
 
 /* Mobile logo */
@@ -485,8 +530,6 @@ body.page-ready .app-bg.bg-gold::after{
     width: clamp(140px, 60vw, 280px);
     max-height: 90px;
   }
-
-  /* logo navbar di hp */
   #mainNavbar .brand-logo{
     height: 44px !important;
   }
@@ -514,7 +557,6 @@ html.js .reveal.d-1{ transition-delay: .10s; }
 html.js .reveal.d-2{ transition-delay: .20s; }
 html.js .reveal.d-3{ transition-delay: .30s; }
 
-/* aksesibilitas */
 @media (prefers-reduced-motion: reduce){
   html.js .reveal{
     opacity: 1 !important;
@@ -561,7 +603,6 @@ html.js .reveal.d-3{ transition-delay: .30s; }
 
 /* =========================
    FOOTER – EHUB STYLE
-   (FONT FIX: jadi Montserrat)
 ========================= */
 .sipensi-footer{
   background: #22466C;
@@ -575,7 +616,6 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   margin: 0 auto;
 }
 
-/* BRAND */
 .footer-brand-logo{
   height: 72px;
   width: auto;
@@ -589,14 +629,12 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   opacity: .95;
 }
 
-/* TITLES */
 .footer-title{
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 14px;
 }
 
-/* LINKS */
 .footer-links,
 .footer-contact{
   list-style: none;
@@ -625,13 +663,11 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   color: #ffffff;
 }
 
-/* ICONS */
 .footer-contact i{
   font-size: 16px;
   min-width: 18px;
 }
 
-/* DIVIDER */
 .footer-divider{
   border: 0;
   height: 1px;
@@ -639,7 +675,6 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   margin: 32px 0 18px;
 }
 
-/* BOTTOM */
 .footer-bottom{
   text-align: center;
   font-size: 14px;
@@ -657,13 +692,13 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   color: #ffffff;
 }
 
-/* RESPONSIVE */
 @media (max-width: 991px){
   .footer-brand-logo{
     height: 64px;
   }
 }
 
+/* fallback reveal (kalau ada yg gak pakai html.js) */
 .reveal{
   opacity: 0;
   transform: translateY(18px);

@@ -23,9 +23,9 @@
         {{-- LOGO GROUP (KLIK BALIK KE DASHBOARD DEPAN) --}}
         <a href="{{ url('/') }}" class="auth-logos-link" aria-label="Kembali ke Beranda">
           <div class="d-flex align-items-center gap-3 auth-logos">
-            <img src="{{ asset('img/logo/logo_umkm_tanpabg.png') }}" class="auth-logo" alt="KemenUMKM">
-            <img src="{{ asset('img/logo/logo_incubase_tanpabg.png') }}" class="auth-logo" alt="Ehub Incubase">
-            <img src="{{ asset('img/logo/logo_sipensi_hd.png') }}" class="auth-logo auth-logo-sipensi" alt="SIPENSI">
+            <!-- <img src="{{ asset('img/logo/logo_umkm_tanpabg.png') }}" class="auth-logo" alt="KemenUMKM"> -->
+            <img src="{{ asset('img/logo/logo_incubase_nobg.png') }}" class="auth-logo" alt="Ehub Incubase">
+            <!-- <img src="{{ asset('img/logo/logo_sipensi_hd.png') }}" class="auth-logo auth-logo-sipensi" alt="SIPENSI"> -->
           </div>
         </a>
 

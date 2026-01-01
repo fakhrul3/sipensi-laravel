@@ -1,32 +1,34 @@
 /* =====================================================
-   AUTH PAGE – SIPENSI (FINAL CLEAN)
+   AUTH PAGE – SIPENSI (FINAL CLEAN + FIXED)
 ===================================================== */
 
 :root{
   --sipensi-blue: #22466C;
   --sipensi-teal: #2f7f8c;
 
-  --gold-1: rgba(246,226,172,0.70);
-  --gold-2: rgba(250,235,190,0.55);
-  --white-1: rgba(255,255,255,0.85);
+  /* background theme */
+  --gold-1: rgb(34, 187, 238);
+  --gold-2: rgb(119, 190, 214);
+  --white-1: rgba(166, 234, 247, 0.85);
 
   /* REGISTER VISUAL CONTROL */
-
-   /* === REGISTER VISUAL CONTROL (EDIT DI SINI) ===
-     - --reg-map-scale : zoom peta utama
-     - --reg-map-y     : naik/turun peta (lebih kecil = naik)
-     - --reg-map-size  : ukuran peta (pakai vh biar konsisten)
-     - --reg-net-scale : zoom ornamen bawah
-     - --reg-net-opacity: transparansi ornamen bawah
-  */
-  --reg-map-scale: 0.60;
+  --reg-map-scale: 0.80;
   --reg-map-y: 200%;
   --reg-map-size: 74vh;
 
   --reg-net-scale: 1.08;
   --reg-net-opacity: .32;
+
+  /* ORNAMENT (POJOK) */
+  --orn-size: 850px;
+  --orn-x: right -410px;
+  --orn-y: top -370px;
+  --orn-opacity: .29;
 }
 
+/* =========================
+   RESET
+========================= */
 html, body{
   width: 100%;
   overflow-x: hidden;
@@ -37,15 +39,26 @@ html, body{
   font-family: "KoHo", sans-serif;
 }
 
+/* =========================
+   PAGE WRAPPER + BG GRADIENT
+========================= */
 .auth-page{
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: #fff;
+
+  /* GRADIENT UTAMA (JANGAN DIHAPUS) */
+  background: linear-gradient(
+    170deg,
+    var(--gold-1) 0%,
+    var(--gold-2) 25%,
+    var(--white-1) 55%,
+    #ffffff 100%
+  );
 }
 
 /* =========================
-   GLOBAL BACKGROUND
+   ORNAMENT LAYER (POJOK)
 ========================= */
 .auth-page::before{
   content: "";
@@ -54,24 +67,15 @@ html, body{
   z-index: 0;
   pointer-events: none;
 
-  background:
-    linear-gradient(
-      180deg,
-      var(--gold-1) 0%,
-      var(--gold-2) 25%,
-      var(--white-1) 55%,
-      rgba(255,255,255,1) 100%
-    ),
-    url("/img/bg_login.png");
-
+  background-image: url("/img/bunga_kemenumkm.png");
   background-repeat: no-repeat;
-  background-position: center top;
-  background-size: 120%;
+  background-position: var(--orn-x) var(--orn-y);
+  background-size: var(--orn-size);
 
-  transform: scale(1.18);
-  transform-origin: center top;
-  transition: transform 2.5s ease, opacity 1.2s ease;
-  will-change: transform;
+  opacity: 0;
+  transform: translate3d(0,0,0) scale(1);
+  transition: opacity 700ms ease, transform 900ms cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform;
 }
 
 /* content di atas background */
@@ -84,16 +88,20 @@ html, body{
 /* =========================
    TOPBAR
 ========================= */
-.auth-topbar{ background: transparent; }
+.auth-topbar{
+  background: transparent;
+}
 
+/* logo base */
 .auth-logo{
-  height: 34px !important;
+  height: 54px !important;
   width: auto !important;
-  max-height: 34px !important;
+  max-height: none !important;
   object-fit: contain;
   transition: transform .18s ease, filter .18s ease;
 }
 
+/* kalau kamu mau SIPENSI juga ikut gede, naikin angka ini */
 .auth-logo.auth-logo-sipensi{
   height: 30px !important;
   max-height: 30px !important;
@@ -151,9 +159,9 @@ html, body{
    TYPOGRAPHY
 ========================= */
 .auth-title{
-  font-size: 64px;
+  font-size: 54px;
   font-weight: 900;
-  color: teal;
+  color: #22466C;
   margin-top: 6px;
   text-shadow: 0 10px 24px rgba(0,0,0,0.10);
 }
@@ -169,16 +177,40 @@ html, body{
 }
 
 /* =========================
+   TITLE WRAP + DIVIDER
+   (Biar divider gak ke tengah)
+========================= */
+/* divider: kuat di tengah, memudar di kiri & kanan */
+/* === CENTER-OUT FADE DIVIDER (CENTER + LEBIH PANJANG) === */
+.title-divider{
+  width: min(520px, 86%);   /* ✅ panjang tapi tetap aman responsive */
+  height: 4px;
+  margin: 18px auto 30px;   /* ✅ auto = ketengah */
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.18) 0%,
+    rgba(0,0,0,.08) 25%,
+    #ffffff 50%,
+    rgba(0,0,0,.08) 75%,
+    rgba(0,0,0,.18) 100%
+  );
+}
+
+
+
+
+/* =========================
    LINK STYLE (NO UNDERLINE)
 ========================= */
 .auth-link{
   font-weight: 700;
   color: var(--sipensi-teal);
-  text-decoration: none !important; /* KUNCI */
+  text-decoration: none !important;
 }
 
 .auth-link:hover{
-  text-decoration: none !important; /* KUNCI */
   opacity: .88;
 }
 
@@ -222,6 +254,7 @@ html, body{
 
 .form-control-lg{ border-radius: 12px; }
 .form-control{ border: 1px solid rgba(0,0,0,0.10); }
+
 .form-control:focus{
   border-color: rgba(34,70,108,0.55);
   box-shadow: 0 0 0 .18rem rgba(34,70,108,0.18);
@@ -237,14 +270,15 @@ html, body{
 ========================= */
 .page-loading *{ transition: none !important; }
 .page-loading.auth-page{ opacity: 0; }
+
 .page-loaded.auth-page{
   opacity: 1;
   transition: opacity .8s ease;
 }
 
 .page-loaded.auth-page::before{
-  transform: scale(1.30);
-  pointer-events: none !important;
+  opacity: var(--orn-opacity);
+  transform: scale(1.02);
 }
 
 /* =========================
@@ -255,9 +289,11 @@ html, body{
 .modal-dialog, .modal-content{ pointer-events: auto !important; }
 .modal-backdrop.show{ opacity: .25 !important; }
 
-.help-modal, .help-modal *{ font-family: "KoHo", sans-serif !important; }
+.help-modal, .help-modal *{
+  font-family: "KoHo", sans-serif !important;
+}
 
-/* REQUEST: 3 tombol modal jadi TEAL */
+/* 3 tombol modal jadi TEAL */
 .help-btn{
   border-radius: 12px;
   background: transparent !important;
@@ -294,7 +330,7 @@ html, body{
   width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto 18px;
+  margin: -50px auto -10px;
   pointer-events: none;
   user-select: none;
 }
@@ -306,20 +342,15 @@ html, body{
   z-index: 6;
 }
 
-
 /* =========================================
-   REGISTER LEFT VISUAL (MAP + NET) - FIX
-   (tempel paling bawah auth.css)
+   REGISTER LEFT VISUAL (MAP + NET)
 ========================================= */
-
-/* container kolom kiri */
 .auth-register-left{
   position: relative;
   min-height: 100vh;
   overflow: hidden;
 }
 
-/* wrapper visual */
 .auth-register-left .left-visual{
   position: relative;
   width: 100%;
@@ -332,9 +363,9 @@ html, body{
 .auth-register-left .left-visual .register-visual-img{
   position: absolute;
   left: 50%;
-  top: 28%;                           /* NAIK/TURUN MAP (ubah ini) */
-  transform: translate(-50%, -50%) scale(1.0);  /* ZOOM MAP (ubah scale) */
-  width: 105%;                        /* BESAR-KECIL MAP (ubah ini) */
+  top: 28%;
+  transform: translate(-50%, -50%) scale(1.0);
+  width: 105%;
   height: auto;
   max-width: none;
   object-fit: contain;
@@ -347,14 +378,14 @@ html, body{
 .auth-register-left .left-visual .net-banner{
   position: absolute;
   left: 50%;
-  bottom: 0%;                       /* NAIK/TURUN NET (ubah ini) */
-  transform: translateX(-50%) scale(1.08); /* ZOOM NET (ubah scale) */
-  width: 130%;                        /* LEBAR NET (ubah ini) */
+  bottom: 0%;
+  transform: translateX(-50%) scale(1.08);
+  width: 130%;
   height: auto;
   max-width: none;
   object-fit: cover;
   z-index: 1;
-  opacity: .28;                       /* SUBTLE (ubah ini) */
+  opacity: .28;
   pointer-events: none;
   user-select: none;
   filter: blur(.25px);

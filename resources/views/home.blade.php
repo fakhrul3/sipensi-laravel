@@ -30,7 +30,7 @@
 
       {{-- SLIDE 2 --}}
       <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide2.jpg') }}');"></div>
+        <div class="hero-bg" style="background-image:url('{{ asset('img/slide2.jpg') }}'); }}"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -47,11 +47,10 @@
           </div>
         </div>
       </div>
-      
 
       {{-- SLIDE 3 --}}
       <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide3.jpg') }}');"></div>
+        <div class="hero-bg" style="background-image:url('{{ asset('img/slide3.jpg') }}'); }}"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -68,11 +67,10 @@
           </div>
         </div>
       </div>
-    
 
       {{-- SLIDE 4 --}}
       <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide4.jpg') }}');"></div>
+        <div class="hero-bg" style="background-image:url('{{ asset('img/slide4.jpg') }}'); }}"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -89,11 +87,10 @@
           </div>
         </div>
       </div>
-      
 
       {{-- SLIDE 5 --}}
       <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide5.jpg') }}');"></div>
+        <div class="hero-bg" style="background-image:url('{{ asset('img/slide5.jpg') }}'); }}"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -131,21 +128,19 @@
   <div class="container">
 
     <div class="incubator-head text-center">
-      <h3 class="incubator-title reveal">Menghubungkan Inkubator Menguatkan Wirausaha</h3>
-      <!-- <p class="incubator-subtitle reveal d-1">
-        Menghubungkan Inkubator, Menguatkan Wirausaha.
-      </p> -->
+      <div class="incubator-title-wrap">
+        <h3 class="incubator-title dotted-title reveal">
+          Menghubungkan Inkubator<br>Menguatkan Wirausaha
+        </h3>
+      </div>
     </div>
 
     <div class="row g-4 justify-content-center incubator-cards">
       {{-- CARD 1 --}}
       <div class="col-12 col-md-6 col-lg-5 reveal reveal-left d-1">
         <div class="incubator-card incubator-card--teal">
-          <!-- <div class="incubator-card-title">Total</div> -->
-
           <div class="incubator-number stat-number"
                data-target="{{ (int)($totalLembaga ?? 732) }}">0</div>
-
           <div class="incubator-card-foot">Inkubator Terdaftar</div>
         </div>
       </div>
@@ -153,11 +148,8 @@
       {{-- CARD 2 --}}
       <div class="col-12 col-md-6 col-lg-5 reveal reveal-right d-2">
         <div class="incubator-card incubator-card--gold">
-          <!-- <div class="incubator-card-title">Total</div> -->
-
           <div class="incubator-number stat-number"
                data-target="{{ (int)($totalTenant ?? 6165) }}">0</div>
-
           <div class="incubator-card-foot">Usaha Rintisan Terinkubasi</div>
         </div>
       </div>
@@ -171,8 +163,6 @@
 
   </div>
 </section>
-
-
 
 {{-- konten bawah --}}
 <div class="container my-5">
@@ -206,7 +196,6 @@
   </div>
 </div>
 
-{{-- panggil home.js  --}}
 @push('scripts')
   <script src="{{ asset('js/home.js') }}"></script>
 @endpush

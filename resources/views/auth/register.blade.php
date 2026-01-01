@@ -15,14 +15,14 @@
       <div class="left-visual">
         {{-- MAP UTAMA --}}
         <img
-          src="{{ asset('img/logo_register.png') }}"
+          src="{{ asset('img/peta_3d_nobg.png') }}"
           alt="Peta Indonesia"
           class="register-visual-img"
         />
 
         {{-- ORNAMEN BAWAH (SUBTLE) --}}
         <img
-          src="{{ asset('img/incubation.png') }}"
+          src="{{ asset('img/net_3d_nobg.png') }}"
           alt="Network Ornament"
           class="net-banner"
         />
@@ -35,8 +35,10 @@
 
         <div class="text-center mb-4 register-heading">
           <h1 class="auth-title mb-2">Pendaftaran Lembaga Inkubator</h1>
+          <div class="title-divider"></div>
         </div>
 
+        
 
         <div class="auth-card auth-card-modern">
           <form onsubmit="return false">
