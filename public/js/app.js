@@ -62,21 +62,21 @@
     });
   }
 
-  function initNavbarScroll() {
-    const nav = document.getElementById('mainNavbar');
-    if (!nav) return;
+    function initNavbarScroll() {
+      const nav = document.getElementById('mainNavbar');
+      if (!nav) return;
 
-    const onScroll = () => {
-      nav.classList.toggle('navbar-scrolled', window.scrollY > 10);
-    };
+      const onScroll = () => {
+        nav.classList.toggle('navbar-scrolled', window.scrollY > 10);
+      };
 
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-  }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
 
   document.addEventListener('DOMContentLoaded', () => {
     initPageTransition();
-    initNavbarScroll();
+    // initNavbarScroll();
   });
 })();
 

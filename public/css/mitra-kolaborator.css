@@ -1,40 +1,79 @@
-/* Google Font KoHo */
-@import url('https://fonts.googleapis.com/css2?family=KoHo:wght@400;600;700&display=swap');
-
 /* =====================================================
-   MITRA KOLABORATOR — STABLE + SMOOTH
-   - No blink on arrow click
-   - Arrow never disappears (only hidden if 1 page)
-   - Page-load transition: title + tabs + logo grid bareng
+   MITRA KOLABORATOR — CLEAN + STABLE (FINAL)
+   - Tabs tidak kepotong (full-bleed keluar padding .container)
+   - Semua font Montserrat (khusus page Mitra)
+   - Title lebih jauh dari navbar
+   - Overlay background super tipis (kaya hero)
 ===================================================== */
 
+/* Google Font Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+/* =====================================================
+   VARIABLES
+===================================================== */
 :root{
   --mitra-ease: cubic-bezier(.22,1,.36,1);
   --mitra-fade: 320ms;
   --mitra-rise: 18px;
+
+  --navbar-offset: 96px;
+
+  /* padding container bootstrap (umumnya 12px–16px) */
+  --container-pad: 16px;
+
+  /* tabs sizing */
+  --tabs-gap: 8px;
+  --tabs-pad-x: 16px;
+
+  /* overlay */
+  --mitra-overlay: 0.16; /* super tipis */
 }
+
+/* =====================================================
+   FONT GLOBAL (khusus page mitra)
+===================================================== */
+.page-mitra,
+.page-mitra *{
+  font-family: "Montserrat", sans-serif !important;
+}
+
+/* =====================================================
+   PAGE OFFSET (NAVBAR FIXED)
+===================================================== */
+/* Navbar tetap overlay di atas hero (biar transparan beneran) */
+.page-mitra{
+  padding-top: 0 !important;
+}
+
+/* Yang didorong cuma kontennya, bukan backgroundnya */
+.mitra-hero{
+  padding-top: var(--navbar-offset);
+}
+
 
 /* =====================================================
    HERO WRAPPER + BACKGROUND
 ===================================================== */
 .mitra-hero{
   position: relative;
-  min-height: 100vh;
-  padding-top: 90px;   /* aman dari navbar */
+  min-height: calc(100vh - var(--navbar-offset));
   padding-bottom: 80px;
-  overflow: hidden;
 
-  /* anti white-flash saat image belum kebuka */
+  overflow: visible;
   background: #0c1b2a;
 }
 
+/* Background wrapper (boleh di-crop) */
 .mitra-bg{
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
+/* layer foto */
 .mitra-bg-layer{
   position: absolute;
   inset: 0;
@@ -47,11 +86,18 @@
   transition: opacity 900ms ease;
   will-change: opacity;
 
-  /* fallback color supaya gak putih */
   background-color: #0c1b2a;
 }
-
 .mitra-bg-layer.active{ opacity: 1; }
+
+/* ✅ overlay super tipis (kaya hero) */
+.mitra-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,var(--mitra-overlay));
+  z-index: 1;
+}
 
 /* konten di atas bg */
 .mitra-hero .container{
@@ -60,16 +106,15 @@
 }
 
 /* =====================================================
-   TITLE (STYLE)
+   TITLE
 ===================================================== */
 .mitra-title-wrap{
-  margin-top: 10px;
-  margin-bottom: 6px;
+  margin-top: 40px;   /* jarak dari navbar */
+  margin-bottom: 10px;
   text-align: center;
 }
 
 .mitra-title{
-  font-family: 'KoHo', sans-serif;
   font-size: 70px;
   font-weight: 700;
   color: #deb95c;
@@ -84,12 +129,13 @@
 .mitra-subtitle{
   margin: 4px 0 0 0 !important;
   font-size: 14px;
+  font-weight: 500;
   color: rgba(255,255,255,.90);
   text-shadow: 0 2px 10px rgba(0,0,0,.35);
 }
 
 /* =====================================================
-   PAGE LOAD TRANSITION (TITLE = TABS = LOGO BARENG)
+   PAGE LOAD TRANSITION
    Trigger: body.page-ready (di-set oleh JS)
 ===================================================== */
 .mitra-title-wrap,
@@ -111,57 +157,90 @@ body.page-ready .mitra-logos-wrap{
 }
 
 /* =====================================================
-   TABS
+   TABS (ANTI KEPOTONG — FULL BLEED)
+   Kunci:
+   - lebar tabs dibuat melebar keluar padding .container
+   - margin negatif biar kanan/kiri gak "ketelen"
 ===================================================== */
 .mitra-tabs{
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 10px 0 18px 0 !important;
-  padding: 0;
+  align-items: center;
+  gap: var(--tabs-gap);
 
+  margin: 10px 0 18px 0 !important;
+
+  justify-content: flex-start;
   flex-wrap: nowrap;
-  overflow-x: auto;
   white-space: nowrap;
+
+  overflow-x: auto;
+  overflow-y: visible;
+
+  /* ✅ FULL BLEED keluar padding container */
+  width: calc(100% + (var(--container-pad) * 2));
+  margin-left: calc(var(--container-pad) * -1);
+  margin-right: calc(var(--container-pad) * -1);
+
+  padding: 0 var(--tabs-pad-x);
+
+  scroll-padding-left: var(--tabs-pad-x);
+  scroll-padding-right: var(--tabs-pad-x);
+
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
-.mitra-tabs::-webkit-scrollbar{ height: 6px; }
+/* spacer tipis kiri/kanan biar ujung aman */
+.mitra-tabs::before,
+.mitra-tabs::after{
+  content:"";
+  flex: 0 0 10px;
+}
+
+.mitra-tabs::-webkit-scrollbar{ height: 5px; }
 .mitra-tabs::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.25);
   border-radius: 999px;
 }
 
+/* CHIP */
 .mitra-tabs .nav-link{
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(170,170,170,.55);
-  color: rgba(20,20,20,.78);
+  flex: 0 0 auto;
 
-  font-size: 14px;
+  background: rgba(255,255,255,.80);
+  border: 1px solid rgba(170,170,170,.45);
+  color: rgba(20,20,20,.80);
+
+  font-size: 12.5px;
   font-weight: 600;
-  padding: 7px 16px;
+  padding: 6px 12px;
+  line-height: 1.15;
+
   border-radius: 999px;
 
   backdrop-filter: blur(6px);
-  transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
 }
 
 .mitra-tabs .nav-link:hover{
+  background: rgba(255,255,255,.92);
   transform: translateY(-1px);
-  background: rgba(255,255,255,.88);
 }
 
 .mitra-tabs .nav-link.active{
-  background: rgba(255,255,255,.92);
-  border-color: rgba(71,136,171,.55);
+  background: rgba(255,255,255,.95);
+  border-color: rgba(71,136,171,.45);
   color: #4788AB;
 }
 
+/* BADGE */
 .mitra-tabs .badge{
   background: rgba(0,0,0,.08);
   color: inherit;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 999px;
   margin-left: 6px;
-  font-size: 11px;
-  padding: .25em .55em;
 }
 
 /* =====================================================
@@ -172,24 +251,20 @@ body.page-ready .mitra-logos-wrap{
   margin-top: 10px;
 }
 
-/* grid */
 .mitra-grid{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 22px;
 
-  /* paging animation (arrow click) */
   transition: opacity var(--mitra-fade) ease, transform var(--mitra-fade) ease;
   will-change: opacity, transform;
 }
 
-/* keluar (dipakai JS) */
 .mitra-grid.is-fading{
   opacity: 0;
   transform: translateX(var(--shift, 0px));
 }
 
-/* cards */
 .mitra-card{
   background: rgba(255,255,255,.92);
   border-radius: 16px;
@@ -203,7 +278,6 @@ body.page-ready .mitra-logos-wrap{
   box-shadow: 0 10px 30px rgba(0,0,0,.12);
   transition: transform .25s ease, box-shadow .25s ease;
 
-  /* anti layout shift ketika logo belum load */
   min-height: 140px;
 }
 
@@ -221,11 +295,10 @@ body.page-ready .mitra-logos-wrap{
   display: block;
 }
 
-/* hide item non-aktif */
 .mitra-card.is-hidden{ display: none !important; }
 
 /* =====================================================
-   ARROWS (Spacing aman + selalu terlihat kalau pages>1)
+   ARROWS
 ===================================================== */
 .mitra-nav-btn{
   position: absolute;
@@ -236,7 +309,6 @@ body.page-ready .mitra-logos-wrap{
   padding: 0;
   margin: 0;
 
-  font-family: inherit;
   font-size: 56px;
   line-height: 1;
   color: rgba(255,255,255,.92);
@@ -254,10 +326,8 @@ body.page-ready .mitra-logos-wrap{
   opacity: 1;
 }
 
-/* JS akan toggle class .is-hidden untuk hide/show */
 .mitra-nav-btn.is-hidden{ display: none !important; }
 
-/* jarak panah */
 .mitra-prev{ left: -64px; }
 .mitra-next{ right: -64px; }
 
@@ -284,7 +354,7 @@ body.page-ready .mitra-logos-wrap{
 }
 
 /* =====================================================
-   NAVBAR (match dashboard behavior)
+   NAVBAR
 ===================================================== */
 #mainNavbar{
   transition: background-color .25s ease, box-shadow .25s ease, backdrop-filter .25s ease;
@@ -310,6 +380,34 @@ body.page-ready .mitra-logos-wrap{
 }
 
 /* =====================================================
+   RESPONSIVE
+===================================================== */
+@media (max-width: 992px){
+  .mitra-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px){
+  /* di HP padding container biasanya 12px */
+  :root{
+    --container-pad: 12px;
+  }
+
+  .mitra-title{ font-size: 44px; }
+  .mitra-subtitle{ font-size: 13px; }
+
+  .mitra-card{
+    padding: 22px;
+    min-height: 120px;
+  }
+
+  .mitra-card img{
+    max-height: 64px;
+  }
+}
+
+/* =====================================================
    REDUCE MOTION
 ===================================================== */
 @media (prefers-reduced-motion: reduce){
@@ -323,3 +421,8 @@ body.page-ready .mitra-logos-wrap{
     transform: none !important;
   }
 }
+
+.page-mitra .mitra-hero .container{
+  padding-top: 24px !important; /* sesuaikan 16-40 */
+}
+

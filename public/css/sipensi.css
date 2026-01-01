@@ -1,17 +1,22 @@
 /* =========================
    GLOBAL FONT
 ========================= */
+*{
+  font-family: "Montserrat", sans-serif;
+}
+
+:root{
+  --bs-body-font-family: "Montserrat", sans-serif;
+}
+
 html, body {
-  font-family: "KoHo", system-ui, -apple-system, "Segoe UI",
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
                Roboto, Arial, sans-serif;
 }
 
 /* =========================
    NAVBAR BASE
 ========================= */
-
-
-
 #mainNavbar {
   min-height: 72px;
   padding: 10px 0;
@@ -29,9 +34,28 @@ html, body {
   z-index: 5;
 }
 
-/* Brand */
-#mainNavbar.navbar-scrolled .navbar-brand img{
+/* =========================
+   BRAND LOGO (FIXED)
+   - Ini yang bikin ukuran LOGO beneran membesar
+========================= */
+#mainNavbar .navbar-brand{
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
+#mainNavbar .brand-logo{
+  height: 56px !important;   /* <<< BESARIN DI SINI */
+  width: auto !important;
+  max-height: none !important;
+  display: block;
   filter: none;
+  transition: height .25s ease;
+}
+
+/* pas navbar scrolled, logo sedikit mengecil biar rapih */
+#mainNavbar.navbar-scrolled .brand-logo{
+  height: 48px !important;
 }
 
 /* =========================
@@ -73,17 +97,14 @@ html, body {
 }
 
 .navbar .nav-link{
-  text-shadow: 0 2px 10px rgba(0,0,0,.5);
+  text-shadow: 0 2px 10px rgba(0,0,0,.15);
 }
-
-
 
 @media (min-width: 992px){
   #mainNavbar .menu-center{
     transform: translateX(-55px) !important; /* kecilin/naikin angka kalau mau */
   }
 }
-
 
 /* =========================
    MENU CENTER
@@ -141,13 +162,9 @@ html, body {
   backdrop-filter: blur(6px);
 }
 
-
-
-
-
 /* =========================
    GLOBAL BACKGROUND BASE
-   ========================= */
+========================= */
 
 /* wrapper background */
 .app-bg{
@@ -205,11 +222,6 @@ body.page-ready .app-bg.bg-gold::after{
   filter: blur(.2px);
 }
 
-
-
-
-
-
 /* =========================
    HERO
 ========================= */
@@ -232,18 +244,22 @@ body.page-ready .app-bg.bg-gold::after{
   transform: scale(1.02);
   z-index: 1;
 }
-.hero-overlay {
-  display: none;
+.hero-overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 1;
 }
 .hero-content {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  text-shadow: 0 4px 14px rgba(0,0,0,0.45);
 }
 
 /* HERO LOGO */
@@ -259,6 +275,7 @@ body.page-ready .app-bg.bg-gold::after{
   height: auto;
   max-height: 140px;
   object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.5));
 }
 
 /* =================================
@@ -269,7 +286,6 @@ body.page-ready .app-bg.bg-gold::after{
 .btn-selengkapnya:active{
   color: #fff !important;
 }
-
 
 .btn-selengkapnya{
   position: relative;
@@ -331,7 +347,6 @@ body.page-ready .app-bg.bg-gold::after{
   color: #fff !important;
 }
 
-
 .btn-inkubator{
   position: relative;
   display: inline-flex;
@@ -391,10 +406,10 @@ body.page-ready .app-bg.bg-gold::after{
   margin: 0 auto 28px;
 }
 .incubator-title{
-  font-weight: 800;
+  font-weight: 500;
   font-size: 54px;
   line-height: 1.1;
-  color: #4788AB;
+  color: #212121;
   margin-bottom: 10px;
 }
 .incubator-subtitle{
@@ -406,14 +421,25 @@ body.page-ready .app-bg.bg-gold::after{
 .incubator-cards{ margin-top: 22px; }
 .incubator-card{
   position: relative;
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 36px 26px 28px;
   text-align: center;
   color: #fff;
-  box-shadow: 0 12px 22px rgba(0,0,0,.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   min-height: 240px;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
+
+.incubator-cards .col-12 {
+    display: flex;
+}
+
 .incubator-card::before,
 .incubator-card::after{
   content: "";
@@ -426,24 +452,31 @@ body.page-ready .app-bg.bg-gold::after{
 .incubator-card::before{ top: -55px; left: -55px; }
 .incubator-card::after{ top: -55px; right: -55px; }
 
-.incubator-card--teal{ background: #4788AB; }
-.incubator-card--gold{ background: #F1D48E; }
+.incubator-card--teal{ background: #ffffff ; }
+.incubator-card--gold{ background: #ffffff ; }
 
-.incubator-card-title{
-  font-weight: 900;
-  font-size: 32px;
-  margin-bottom: 10px;
-}
 .incubator-number{
-  font-weight: 900;
-  font-size: 56px;
-  line-height: 1;
-  margin: 10px 0 12px;
-  letter-spacing: .5px;
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 .incubator-card-foot{
   font-size: 14px;
   opacity: .92;
+}
+
+/* Ubah warna teks jadi hitam */
+.incubator-card-title,
+.incubator-number,
+.incubator-card-foot {
+    color: #212529;
+}
+
+.incubator-card-foot {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #6c757d;
 }
 
 /* Mobile logo */
@@ -452,11 +485,15 @@ body.page-ready .app-bg.bg-gold::after{
     width: clamp(140px, 60vw, 280px);
     max-height: 90px;
   }
+
+  /* logo navbar di hp */
+  #mainNavbar .brand-logo{
+    height: 44px !important;
+  }
 }
 
 /* =========================
-   SCROLL ANIMATION – INCUBATOR (ANTI-BLANK)
-   Animasi aktif hanya kalau JS jalan (html.js)
+   SCROLL ANIMATION – INCUBATOR
 ========================= */
 html.js .reveal{
   opacity: 0;
@@ -486,26 +523,7 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   }
 }
 
-/* FIX: tombol inkubator jangan sampai teks jadi hitam saat hover */
-.btn-inkubator,
-.btn-inkubator:visited{
-  color: #fff !important;
-}
-.btn-inkubator:hover,
-.btn-inkubator:focus,
-.btn-inkubator:active{
-  color: #fff !important;
-  text-decoration: none;
-}
-.btn-inkubator::after,
-.btn-inkubator:hover::after,
-.btn-inkubator:focus::after,
-.btn-inkubator:active::after{
-  color: #fff !important;
-}
-
-
-/* ===== Page transition (dashboard <-> mitra) ===== */
+/* ===== Page transition ===== */
 .sipensi-page {
   opacity: 1;
   transition: opacity .18s ease;
@@ -514,33 +532,12 @@ html.js .reveal.d-3{ transition-delay: .30s; }
 .sipensi-page.page-enter { opacity: 0; }
 .sipensi-page.page-enter.page-enter-active { opacity: 1; }
 
-/* ===== Navbar shared behavior ===== */
-#mainNavbar.navbar {
-  transition: background-color .25s ease, box-shadow .25s ease, backdrop-filter .25s ease, padding .25s ease;
-}
-#mainNavbar.navbar-solid {
-  background: rgba(255, 255, 255, 0.86);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.10);
-}
-#mainNavbar .brand-logo { height: 34px; width: auto; }
-#mainNavbar .brand-text { font-weight: 700; letter-spacing: .5px; }
-#mainNavbar .nav-link.active {
-  font-weight: 700;
-  text-decoration: none;
-  border-bottom: 2px solid #4788AB;
-}
-
-/* --- Shared navbar helpers (used by dashboard + mitra) --- */
+/* --- Shared navbar helpers --- */
 .navbar-shell{
   max-width: 1400px;
   margin: 0 auto;
 }
-.brand-logo{
-  height: 34px;
-  width: auto;
-  display:block;
-}
+
 .btn-login{
   background: #1d4f7a;
   color:#fff;
@@ -555,23 +552,22 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   color:#fff;
   transform: translateY(-1px);
   box-shadow: 0 10px 26px rgba(0,0,0,.18);
-} 
-
+}
 
 .stat-number {
   font-weight: 900;
   font-size: 56px;
 }
 
-
 /* =========================
    FOOTER – EHUB STYLE
+   (FONT FIX: jadi Montserrat)
 ========================= */
 .sipensi-footer{
   background: #22466C;
   color: #ffffff;
   padding: 64px 0 32px;
-  font-family: "KoHo", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .sipensi-footer-shell{

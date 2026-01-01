@@ -1,11 +1,17 @@
+{{-- DEBUG --}}
+<!-- MITRA VIEW AKTIF -->
+
+
 @extends('layouts.app')
 @section('title','Mitra Kolaborator')
-{{-- kalau kamu pakai sistem bg-variant di layout --}}
 @section('bg-variant','')
+
+@push('styles')
+  <link rel="stylesheet" href="{{ asset('css/mitra-kolaborator.css') }}">
+@endpush
 
 @section('content')
 @php
-  // Background slides (pastikan file ada di public/img/)
   $bgSlides = [
     asset('img/slide1.JPG'),
     asset('img/slide2.JPG'),
@@ -13,83 +19,103 @@
     asset('img/slide4.JPG'),
     asset('img/slide5.JPG'),
   ];
+  $firstKey = array_key_first($tabs);
 @endphp
 
-<div class="mitra-hero">
-  {{-- Background Slideshow --}}
-  <div class="mitra-bg" data-slides='@json($bgSlides)'>
-    <div class="mitra-bg-layer layer-a"></div>
-    <div class="mitra-bg-layer layer-b"></div>
-  </div>
+<div class="page-mitra">
+  <div class="mitra-hero">
 
-  <div class="container py-5">
-    <div class="mitra-title-wrap">
-      <h1 class="mitra-title">65++ Mitra Kolaborator</h1>
-      <p class="mitra-subtitle">Berkolaborasi untuk Wirausaha Indonesia</p>
+    {{-- Background --}}
+    <div class="mitra-bg" data-slides='@json($bgSlides)'>
+      <div class="mitra-bg-layer layer-a active"></div>
+      <div class="mitra-bg-layer layer-b"></div>
     </div>
 
-    {{-- Tabs --}}
-    <ul class="nav nav-pills mitra-tabs" id="mitraTabs" role="tablist">
-      @php $i = 0; @endphp
-      @foreach($groups as $title => $items)
-        @php
-          $id = 'tab-' . \Illuminate\Support\Str::slug($title);
-          $active = $i === 0 ? 'active' : '';
-          $selected = $i === 0 ? 'true' : 'false';
-          $i++;
-        @endphp
-        <li class="nav-item" role="presentation">
-          <button class="nav-link {{ $active }}" id="{{ $id }}-btn"
-                  data-bs-toggle="pill" data-bs-target="#{{ $id }}"
-                  type="button" role="tab" aria-controls="{{ $id }}"
-                  aria-selected="{{ $selected }}">
-            {{ $title }}
-            <span class="ms-1 badge rounded-pill">{{ $items->count() }}</span>
-          </button>
-        </li>
-      @endforeach
-    </ul>
+    <div class="container py-5">
 
-    {{-- Tab Contents --}}
-    <div class="tab-content">
-      @php $j = 0; @endphp
-      @foreach($groups as $title => $items)
-        @php
-          $id = 'tab-' . \Illuminate\Support\Str::slug($title);
-          $show = $j === 0 ? 'show active' : '';
-          $j++;
-        @endphp
+      <div class="mitra-title-wrap">
+        <h1 class="mitra-title">65++ Mitra Kolaborator</h1>
+        <p class="mitra-subtitle">Berkolaborasi untuk Wirausaha Indonesia</p>
+      </div>
 
-        <div class="tab-pane fade {{ $show }}" id="{{ $id }}" role="tabpanel" aria-labelledby="{{ $id }}-btn" tabindex="0">
-          <div class="mitra-logos-wrap" data-mitra-wrap>
+      {{-- Tabs --}}
+      <ul class="nav nav-pills mitra-tabs" id="mitraTabs" role="tablist">
+        @foreach($tabs as $key => $tab)
+          @php
+            $id = 'tab-' . $key;
+            $active = $key === $firstKey ? 'active' : '';
+            $selected = $key === $firstKey ? 'true' : 'false';
+          @endphp
 
-            {{-- Arrows --}}
-            <button class="mitra-nav-btn mitra-prev" type="button" aria-label="Previous" data-mitra-prev>&lsaquo;</button>
-            <button class="mitra-nav-btn mitra-next" type="button" aria-label="Next" data-mitra-next>&rsaquo;</button>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link {{ $active }}"
+              id="{{ $id }}-btn"
+              data-bs-toggle="pill"
+              data-bs-target="#{{ $id }}"
+              type="button"
+              role="tab"
+              aria-controls="{{ $id }}"
+              aria-selected="{{ $selected }}"
+            >
+              {{ $tab['label'] }}
+              <span class="ms-1 badge rounded-pill">{{ count($tab['files']) }}</span>
+            </button>
+          </li>
+        @endforeach
+      </ul>
 
-            {{-- Grid --}}
-            <div class="mitra-grid" data-mitra-grid>
-              @foreach($items as $logo)
-                <div class="mitra-card" data-mitra-item>
-                  <img src="{{ asset($logo['path']) }}" alt="{{ $logo['name'] }}" loading="lazy">
-                </div>
-              @endforeach
+      {{-- Content --}}
+      <div class="tab-content">
+        @foreach($tabs as $key => $tab)
+          @php
+            $id = 'tab-' . $key;
+            $show = $key === $firstKey ? 'show active' : '';
+          @endphp
+
+          <div
+            class="tab-pane fade {{ $show }}"
+            id="{{ $id }}"
+            role="tabpanel"
+            aria-labelledby="{{ $id }}-btn"
+            tabindex="0"
+          >
+            <div class="mitra-logos-wrap" data-mitra-wrap>
+              <button class="mitra-nav-btn mitra-prev" type="button" aria-label="Previous" data-mitra-prev>&lsaquo;</button>
+              <button class="mitra-nav-btn mitra-next" type="button" aria-label="Next" data-mitra-next>&rsaquo;</button>
+
+              <div class="mitra-grid" data-mitra-grid>
+                @foreach($tab['files'] as $file)
+                  <div class="mitra-card" data-mitra-item>
+                    <img
+                      src="{{ asset($mitraBaseUrl . '/' . rawurlencode($file)) }}"
+                      alt="{{ pathinfo($file, PATHINFO_FILENAME) }}"
+                      loading="lazy"
+                    >
+                  </div>
+                @endforeach
+              </div>
+
+              <div class="mitra-page-indicator" data-mitra-indicator></div>
             </div>
-
-            <div class="mitra-page-indicator" data-mitra-indicator></div>
           </div>
-        </div>
-      @endforeach
-    </div>
+        @endforeach
+      </div>
 
+    </div>
   </div>
 </div>
 @endsection
 
-@push('styles')
-  <link rel="stylesheet" href="{{ asset('css/mitra-kolaborator.css') }}">
-@endpush
-
 @push('scripts')
+  {{-- Page-ready + reset tabs (TIDAK sentuh navbar) --}}
+  <script>
+    window.addEventListener('load', () => {
+      document.body.classList.add('page-ready');
+      const tabs = document.querySelector('.mitra-tabs');
+      if (tabs) tabs.scrollLeft = 0;
+    });
+  </script>
+
   <script src="{{ asset('js/mitra-kolaborator.js') }}" defer></script>
 @endpush

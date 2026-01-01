@@ -16,11 +16,10 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
-            <p class="fs-5 mb-4 text-white reveal d-1">
-              Platform terpadu untuk mengakses informasi Inkubator<br>
-              dan membantu pengembangan Usaha Rintisan di seluruh Indonesia.
+            <p class="fs-6 mb-4 text-white reveal d-1">
+              Akses informasi Inkubator dan Usaha Rintisan Indonesia
             </p>
             <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
               Selengkapnya
@@ -37,11 +36,10 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
-            <p class="fs-5 mb-4 text-white reveal d-1">
-              Platform terpadu untuk mengakses informasi Inkubator<br>
-              dan membantu pengembangan Usaha Rintisan di seluruh Indonesia.
+            <p class="fs-6 mb-4 text-white reveal d-1">
+              Akses informasi Inkubator dan Usaha Rintisan Indonesia
             </p>
             <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
               Selengkapnya
@@ -59,11 +57,10 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
-            <p class="fs-5 mb-4 text-white reveal d-1">
-              Platform terpadu untuk mengakses informasi Inkubator<br>
-              dan membantu pengembangan Usaha Rintisan di seluruh Indonesia.
+            <p class="fs-6 mb-4 text-white reveal d-1">
+              Akses informasi Inkubator dan Usaha Rintisan Indonesia
             </p>
             <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
               Selengkapnya
@@ -81,11 +78,10 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
-            <p class="fs-5 mb-4 text-white reveal d-1">
-              Platform terpadu untuk mengakses informasi Inkubator<br>
-              dan membantu pengembangan Usaha Rintisan di seluruh Indonesia.
+            <p class="fs-6 mb-4 text-white reveal d-1">
+              Akses informasi Inkubator dan Usaha Rintisan Indonesia
             </p>
             <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
               Selengkapnya
@@ -103,11 +99,10 @@
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/logo_sipensi_3d.png') }}" alt="SIPENSI" class="hero-logo">
+              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
-            <p class="fs-5 mb-4 text-white reveal d-1">
-              Platform terpadu untuk mengakses informasi Inkubator<br>
-              dan membantu pengembangan Usaha Rintisan di seluruh Indonesia.
+            <p class="fs-6 mb-4 text-white reveal d-1">
+              Akses informasi Inkubator dan Usaha Rintisan Indonesia
             </p>
             <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
               Selengkapnya
@@ -136,18 +131,17 @@
   <div class="container">
 
     <div class="incubator-head text-center">
-      <h2 class="incubator-title reveal">Inkubator dan Tenant</h2>
-      <p class="incubator-subtitle reveal d-1">
-        Inkubator menyelenggarakan kegiatan inkubasi untuk mendukung pengembangan
-        dan pertumbuhan Usaha Rintisan melalui layanan dan program pendampingan.
-      </p>
+      <h3 class="incubator-title reveal">Menghubungkan Inkubator Menguatkan Wirausaha</h3>
+      <!-- <p class="incubator-subtitle reveal d-1">
+        Menghubungkan Inkubator, Menguatkan Wirausaha.
+      </p> -->
     </div>
 
     <div class="row g-4 justify-content-center incubator-cards">
       {{-- CARD 1 --}}
       <div class="col-12 col-md-6 col-lg-5 reveal reveal-left d-1">
         <div class="incubator-card incubator-card--teal">
-          <div class="incubator-card-title">Total</div>
+          <!-- <div class="incubator-card-title">Total</div> -->
 
           <div class="incubator-number stat-number"
                data-target="{{ (int)($totalLembaga ?? 732) }}">0</div>
@@ -159,7 +153,7 @@
       {{-- CARD 2 --}}
       <div class="col-12 col-md-6 col-lg-5 reveal reveal-right d-2">
         <div class="incubator-card incubator-card--gold">
-          <div class="incubator-card-title">Total</div>
+          <!-- <div class="incubator-card-title">Total</div> -->
 
           <div class="incubator-number stat-number"
                data-target="{{ (int)($totalTenant ?? 6165) }}">0</div>
@@ -171,7 +165,7 @@
 
     <div class="text-center mt-4 reveal d-3">
       <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-inkubator">
-        Lihat Semua Inkubator
+        Inkubator Terdaftar
       </a>
     </div>
 

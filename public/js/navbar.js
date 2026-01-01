@@ -1,17 +1,34 @@
+// public/js/navbar.js
 document.addEventListener("DOMContentLoaded", () => {
-  const nav = document.getElementById("mainNavbar");
-  if (!nav) return;
+  const navbar = document.getElementById("mainNavbar");
+  if (!navbar) return;
 
-  const setState = () => {
-    if (window.scrollY > 10) {
-      nav.classList.add("navbar-scrolled");
-      nav.classList.remove("navbar-transparent");
-    } else {
-      nav.classList.remove("navbar-scrolled");
-      nav.classList.add("navbar-transparent");
-    }
+  const setTransparent = () => {
+    navbar.classList.add("navbar-transparent");
+    navbar.classList.remove("navbar-scrolled");
   };
 
-  setState();
-  window.addEventListener("scroll", setState, { passive: true });
+  const setScrolled = () => {
+    navbar.classList.add("navbar-scrolled");
+    navbar.classList.remove("navbar-transparent");
+  };
+
+  const updateNavbar = () => {
+    // ✅ SEMUA PAGE: top transparan, scroll putih
+    if (window.scrollY > 10) setScrolled();
+    else setTransparent();
+  };
+
+  // INIT
+  updateNavbar();
+
+  // SCROLL
+  window.addEventListener("scroll", updateNavbar, { passive: true });
+
+  // MOBILE: saat menu dibuka, paksa putih biar kebaca
+  const collapse = document.getElementById("mainNavbarNav");
+  if (collapse) {
+    collapse.addEventListener("show.bs.collapse", setScrolled);
+    collapse.addEventListener("hidden.bs.collapse", updateNavbar);
+  }
 });
