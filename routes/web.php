@@ -19,5 +19,8 @@ Route::get('/forgot-password', function () {return view('auth.forgot-password');
 Route::view('/login', 'auth.login')->name('login.mock');
 Route::view('/forgot-password', 'auth.forgot-password')->name('password.request.mock');
 Route::view('/register', 'auth.register')->name('register.mock');
+Route::view('/tentang', 'tentang.tentang')->name('tentang');
+
+
 
 

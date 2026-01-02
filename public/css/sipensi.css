@@ -709,3 +709,32 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   opacity: 1;
   transform: translateY(0);
 }
+
+
+/* =================================
+   FOOTER: BIKIN KONTAK RATA (HANGING ICON)
+================================= */
+
+/* khusus kontak: jangan flex dorong teks */
+.sipensi-footer .footer-contact li{
+  position: relative;
+  display: block !important;
+  padding-left: 0 !important;    /* teks mulai dari kiri */
+  margin-bottom: 12px;
+}
+
+/* icon digeser ke kiri supaya "gantung" */
+.sipensi-footer .footer-contact li i{
+  position: absolute;
+  left: -26px;                   /* atur: -22 s/d -30 sesuai pas */
+  top: 2px;
+  width: 18px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* biar link gak turun/naik aneh */
+.sipensi-footer .footer-contact li a{
+  display: inline-block;
+}
+

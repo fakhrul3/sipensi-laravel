@@ -36,7 +36,8 @@ html, body{
 
 .auth-page,
 .auth-page *{
-  font-family: "KoHo", sans-serif;
+    font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
+               Roboto, Arial, sans-serif;
 }
 
 /* =========================
@@ -152,15 +153,15 @@ html, body{
    MAIN SPACING
 ========================= */
 .auth-main{
-  padding: 48px 0 80px;
+  padding: 38px 0 80px;
 }
 
 /* =========================
    TYPOGRAPHY
 ========================= */
 .auth-title{
-  font-size: 54px;
-  font-weight: 900;
+  font-size: 48px;
+  font-weight: 800;
   color: #22466C;
   margin-top: 6px;
   text-shadow: 0 10px 24px rgba(0,0,0,0.10);
@@ -178,14 +179,11 @@ html, body{
 
 /* =========================
    TITLE WRAP + DIVIDER
-   (Biar divider gak ke tengah)
 ========================= */
-/* divider: kuat di tengah, memudar di kiri & kanan */
-/* === CENTER-OUT FADE DIVIDER (CENTER + LEBIH PANJANG) === */
 .title-divider{
-  width: min(520px, 86%);   /* ✅ panjang tapi tetap aman responsive */
+  width: min(520px, 86%);
   height: 4px;
-  margin: 18px auto 30px;   /* ✅ auto = ketengah */
+  margin: 18px auto 30px;
   border-radius: 999px;
 
   background: linear-gradient(
@@ -197,9 +195,6 @@ html, body{
     rgba(0,0,0,.18) 100%
   );
 }
-
-
-
 
 /* =========================
    LINK STYLE (NO UNDERLINE)
@@ -279,6 +274,75 @@ html, body{
 .page-loaded.auth-page::before{
   opacity: var(--orn-opacity);
   transform: scale(1.02);
+}
+
+/* =====================================================
+   STAGGER ANIMATION (FIRST OPEN)
+   - tinggal kasih class: stg stg-1, stg-2, dst di blade
+===================================================== */
+
+/* base state */
+.auth-page .stg{
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: opacity, transform;
+}
+
+/* jangan jalanin stagger saat masih page-loading */
+.auth-page.page-loading .stg{
+  animation: none !important;
+}
+
+/* jalanin stagger ketika page-loading tidak ada / sudah lewat */
+.auth-page:not(.page-loading) .stg{
+  animation: authStgIn .65s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+@keyframes authStgIn{
+  from{ opacity: 0; transform: translateY(10px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+/* arah kiri/kanan opsional */
+.auth-page:not(.page-loading) .stg-left{
+  transform: translateX(-14px);
+  animation-name: authStgInLeft;
+}
+.auth-page:not(.page-loading) .stg-right{
+  transform: translateX(14px);
+  animation-name: authStgInRight;
+}
+
+@keyframes authStgInLeft{
+  from{ opacity: 0; transform: translateX(-14px); }
+  to{ opacity: 1; transform: translateX(0); }
+}
+@keyframes authStgInRight{
+  from{ opacity: 0; transform: translateX(14px); }
+  to{ opacity: 1; transform: translateX(0); }
+}
+
+/* delay preset */
+.stg-1{ animation-delay: .06s; }
+.stg-2{ animation-delay: .14s; }
+.stg-3{ animation-delay: .22s; }
+.stg-4{ animation-delay: .30s; }
+.stg-5{ animation-delay: .38s; }
+.stg-6{ animation-delay: .46s; }
+.stg-7{ animation-delay: .54s; }
+.stg-8{ animation-delay: .62s; }
+.stg-9{ animation-delay: .70s; }
+.stg-10{ animation-delay: .78s; }
+.stg-11{ animation-delay: .86s; }
+.stg-12{ animation-delay: .94s; }
+
+/* aksesibilitas */
+@media (prefers-reduced-motion: reduce){
+  .auth-page .stg{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* =========================

@@ -21,7 +21,7 @@
         <h6 class="footer-title">Navigasi</h6>
         <ul class="footer-links">
           <li><a href="{{ route('lembaga.index') }}">Inkubator</a></li>
-          <li><a href="{{ route('home') }}">Tentang</a></li>
+          <li><a href="{{ route('tentang') }}">Tentang</a></li>
           <li><a href="{{ route('mitra.index') }}">Mitra</a></li>
           <li><a href="{{ route('kontak') }}">Kontak</a></li>
         </ul>

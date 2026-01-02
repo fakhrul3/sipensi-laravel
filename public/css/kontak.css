@@ -1,25 +1,63 @@
 /* =====================================================
-   KONTAK KAMI – SIPENSI (FINAL FIX)
+   KONTAK + FAQ – SIPENSI (CLEAN FINAL)
+   - Scoped ke .page-kontak
+   - Kontak: bg_kontak + smooth overlay + parallax (fixed)
+   - FAQ: background gambar + overlay transparan (gambar tetap keliatan)
+   - Accordion: animasi max-height + rotate icon
 ===================================================== */
 
+/* =========================
+   SCOPE PAGE
+========================= */
 .page-kontak{
   font-family: "KoHo", sans-serif;
 }
 
-/* ===============================
-   LAYOUT
-================================ */
-.contact-top{
+/* =====================================================
+   SECTION: CONTACT (TOP)
+===================================================== */
+.page-kontak .contact-top{
   position: relative;
   padding: 140px 0 90px;
 
-  background-image: url("../img/bg_kontak.png");
+  background-image: url("../img/smesco_kontak.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: -50% 10%;
+  background-position: center;
+  background-attachment: fixed;
+
+  isolation: isolate;
 }
 
-.contact-top-grid{
+/* overlay lembut biar navbar & text kebaca */
+.page-kontak .contact-top::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  background:
+    radial-gradient(900px 420px at 18% 12%,
+      rgba(34,70,108,.35) 0%,
+      rgba(34,70,108,0) 60%
+    ),
+    linear-gradient(180deg,
+      rgba(0,0,0,.28) 0%,
+      rgba(0,0,0,.14) 38%,
+      rgba(0,0,0,.06) 70%,
+      rgba(0,0,0,0) 100%
+    );
+}
+
+/* konten di atas overlay */
+.page-kontak .contact-top > .container{
+  position: relative;
+  z-index: 1;
+}
+
+/* layout */
+.page-kontak .contact-top-grid{
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
@@ -28,211 +66,331 @@
   align-items: flex-start;
 }
 
-/* ===============================
-   LEFT (TITLE & SUBTITLE)
-================================ */
+/* LEFT */
 .page-kontak .contact-top-left .contact-title{
   font-size: clamp(40px, 4vw, 60px);
   font-weight: 700;
   margin-bottom: 10px;
-  color: #F1D48E; 
-  text-shadow: 0 2px 6px rgba(0,0,0,1);
+  color: #F1D48E;
+  text-shadow: 0 2px 10px rgba(0,0,0,.55);
 }
 
+.page-kontak .contact-top-left .contact-subtitle,
+.page-kontak .contact-top-left .contact-subtitle--org,
+.page-kontak .contact-top-left p{
+  color: rgba(255,255,255,.95) !important;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.65;
+  text-shadow: 0 2px 12px rgba(0,0,0,.55);
+}
 
-/* ===============================
-   MAP
-================================ */
-.contact-map{
+/* MAP */
+.page-kontak .contact-map{
   max-width: 560px;
   border-radius: 14px;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #e6e6e6;
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(255,255,255,.25);
 
   box-shadow:
-    0 10px 30px rgba(0,0,0,.18),
-    0 4px 10px rgba(0,0,0,.12);
+    0 14px 40px rgba(0,0,0,.20),
+    0 6px 16px rgba(0,0,0,.14);
 
-  transition: transform .35s ease, box-shadow .35s ease;
+  transition: transform .28s ease, box-shadow .28s ease;
 }
 
-.contact-map:hover{
+.page-kontak .contact-map:hover{
   transform: translateY(-4px);
   box-shadow:
-    0 18px 45px rgba(0,0,0,.22),
-    0 6px 16px rgba(0,0,0,.14);
+    0 20px 54px rgba(0,0,0,.26),
+    0 10px 22px rgba(0,0,0,.16);
 }
 
-.contact-map iframe{
+.page-kontak .contact-map iframe{
   width: 100%;
   height: 260px;
   border: 0;
   display: block;
 }
 
-.contact-map-caption{
+.page-kontak .contact-map-caption{
   padding: 12px 14px;
   font-size: 14px;
-  color: #444;
-  border-top: 1px solid #eee;
-  background: #fff;
+  color: #334155;
+  border-top: 1px solid rgba(2,6,23,.08);
+  background: rgba(255,255,255,.95);
 }
 
-/* ===============================
-   RIGHT – FORM PANEL
-================================ */
-.contact-form-wrap{
+/* RIGHT – FORM PANEL */
+.page-kontak .contact-form-wrap{
   position: relative;
   border-radius: 16px;
   overflow: hidden;
 
-  background: rgba(34, 70, 108, 0.55); /* #22466C transparan */
+  background: rgba(34, 70, 108, 0.62);
+  border: 1px solid rgba(255,255,255,.18);
 
   padding: 28px;
 
   box-shadow:
-    0 16px 40px rgba(0,0,0,.25),
+    0 18px 46px rgba(0,0,0,.28),
     0 6px 14px rgba(0,0,0,.18);
 
-  transition: transform .35s ease, box-shadow .35s ease;
+  transition: transform .28s ease, box-shadow .28s ease;
 }
 
+.page-kontak .contact-form-wrap:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.32),
+    0 10px 22px rgba(0,0,0,.20);
+}
 
-/* ===============================
-   FORM ELEMENTS (PUTIH)
-================================ */
-.contact-form-wrap input,
-.contact-form-wrap textarea{
-  background-color: #ffffff !important;
-  color: #333333 !important;
-  border: 1px solid #d0d0d0 !important;
-  border-radius: 6px !important;
+/* FORM ELEMENTS */
+.page-kontak .contact-form-wrap input,
+.page-kontak .contact-form-wrap textarea{
+  background-color: rgba(255,255,255,.98) !important;
+  color: #111827 !important;
+  border: 1px solid rgba(2,6,23,.12) !important;
+  border-radius: 10px !important;
   box-shadow: none !important;
   font-size: 14px;
 }
 
-.contact-form-wrap input::placeholder,
-.contact-form-wrap textarea::placeholder{
-  color: #888888 !important;
+.page-kontak .contact-form-wrap input::placeholder,
+.page-kontak .contact-form-wrap textarea::placeholder{
+  color: rgba(100,116,139,.95) !important;
 }
 
-.contact-form-wrap input:focus,
-.contact-form-wrap textarea:focus{
+.page-kontak .contact-form-wrap input:focus,
+.page-kontak .contact-form-wrap textarea:focus{
   background-color: #ffffff !important;
-  border-color: #22466C !important;
+  border-color: rgba(57,118,183,.85) !important;
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 3px rgba(57,118,183,.22) !important;
 }
 
-.contact-form-wrap textarea{
+.page-kontak .contact-form-wrap textarea{
   resize: vertical;
   min-height: 220px;
 }
 
-/* ===============================
-   SUBMIT BUTTON
-================================ */
-.contact-submit{
-  background: rgba(255,255,255,0.18) !important;
-  border: 1px solid rgba(255,255,255,0.35) !important;
-  color: #ffffff !important;
-  padding: 8px 20px !important;
-  border-radius: 6px !important;
-  font-weight: 600;
-  letter-spacing: .5px;
-}
-
-.contact-submit:hover{
-  filter: brightness(.9);
-}
-
-/* ===============================
-   CAPTCHA
-================================ */
-.contact-captcha{
-  margin-top: 10px;
-}
-
-/* ===============================
-   RESPONSIVE
-================================ */
-@media(max-width: 992px){
-  .contact-top{
-    padding: 120px 0 80px;
-  }
-
-  .contact-top-grid{
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .contact-map{
-    max-width: 100%;
-  }
-
-  .contact-map iframe{
-    height: 300px;
-  }
-}
-
-/* ===============================
-   FORCE SUBTITLE GOLD
-================================ */
-
-.page-kontak .contact-top-left .contact-subtitle,
-.page-kontak .contact-top-left .contact-subtitle--org,
-.page-kontak .contact-top-left p{
-  color: #ffffff !important; /* GOLD */
-  font-size: 17px;
-  font-weight: bold;
-  text-shadow: 0 2px 8px rgba(0,0,0,1);
-  
-}
-
-/* ===============================
-   FORM HOVER – SHADOW ONLY
-================================ */
-
-.contact-form-wrap{
-  transition: box-shadow .3s ease;
-}
-
-.contact-form-wrap:hover{
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.30),
-    0 6px 18px rgba(0,0,0,.22);
-}
-
-.contact-form-wrap:hover{
-  box-shadow:
-    0 14px 34px rgba(0,0,0,.24);
-}
-
-/* ===============================
-   BUTTON SUBMIT – SOLID
-================================ */
-
-.contact-submit{
-  background-color: #3976b7 !important; 
+/* SUBMIT BUTTON */
+.page-kontak .contact-submit{
+  background-color: #3976b7 !important;
   border: 1px solid #3976b7 !important;
   color: #ffffff !important;
 
   padding: 10px 22px !important;
-  border-radius: 6px !important;
-  font-weight: 600;
-  letter-spacing: .5px;
+  border-radius: 10px !important;
+  font-weight: 700;
+  letter-spacing: .4px;
 
-  transition: background-color .25s ease, box-shadow .25s ease;
+  transition: transform .2s ease, background-color .25s ease, box-shadow .25s ease;
 }
 
-.contact-submit:hover{
-  background-color: #2d91a0 !important; /* teal lebih gelap */
+.page-kontak .contact-submit:hover{
+  background-color: #2d91a0 !important;
   border-color: #2d91a0 !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(0,0,0,.22);
 }
 
-.contact-submit:focus{
+.page-kontak .contact-submit:focus{
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(47,127,140,.35);
+  box-shadow: 0 0 0 3px rgba(47,127,140,.35) !important;
+}
+
+/* CAPTCHA */
+.page-kontak .contact-captcha{
+  margin-top: 10px;
+}
+
+/* RESPONSIVE CONTACT */
+@media(max-width: 992px){
+  .page-kontak .contact-top{
+    padding: 120px 0 80px;
+    background-attachment: scroll;
+  }
+
+  .page-kontak .contact-top-grid{
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .page-kontak .contact-map{
+    max-width: 100%;
+  }
+
+  .page-kontak .contact-map iframe{
+    height: 300px;
+  }
+}
+
+/* =====================================================
+   SECTION: FAQ (BACKGROUND IMAGE)
+===================================================== */
+.page-kontak .faq-section{
+  position: relative;
+  padding: 100px 0;
+
+  background-image: url("../img/bg_kontak.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+  isolation: isolate;
+}
+
+/* overlay: dibuat SEMI TRANSPARAN biar gambar tetep nongol */
+.page-kontak .faq-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  /* overlay lebih kontras tapi tetap soft */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15,23,42,.45) 0%,   /* slate-900 */
+      rgba(30,41,59,.55) 35%, /* slate-800 */
+      rgba(51,65,85,.65) 100% /* slate-700 */
+    );
+
+  backdrop-filter: blur(4px);
+}
+
+/* konten di atas overlay */
+.page-kontak .faq-section > *{
+  position: relative;
+  z-index: 1;
+}
+
+.page-kontak .faq-container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-kontak .faq-header{
+  text-align: center;
+  margin-bottom: 42px;
+}
+
+.page-kontak .faq-header h2{
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 800;
+  color: #212121;
+  margin: 0 0 10px 0;
+}
+
+.page-kontak .faq-header p{
+  color: #f6f6f6;
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.page-kontak .faq-content-wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* IMAGE CARD */
+.page-kontak .faq-image-container{
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(2,6,23,.10);
+  box-shadow: 0 14px 40px rgba(0,0,0,.12);
+  position: sticky;
+  top: 120px;
+}
+
+.page-kontak .faq-image-container img{
+  width: 100%;
+  display: block;
+  height: auto;
+}
+
+/* ACCORDION ITEM */
+.page-kontak .faq-accordion .faq-item{
+  background: rgba(255,255,255,.96);
+  border-radius: 16px;
+  border: 1px solid rgba(2,6,23,.08);
+  overflow: hidden;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.page-kontak .faq-accordion .faq-item:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.10);
+}
+
+/* QUESTION */
+.page-kontak .faq-question{
+  padding: 16px 18px;
+  font-weight: 800;
+  color: #22466C;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  user-select: none;
+}
+
+.page-kontak .faq-icon{
+  font-size: 18px;
+  line-height: 1;
+  transition: transform .25s ease;
+}
+
+/* ANSWER (animate) */
+.page-kontak .faq-answer{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease;
+}
+
+.page-kontak .faq-answer-content{
+  padding: 0 18px 18px;
+  color: #475569;
+  line-height: 1.8;
+}
+
+/* ACTIVE STATE */
+.page-kontak .faq-item.active .faq-icon{
+  transform: rotate(180deg);
+}
+
+.page-kontak .faq-item.active .faq-answer{
+  max-height: 520px; /* fallback */
+}
+
+/* RESPONSIVE FAQ */
+@media (max-width: 992px){
+  .page-kontak .faq-content-wrapper{
+    grid-template-columns: 1fr;
+  }
+
+  .page-kontak .faq-image-container{
+    position: relative;
+    top: auto;
+  }
+}
+
+/* MOBILE PERFORMANCE */
+@media (max-width: 768px){
+  .page-kontak .faq-section{
+    background-attachment: scroll;
+  }
 }

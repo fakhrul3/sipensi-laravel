@@ -4,13 +4,14 @@
 
 @section('content')
 
+{{-- ================= HERO ================= --}}
 <section class="hero">
   <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
     <div class="carousel-inner">
 
-      {{-- SLIDE 1 --}}
-      <div class="carousel-item active position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide1.jpg') }}');"></div>
+      @for ($i = 1; $i <= 5; $i++)
+      <div class="carousel-item {{ $i === 1 ? 'active' : '' }} position-relative">
+        <div class="hero-bg" style="background-image:url('{{ asset("img/slide$i.jpg") }}');"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -27,90 +28,10 @@
           </div>
         </div>
       </div>
-
-      {{-- SLIDE 2 --}}
-      <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide2.jpg') }}'); }}"></div>
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-          <div class="wrap">
-            <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
-            </div>
-            <p class="fs-6 mb-4 text-white reveal d-1">
-              Akses informasi Inkubator dan Usaha Rintisan Indonesia
-            </p>
-            <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
-              Selengkapnya
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {{-- SLIDE 3 --}}
-      <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide3.jpg') }}'); }}"></div>
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-          <div class="wrap">
-            <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
-            </div>
-            <p class="fs-6 mb-4 text-white reveal d-1">
-              Akses informasi Inkubator dan Usaha Rintisan Indonesia
-            </p>
-            <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
-              Selengkapnya
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {{-- SLIDE 4 --}}
-      <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide4.jpg') }}'); }}"></div>
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-          <div class="wrap">
-            <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
-            </div>
-            <p class="fs-6 mb-4 text-white reveal d-1">
-              Akses informasi Inkubator dan Usaha Rintisan Indonesia
-            </p>
-            <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
-              Selengkapnya
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {{-- SLIDE 5 --}}
-      <div class="carousel-item position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset('img/slide5.jpg') }}'); }}"></div>
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-          <div class="wrap">
-            <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
-            </div>
-            <p class="fs-6 mb-4 text-white reveal d-1">
-              Akses informasi Inkubator dan Usaha Rintisan Indonesia
-            </p>
-            <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
-              Selengkapnya
-            </a>
-          </div>
-        </div>
-      </div>
+      @endfor
 
     </div>
 
-    {{-- prev/next --}}
     <button class="carousel-control-prev" type="button"
             data-bs-target="#heroCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon"></span>
@@ -120,10 +41,10 @@
             data-bs-target="#heroCarousel" data-bs-slide="next">
       <span class="carousel-control-next-icon"></span>
     </button>
-
   </div>
 </section>
 
+{{-- ================= INCUBATOR ================= --}}
 <section class="incubator-section">
   <div class="container">
 
@@ -136,7 +57,6 @@
     </div>
 
     <div class="row g-4 justify-content-center incubator-cards">
-      {{-- CARD 1 --}}
       <div class="col-12 col-md-6 col-lg-5 reveal reveal-left d-1">
         <div class="incubator-card incubator-card--teal">
           <div class="incubator-number stat-number"
@@ -145,7 +65,6 @@
         </div>
       </div>
 
-      {{-- CARD 2 --}}
       <div class="col-12 col-md-6 col-lg-5 reveal reveal-right d-2">
         <div class="incubator-card incubator-card--gold">
           <div class="incubator-number stat-number"
@@ -164,7 +83,10 @@
   </div>
 </section>
 
-{{-- konten bawah --}}
+{{-- ================= SEBARAN MAP ================= --}}
+@include('partials.sebaran-inkubator')
+
+{{-- ================= CONTENT BAWAH ================= --}}
 <div class="container my-5">
   <div class="row g-4">
     <div class="col-md-4">
@@ -196,8 +118,23 @@
   </div>
 </div>
 
-@push('scripts')
-  <script src="{{ asset('js/home.js') }}"></script>
+@endsection
+
+{{-- ================= STYLES ================= --}}
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="{{ asset('css/sebaran-inkubator.css') }}">
 @endpush
 
-@endsection
+{{-- ================= SCRIPTS ================= --}}
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+{{-- CONFIG DATA UNTUK MAP --}}
+<script>
+  window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);
+</script>
+
+<script src="{{ asset('js/sebaran-inkubator.js') }}"></script>
+<script src="{{ asset('js/home.js') }}"></script>
+@endpush

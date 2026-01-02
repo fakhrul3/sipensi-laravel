@@ -7,15 +7,16 @@
     <div class="col-md-9 col-lg-6 col-xl-5">
 
       <div class="text-center mb-4">
-        <h1 class="auth-title auth-title-sm">Lupa Password</h1>
-        <p class="auth-subtitle">
+        <h1 class="auth-title auth-title-sm stg stg-1">Lupa Password</h1>
+        <p class="auth-subtitle stg stg-2">
           Masukan Email yang terdaftar <br> Kami akan mengirimkan tautan untuk reset password
         </p>
       </div>
 
-      <div class="auth-card auth-card-modern">
+      <div class="auth-card auth-card-modern stg stg-3">
         <form action="#" method="POST" onsubmit="return false;">
-          <div class="mb-3">
+
+          <div class="mb-3 stg stg-4">
             <label class="form-label">Email</label>
             <input type="email" class="form-control form-control-lg" placeholder="contoh@domain.go.id">
             <div class="form-hint mt-2">
@@ -23,11 +24,11 @@
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary w-100 btn-lg auth-btn" id="btnSendLinkMock">
+          <button type="button" class="btn btn-primary w-100 btn-lg auth-btn stg stg-5" id="btnSendLinkMock">
             Kirim Tautan
           </button>
 
-          <div class="d-flex justify-content-between align-items-center mt-4">
+          <div class="d-flex justify-content-between align-items-center mt-4 stg stg-6">
             <a href="{{ url('/login') }}" class="auth-link">← Kembali ke Login</a>
 
             {{-- FIX: trigger modal --}}
@@ -35,6 +36,7 @@
               Butuh bantuan?
             </a>
           </div>
+
         </form>
       </div>
 

@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --ehub-blue: #22466C;
+  --ehub-accent: #3b82f6;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+
+  /* tinggi navbar kamu (dari CSS: #mainNavbar min-height 72px) */
+  --nav-h: 72px;
+}
+
+/* Scope font khusus halaman tentang (biar aman) */
+.tentang-hero,
+.tentang-section,
+.tentang-hero * ,
+.tentang-section *{
+  font-family: "Montserrat", sans-serif;
+}
+
+/* =========================
+   HERO TENTANG (UNIQUE)
+   - Full layar
+   - Background tetep fixed (parallax)
+   - Tidak menggelapkan berlebihan
+========================= */
+.tentang-hero{
+  position: relative;
+  height: calc(100vh - var(--nav-h));     /* 1 layar, aman dari navbar fixed */
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  /* offset biar content gak ketiban navbar */
+  padding-top: var(--nav-h);
+}
+
+/* overlay: TIPIS banget, biar tetap “normal” */
+.tentang-hero__overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.12); /* sebelumnya .30 => terlalu gelap */
+  z-index: 1;
+}
+
+/* content tetap center dan enak dibaca */
+.tentang-hero__content{
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 64px 24px;
+  text-shadow: 0 4px 14px rgba(0,0,0,0.45);
+
+  /* center vertical */
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tentang-container{
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.tentang-hero__kicker{
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-size: .78rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+
+  display: inline-block;
+  padding: 10px 18px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+.tentang-hero__title{
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px 0;
+  line-height: 1.1;
+}
+
+.tentang-hero__subtitle{
+  font-size: 1.15rem;
+  max-width: 46rem;
+  color: rgba(255,255,255,.95);
+  line-height: 1.85;
+  margin: 0;
+}
+
+/* =========================
+   SECTION WRAPPER
+========================= */
+.tentang-section{
+  padding: 80px 0;
+}
+
+.tentang-section--white{ background: #ffffff; }
+.tentang-section--soft{ background: #F8FAFC; }
+
+/* =========================
+   CONTENT CARD FULL
+========================= */
+.tentang-content-card{
+  width: 100%;
+  padding: 5rem 24px;
+  border-top: 1px solid #E6E6E6;
+  border-bottom: 1px solid #E6E6E6;
+  display: flex;
+  justify-content: center;
+  background: #fff;
+}
+
+.tentang-content-wrap{
+  max-width: 900px;
+  width: 100%;
+}
+
+.tentang-text{
+  font-size: 1.08rem;
+  line-height: 2.05;
+  color: var(--text-main);
+  margin: 0 0 22px 0;
+  font-weight: 400;
+  text-align: justify;
+}
+
+.tentang-text strong{
+  color: var(--ehub-blue);
+  font-weight: 800;
+}
+
+.tentang-text--last{ margin-bottom: 0; }
+
+.tentang-link{
+  color: var(--ehub-blue);
+  font-weight: 800;
+}
+
+/* =========================
+   TITLE + SUBTITLE
+========================= */
+.tentang-title{
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--ehub-blue);
+  margin: 0 0 12px 0;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.tentang-subtitle{
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  text-align: center;
+  max-width: 52rem;
+  margin: 0 auto 44px;
+  line-height: 1.8;
+}
+
+/* =========================
+   CARDS
+========================= */
+.tentang-card{
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.3rem;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,.05);
+  transition: transform .35s cubic-bezier(.165,.84,.44,1),
+              box-shadow .35s cubic-bezier(.165,.84,.44,1),
+              border-color .35s cubic-bezier(.165,.84,.44,1);
+  height: 100%;
+}
+
+.tentang-card:hover{
+  transform: translateY(-10px);
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,.10);
+  border-color: rgba(59,130,246,.55);
+}
+
+.tentang-card__title{
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  color: var(--ehub-blue);
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tentang-card__title::before{
+  content: "";
+  width: 4px;
+  height: 22px;
+  background: var(--ehub-accent);
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.tentang-card__desc{
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.85;
+  font-size: 1rem;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px){
+  .tentang-hero{
+    background-attachment: scroll; /* tetap aman di mobile */
+    height: auto;
+    min-height: 70vh;
+    padding-top: var(--nav-h);
+  }
+
+  .tentang-hero__content{
+    min-height: auto;
+    padding: 44px 18px;
+  }
+
+  .tentang-content-card{
+    padding: 3rem 18px;
+  }
+
+  .tentang-text{
+    text-align: left;
+    line-height: 1.95;
+  }
+
+  .tentang-title{ font-size: 2rem; }
+}
+
+/* =========================
+   HERO FULL 1 LAYAR (100vh)
+========================= */
+.tentang-hero{
+  height: 100vh !important;
+  min-height: 100vh !important;
+  padding-top: 0 !important;          /* jangan dorong tinggi hero */
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  color: #fff;
+  overflow: hidden;
+}
+
+/* konten hero: kasih offset navbar tanpa ngurangin tinggi hero */
+.tentang-hero__content{
+  padding-top: var(--nav-h) !important; /* navbar fixed */
+  min-height: 100vh !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* overlay tetap tipis */
+.tentang-hero__overlay{
+  background: rgba(0,0,0,.12) !important;
+}
+
+/* =========================
+   PILL/KICKER: SESUAI HURUF
+========================= */
+.tentang-hero__kicker{
+  display: inline-flex !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  padding: 10px 18px !important;
+}
+
+/* fallback kalau browser gak support fit-content */
+@supports not (width: fit-content){
+  .tentang-hero__kicker{ display: inline-block !important; }
+}
+
+/* mobile: jangan fixed attachment (biar smooth) */
+@media (max-width: 768px){
+  .tentang-hero{
+    background-attachment: scroll !important;
+  }
+  .tentang-hero__content{
+    min-height: 100vh !important;
+  }
+  /* kalau teks kepanjangan di HP, boleh wrap */
+  .tentang-hero__kicker{
+    white-space: normal !important;
+  }
+}

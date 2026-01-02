@@ -30,8 +30,9 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ $isHome ? '' : '' }}" href="{{ route('home') }}#tentang" data-page-link data-anchor="tentang">TENTANG</a>
+          <a class="nav-link {{ request()->routeIs('tentang') ? 'active' : '' }}" href="{{ route('tentang') }}"> TENTANG </a>
         </li>
+
 
         <li class="nav-item">
           <a class="nav-link {{ $isMitra ? 'active' : '' }}" href="{{ route('mitra.index') }}" data-page-link>MITRA</a>

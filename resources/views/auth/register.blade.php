@@ -6,12 +6,8 @@
 <div class="container-fluid px-0">
   <div class="row g-0 min-vh-100">
 
-       
-
     {{-- LEFT : VISUAL (DESKTOP ONLY) --}}
-
-
-    <div class="col-lg-5 d-none d-lg-block auth-register-left">
+    <div class="col-lg-5 d-none d-lg-block auth-register-left stg stg-1 stg-left">
       <div class="left-visual">
         {{-- MAP UTAMA --}}
         <img
@@ -34,17 +30,15 @@
       <div class="auth-register-wrapper w-100">
 
         <div class="text-center mb-4 register-heading">
-          <h1 class="auth-title mb-2">Pendaftaran Lembaga Inkubator</h1>
-          <div class="title-divider"></div>
+          <h1 class="auth-title mb-2 stg stg-2">Pendaftaran Lembaga Inkubator</h1>
+          <div class="title-divider stg stg-3"></div>
         </div>
 
-        
-
-        <div class="auth-card auth-card-modern">
+        <div class="auth-card auth-card-modern stg stg-4 stg-right">
           <form onsubmit="return false">
 
             {{-- ROW 1 --}}
-            <div class="row g-3">
+            <div class="row g-3 stg stg-5">
               <div class="col-md-6">
                 <label class="form-label">Nama Lembaga Inkubator</label>
                 <input type="text" class="form-control" placeholder="Nama Inkubator">
@@ -56,7 +50,7 @@
             </div>
 
             {{-- ROW 2 --}}
-            <div class="row g-3 mt-1">
+            <div class="row g-3 mt-1 stg stg-6">
               <div class="col-md-6">
                 <label class="form-label">No Kontak / HP</label>
                 <input type="text" class="form-control" placeholder="08xxxxxxxx">
@@ -69,13 +63,13 @@
             </div>
 
             {{-- ALAMAT --}}
-            <div class="mt-3">
+            <div class="mt-3 stg stg-7">
               <label class="form-label">Alamat Kantor / Sekretariat</label>
               <textarea class="form-control" rows="3" placeholder="Alamat lengkap"></textarea>
             </div>
 
             {{-- ROW 3 --}}
-            <div class="row g-3 mt-1">
+            <div class="row g-3 mt-1 stg stg-8">
               <div class="col-md-6">
                 <label class="form-label">Provinsi</label>
                 <select class="form-select">
@@ -94,7 +88,7 @@
             </div>
 
             {{-- JENIS --}}
-            <div class="mt-3">
+            <div class="mt-3 stg stg-9">
               <label class="form-label">Jenis Lembaga Inkubator</label>
               <select class="form-select">
                 <option>Pemerintah Pusat</option>
@@ -105,14 +99,14 @@
             </div>
 
             {{-- FILE --}}
-            <div class="mt-3">
+            <div class="mt-3 stg stg-10">
               <label class="form-label">Dokumen Legalitas</label>
               <input type="file" class="form-control">
               <small class="form-hint">PDF, maks. 10 MB</small>
             </div>
 
             {{-- AKUN --}}
-            <div class="row g-3 mt-2">
+            <div class="row g-3 mt-2 stg stg-11">
               <div class="col-md-6">
                 <label class="form-label">Email / Username</label>
                 <input type="text" class="form-control is-invalid">
@@ -122,7 +116,7 @@
               </div>
             </div>
 
-            <div class="row g-3 mt-1">
+            <div class="row g-3 mt-1 stg stg-12">
               <div class="col-md-6">
                 <label class="form-label">Password</label>
                 <input type="password" class="form-control">
@@ -135,7 +129,7 @@
             </div>
 
             {{-- ACTION --}}
-            <div class="d-flex justify-content-between mt-4">
+            <div class="d-flex justify-content-between mt-4 stg stg-12">
               <a href="{{ url('/login') }}" class="btn btn-outline-secondary">
                 Batal
               </a>
