@@ -1,4 +1,4 @@
-<section class="sebaran-section" id="sebaran-inkubator">
+<section class="sebaran-section" id="sebaran-inkubator" data-reveal-once>
   <div class="sebaran-shell">
     <h2 class="sebaran-title">Sebaran Inkubator</h2>
     <p class="sebaran-subtitle">

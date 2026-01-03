@@ -236,3 +236,31 @@
   :root{ --nav-safe-top: 76px; }
   .sipensi-lightbox__close{ right: 14px; }
 }
+
+/* =========================
+   FIX: HOVER PANAH GALERI JANGAN HILANG
+========================= */
+.gallery-arrow{
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition:
+    transform .18s ease,
+    background-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease,
+    opacity .18s ease;
+}
+
+.gallery-arrow:hover{
+  opacity: 1 !important;
+  background: #22466C !important;  /* biar keliatan jelas */
+  color: #fff !important;          /* svg ikut putih */
+  box-shadow: 0 18px 46px rgba(0,0,0,.28) !important;
+  transform: translateY(-50%) scale(1.06);
+}
+
+/* pastiin stroke svg tetap ngikut currentColor */
+.gallery-arrow svg path{
+  stroke: currentColor !important;
+}

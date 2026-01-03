@@ -56,3 +56,31 @@
 .leaflet-popup{
   z-index: 999 !important;
 }
+
+.sipensi-popup{
+  min-width: 160px;
+}
+
+.sipensi-popup .popup-title{
+  font-weight: 800;
+  margin-bottom: 2px;
+  color: #1f2937;
+}
+
+.sipensi-popup .popup-count{
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sipensi-popup .popup-link{
+  display: inline-block;
+  font-weight: 800;
+  font-size: 13px;
+  color: #22466C;
+  text-decoration: none;
+}
+
+.sipensi-popup .popup-link:hover{
+  text-decoration: underline;
+}

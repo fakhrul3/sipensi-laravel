@@ -1,0 +1,109 @@
+/* =====================================================
+   FOOTER – SIPENSI
+===================================================== */
+
+.sipensi-footer{
+  background: #22466C;
+  color: #ffffff;
+  padding: 64px 0 32px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.sipensi-footer-shell{
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-brand-logo{
+  height: 72px;
+  width: auto;
+  margin-bottom: 18px;
+}
+
+.footer-address{
+  max-width: 520px;
+  line-height: 1.7;
+  font-size: 15px;
+  opacity: .95;
+}
+
+/* ✅ bikin Navigasi + Kontak simetris (grid wrapper) */
+.footer-right{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 56px;
+  align-items: start;
+}
+
+.footer-col{
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-title{
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  line-height: 1.2;
+}
+
+.footer-links,
+.footer-contact{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li,
+.footer-contact li{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.footer-links a,
+.footer-contact a{
+  color: rgba(255,255,255,.92);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-links a:hover,
+.footer-contact a:hover{
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+.footer-contact i{
+  font-size: 16px;
+  min-width: 18px;
+  opacity: .95;
+}
+
+.footer-divider{
+  border: 0;
+  height: 1px;
+  background: rgba(255,255,255,.25);
+  margin: 32px 0 18px;
+}
+
+.footer-bottom{
+  text-align: center;
+  font-size: 14px;
+  opacity: .9;
+}
+
+@media (max-width: 991px){
+  .footer-brand-logo{
+    height: 64px;
+  }
+}
+
+@media (max-width: 768px){
+  .footer-right{
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}

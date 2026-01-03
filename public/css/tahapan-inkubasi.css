@@ -1,0 +1,181 @@
+.tahapan-inkubasi-section{ padding: 70px 0; }
+
+.tahapan-inkubasi-title{ text-align:center; margin-bottom: 28px; }
+.tahapan-inkubasi-title h1{
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 800;
+  color:#212121;
+  margin: 0 0 10px;
+}
+.tahapan-inkubasi-title p{
+  font-size: 1.05rem;
+  color:#64748b;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.tahapan-tabs{
+  display:flex;
+  justify-content:center;
+  gap: 14px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+
+.tahapan-tab-btn{
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: #fff;
+  color: #475569;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, color .18s ease, border-color .18s ease;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.tahapan-tab-btn:hover{
+  background:#22466C;
+  border-color:#22466C;
+  color:#fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
+.tahapan-tab-btn.active{
+  background:#22466C;
+  border-color:#22466C;
+  color:#fff;
+}
+.tahapan-tab-btn i{ font-size: 1.1rem; }
+
+.tahapan-content-wrapper{
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tahapan-content-card{
+  border-radius: 16px;
+  border: none;
+  border-top: 6px solid #F1D48E;
+  background: #fff;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.10);
+}
+
+/* ✅ transisi ketika ganti tab */
+.tahap-content{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .28s ease, transform .28s ease;
+}
+.tahap-content.is-active{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tahap-title{ display:flex; align-items:center; gap: 18px; margin-bottom: 18px; }
+.icon-container{
+  width: 70px; height: 70px;
+  background: #EDF7F6;
+  border-radius: 15px;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 8px 20px rgba(0,0,0,.10);
+  flex-shrink: 0;
+}
+.icon-container i{ font-size: 2rem; color: #F1D48E; }
+
+.tahap-title h2{
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #22466C;
+  margin: 0;
+}
+
+.tahap-description{
+  font-size: 1.05rem;
+  color:#475569;
+  margin-bottom: 26px;
+  line-height: 1.85;
+}
+
+.aktivitas-utama-section h3{
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #22466C;
+  margin-bottom: 16px;
+}
+
+.aktivitas-list{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  list-style:none;
+  padding:0;
+  counter-reset: aktivitas-counter;
+  margin: 0;
+}
+.aktivitas-list li{
+  display:flex;
+  align-items:flex-start;
+  gap: 12px;
+  padding: 14px;
+  background:#f7fafc;
+  border-radius: 12px;
+}
+.aktivitas-list li::before{
+  content: counter(aktivitas-counter);
+  counter-increment: aktivitas-counter;
+  width: 30px; height: 30px;
+  background:#F1D48E;
+  color:#fff;
+  border-radius: 999px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* arrows */
+.nav-arrow-left, .nav-arrow-right{
+  position:absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px; height: 56px;
+  border-radius: 999px;
+  background:#fff;
+  border: 0;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  z-index: 20;
+  box-shadow: 0 10px 22px rgba(0,0,0,.15);
+  transition: transform .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+.nav-arrow-left{ left: -70px; }
+.nav-arrow-right{ right: -70px; }
+@media (max-width: 1200px){
+  .nav-arrow-left{ left: -24px; }
+  .nav-arrow-right{ right: -24px; }
+}
+.nav-arrow-left i, .nav-arrow-right i{
+  color:#22466C;
+  font-size: 1.15rem;
+}
+.nav-arrow-left:hover, .nav-arrow-right:hover{
+  background:#22466C;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 14px 30px rgba(34,70,108,.25);
+}
+.nav-arrow-left:hover i, .nav-arrow-right:hover i{ color:#fff; }
+.hidden{ display:none !important; }
+
+@media (max-width: 768px){
+  .aktivitas-list{ grid-template-columns: 1fr; }
+  .tahapan-tabs{ flex-direction: column; align-items: center; }
+  .tahapan-tab-btn{ width: 100%; max-width: 340px; justify-content: center; }
+  .tahapan-content-card{ padding: 24px; }
+  .nav-arrow-left, .nav-arrow-right{ display:none; }
+}

@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // aktifkan mode JS (penting!)
   document.documentElement.classList.add('js');
-  document.body.classList.add('page-ready');
-
 
   const els = document.querySelectorAll('.reveal');
   if (!els.length) return;
@@ -17,5 +15,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   els.forEach(el => io.observe(el));
 });
-
-

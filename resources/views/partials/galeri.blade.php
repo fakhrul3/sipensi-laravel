@@ -1,4 +1,4 @@
-<section class="sipensi-gallery" id="sipensiGallery">
+<section class="sipensi-gallery" id="sipensiGallery" data-reveal-once>
   <div class="container">
 
     <div class="gallery-head">

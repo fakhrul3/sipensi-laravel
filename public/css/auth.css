@@ -1,15 +1,19 @@
 /* =====================================================
-   AUTH PAGE – SIPENSI (FINAL CLEAN + FIXED)
+   AUTH PAGE – SIPENSI (FINAL CLEAN + SOFT COLOR)
 ===================================================== */
 
 :root{
   --sipensi-blue: #22466C;
   --sipensi-teal: #2f7f8c;
 
-  /* background theme */
-  --gold-1: rgb(34, 187, 238);
-  --gold-2: rgb(119, 190, 214);
-  --white-1: rgba(166, 234, 247, 0.85);
+  /* =========================
+     SOFT BACKGROUND THEME (NEW)
+     - lebih adem, gak ngejreng
+  ========================= */
+  --bg-1: #BFE4EE;                 /* soft sky teal */
+  --bg-2: #8EC9DA;                 /* soft aqua */
+  --bg-3: rgba(234, 244, 248, .92);/* very light */
+  --bg-4: #ffffff;
 
   /* REGISTER VISUAL CONTROL */
   --reg-map-scale: 0.80;
@@ -23,7 +27,7 @@
   --orn-size: 850px;
   --orn-x: right -410px;
   --orn-y: top -370px;
-  --orn-opacity: .29;
+  --orn-opacity: .26; /* sedikit lebih subtle */
 }
 
 /* =========================
@@ -36,7 +40,7 @@ html, body{
 
 .auth-page,
 .auth-page *{
-    font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
                Roboto, Arial, sans-serif;
 }
 
@@ -48,13 +52,13 @@ html, body{
   position: relative;
   overflow: hidden;
 
-  /* GRADIENT UTAMA (JANGAN DIHAPUS) */
+  /* ✅ GRADIENT UTAMA (SOFT) */
   background: linear-gradient(
     170deg,
-    var(--gold-1) 0%,
-    var(--gold-2) 25%,
-    var(--white-1) 55%,
-    #ffffff 100%
+    var(--bg-1) 0%,
+    var(--bg-2) 28%,
+    var(--bg-3) 58%,
+    var(--bg-4) 100%
   );
 }
 
@@ -172,8 +176,9 @@ html, body{
   font-size: 44px !important;
 }
 
+/* ✅ dulu putih, sekarang soft biar lebih “premium” */
 .auth-subtitle{
-  color: #fff;
+  color: rgba(34,70,108,.78);
   margin-top: 10px;
 }
 
@@ -188,11 +193,11 @@ html, body{
 
   background: linear-gradient(
     90deg,
-    rgba(0,0,0,.18) 0%,
-    rgba(0,0,0,.08) 25%,
-    #ffffff 50%,
-    rgba(0,0,0,.08) 75%,
-    rgba(0,0,0,.18) 100%
+    rgba(34,70,108,.22) 0%,
+    rgba(34,70,108,.10) 25%,
+    rgba(255,255,255,.95) 50%,
+    rgba(34,70,108,.10) 75%,
+    rgba(34,70,108,.22) 100%
   );
 }
 
@@ -213,11 +218,11 @@ html, body{
    CARD + FORM
 ========================= */
 .auth-card{
-  background: rgba(255,255,255,0.78);
-  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.82);
+  border: 1px solid rgba(34,70,108,0.10);
   border-radius: 14px;
   padding: 22px;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 16px 40px rgba(34,70,108,0.10);
   backdrop-filter: blur(6px);
   transition: transform .3s ease, box-shadow .3s ease;
   position: relative;
@@ -226,7 +231,7 @@ html, body{
 
 .auth-card:hover{
   transform: translateY(-2px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+  box-shadow: 0 20px 50px rgba(34,70,108,0.14);
 }
 
 .auth-card-modern{
@@ -248,11 +253,11 @@ html, body{
 }
 
 .form-control-lg{ border-radius: 12px; }
-.form-control{ border: 1px solid rgba(0,0,0,0.10); }
+.form-control{ border: 1px solid rgba(34,70,108,0.14); }
 
 .form-control:focus{
-  border-color: rgba(34,70,108,0.55);
-  box-shadow: 0 0 0 .18rem rgba(34,70,108,0.18);
+  border-color: rgba(142,201,218,0.95);
+  box-shadow: 0 0 0 .18rem rgba(142,201,218,0.28);
 }
 
 .form-hint{

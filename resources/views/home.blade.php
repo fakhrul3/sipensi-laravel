@@ -24,7 +24,7 @@
 
       @for ($i = 1; $i <= 5; $i++)
       <div class="carousel-item {{ $i === 1 ? 'active' : '' }} position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset("img/slide$i.jpg") }}');"></div>
+        <div class="hero-bg" style="background-image:url('{{ asset("img/slide$i.jpg") }}?v={{ filemtime(public_path("img/slide$i.jpg")) }}');"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -69,23 +69,31 @@
       </div>
     </div>
 
-    <div class="row g-4 justify-content-center incubator-cards">
-      <div class="col-12 col-md-6 col-lg-5 reveal reveal-left d-1">
-        <div class="incubator-card incubator-card--teal">
-          <div class="incubator-number stat-number"
-               data-target="{{ (int)($totalLembaga ?? 732) }}">0</div>
-          <div class="incubator-card-foot">Inkubator Terdaftar</div>
-        </div>
-      </div>
+<div class="container">
+  <div class="row g-4 justify-content-center incubator-cards">
 
-      <div class="col-12 col-md-6 col-lg-5 reveal reveal-right d-2">
-        <div class="incubator-card incubator-card--gold">
-          <div class="incubator-number stat-number"
-               data-target="{{ (int)($totalTenant ?? 6165) }}">0</div>
-          <div class="incubator-card-foot">Usaha Rintisan Terinkubasi</div>
-        </div>
+    <div class="col-12 col-md-6 col-lg-5 reveal reveal-left d-1">
+      <div class="incubator-card incubator-card--teal">
+        <div class="incubator-number stat-number counter"
+             data-target="{{ (int)($totalLembaga ?? 732) }}"
+             data-duration="1200">0</div>
+        <div class="incubator-card-foot">Inkubator Terdaftar</div>
       </div>
     </div>
+
+    <div class="col-12 col-md-6 col-lg-5 reveal reveal-right d-2">
+      <div class="incubator-card incubator-card--gold">
+        <div class="incubator-number stat-number counter"
+             data-target="{{ (int)($totalTenant ?? 6165) }}"
+             data-format="dot"
+             data-duration="1400">0</div>
+        <div class="incubator-card-foot">Usaha Rintisan Terinkubasi</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
     <div class="text-center mt-4 reveal d-3">
       <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-inkubator">
@@ -117,6 +125,12 @@
     window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);
   </script>
 
+  <script>
+  window.SIPENSI = window.SIPENSI || {};
+  window.SIPENSI.lembagaUrl = "{{ route('lembaga.index') }}";
+  </script>
+
+
   {{-- JS Map --}}
   <script src="{{ asset('js/sebaran-inkubator.js') }}"></script>
 
@@ -125,6 +139,10 @@
 
   {{-- JS Galeri --}}
   <script src="{{ asset('js/galeri.js') }}"></script>
+
+  {{-- JS counter scroll --}}
+  <script src="{{ asset('js/counter-scroll.js') }}"></script>
+
 
   
 @endpush

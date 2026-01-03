@@ -1,164 +1,44 @@
-/* =========================
-   GLOBAL FONT
-========================= */
-*{
-  font-family: "Montserrat", sans-serif;
-}
+/* =====================================================
+   SIPENSI – BASE GLOBAL (SETELAH DIPISAH)
+   - navbar.css
+   - home-incubator.css
+   - footer.css
+===================================================== */
 
+/* =========================
+   1) TOKENS / VARIABLES
+========================= */
 :root{
   --bs-body-font-family: "Montserrat", sans-serif;
+
+  /* palette utama */
+  --sipensi-blue: #22466C;
+  --sipensi-blue-dark: #1a3856;
+  --sipensi-teal: #2f7f8c;
+
+  --cta-blue: #1d4f7a;
+  --cta-blue-dark: #163e60;
+
+  --accent-line: #4788AB;
 }
 
-html, body {
+/* =========================
+   2) GLOBAL RESET (SAFE)
+========================= */
+html, body{
+  width: 100%;
+  overflow-x: hidden;
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
+               Roboto, Arial, sans-serif;
+}
+
+body, button, input, textarea, select{
   font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
                Roboto, Arial, sans-serif;
 }
 
 /* =========================
-   NAVBAR BASE
-========================= */
-#mainNavbar {
-  min-height: 72px;
-  padding: 10px 0;
-  background: transparent;
-  box-shadow: none;
-  transition:
-    background-color .35s ease,
-    box-shadow .35s ease,
-    backdrop-filter .35s ease;
-}
-
-/* tombol prev & next */
-.carousel-control-prev,
-.carousel-control-next{
-  z-index: 5;
-}
-
-/* =========================
-   BRAND LOGO (FIXED)
-========================= */
-#mainNavbar .navbar-brand{
-  padding: 0 !important;
-  display: flex;
-  align-items: center;
-}
-
-#mainNavbar .brand-logo{
-  height: 56px !important;
-  width: auto !important;
-  max-height: none !important;
-  display: block;
-  filter: none;
-  transition: height .25s ease;
-}
-
-#mainNavbar.navbar-scrolled .brand-logo{
-  height: 48px !important;
-}
-
-/* =========================
-   NAVBAR STATE: TRANSPARENT
-========================= */
-#mainNavbar.navbar-transparent .nav-link {
-  color: rgba(255,255,255,.92);
-}
-#mainNavbar.navbar-transparent .nav-link:hover {
-  color: #ffffff;
-}
-
-/* =========================
-   NAVBAR STATE: SCROLLED
-========================= */
-#mainNavbar.navbar-scrolled {
-  background-color: #ffffff !important;
-  backdrop-filter: none !important;
-  box-shadow: 0 6px 20px rgba(0,0,0,.12) !important;
-  padding: 6px 0;
-}
-#mainNavbar.navbar-scrolled .nav-link {
-  color: rgba(0,0,0,.78);
-}
-#mainNavbar.navbar-scrolled .nav-link:hover {
-  color: #000;
-}
-
-#mainNavbar .menu-center {
-  font-weight: 800;
-}
-
-#mainNavbar.navbar-scrolled .menu-center .nav-link.active {
-  color: #fff !important;
-  background: #22466C;
-  border-radius: 8px;
-}
-
-.navbar .nav-link{
-  text-shadow: 0 2px 10px rgba(0,0,0,.15);
-}
-
-@media (min-width: 992px){
-  #mainNavbar .menu-center{
-    transform: translateX(-55px) !important;
-  }
-}
-
-/* =========================
-   MENU CENTER
-========================= */
-.menu-center {
-  display: flex;
-  gap: 14px;
-}
-.menu-center .nav-link {
-  position: relative;
-  padding: 6px 14px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  transition: color .25s ease, background-color .25s ease;
-}
-.menu-center .nav-link:hover,
-.menu-center .nav-link.active {
-  background: #22466C;
-  color: #fff !important;
-  border-radius: 8px;
-}
-
-#mainNavbar.navbar-scrolled .menu-center .nav-link:not(.active)::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -2px;
-  transform: translateX(-50%);
-  width: 75%;
-  height: 2px;
-  background: linear-gradient(to right, transparent, #4788AB, transparent);
-  opacity: .7;
-}
-.menu-center .nav-link:hover::after,
-.menu-center .nav-link.active::after {
-  display: none;
-}
-
-/* tombol masuk */
-.navbar-actions .btn {
-  background: #22466C;
-  border-color: #22466C;
-  font-weight: 600;
-  padding: 6px 18px;
-  transition: background-color .25s ease;
-}
-.navbar-actions .btn:hover {
-  background: #1a3856;
-  border-color: #1a3856;
-}
-
-.nav-solid{
-  background: rgba(34,70,108,.92);
-  backdrop-filter: blur(6px);
-}
-
-/* =========================
-   GLOBAL BACKGROUND BASE
+   3) GLOBAL BACKGROUND BASE
 ========================= */
 .app-bg{
   min-height: 100vh;
@@ -209,19 +89,22 @@ body.page-ready .app-bg.bg-gold::after{
 }
 
 /* =========================
-   HERO
+   4) HERO (HOME)
+   (kalau nanti mau dipisah, bikin hero.css)
 ========================= */
-.hero {
+.hero{
   height: 100vh;
   position: relative;
   overflow: hidden;
 }
+
 .hero-carousel,
 .hero-carousel .carousel-inner,
-.hero-carousel .carousel-item {
+.hero-carousel .carousel-item{
   height: 100vh;
 }
-.hero-bg {
+
+.hero-bg{
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -230,13 +113,15 @@ body.page-ready .app-bg.bg-gold::after{
   transform: scale(1.02);
   z-index: 1;
 }
+
 .hero-overlay{
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.18);
   z-index: 1;
 }
-.hero-content {
+
+.hero-content{
   position: relative;
   z-index: 2;
   height: 100vh;
@@ -254,6 +139,7 @@ body.page-ready .app-bg.bg-gold::after{
   align-items:center;
   margin-bottom:16px;
 }
+
 .hero-logo{
   display:block;
   width: clamp(180px, 28vw, 420px);
@@ -263,29 +149,39 @@ body.page-ready .app-bg.bg-gold::after{
   filter: drop-shadow(0 6px 18px rgba(0,0,0,.5));
 }
 
-/* =================================
-   BUTTON: HERO (Selengkapnya)
-================================= */
-.btn-selengkapnya:hover,
-.btn-selengkapnya:focus,
-.btn-selengkapnya:active{
-  color: #fff !important;
+/* mobile hero logo */
+@media (max-width: 576px){
+  .hero-logo{
+    width: clamp(140px, 60vw, 280px);
+    max-height: 90px;
+  }
 }
 
+/* =========================
+   5) BUTTONS (GLOBAL)
+========================= */
+
+/* HERO: Selengkapnya */
 .btn-selengkapnya{
   position: relative;
   display: inline-flex;
   align-items: center;
+
   padding: 10px 30px 10px 22px;
   font-size: 15px;
   font-weight: 600;
+
   color: #ffffff;
   background: transparent;
   border: 1.6px solid rgba(255,255,255,.95);
   border-radius: 14px;
   overflow: hidden;
-  transition: all .25s ease;
+
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+  text-decoration: none;
 }
+
+/* panah */
 .btn-selengkapnya::after{
   content: "→";
   position: absolute;
@@ -293,56 +189,68 @@ body.page-ready .app-bg.bg-gold::after{
   top: 50%;
   transform: translateY(-50%) translateX(-6px);
   opacity: 0;
+
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
-  transition: all .25s ease;
+
+  transition: opacity .25s ease, transform .25s ease;
 }
+
 .btn-selengkapnya:hover{
-  background: #22466C;
-  border-color: #22466C;
+  background: var(--sipensi-blue);
+  border-color: var(--sipensi-blue);
   text-decoration: none;
 }
+
 .btn-selengkapnya:hover::after{
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
 
-/* =================================
-   BUTTON: INKUBATOR (PRIMARY)
-================================= */
-.btn-inkubator,
-.btn-inkubator:visited{
-  color: #fff !important;
-}
-.btn-inkubator:hover,
-.btn-inkubator:focus,
-.btn-inkubator:active{
-  color: #fff !important;
-  text-decoration: none;
-}
-.btn-inkubator::after,
-.btn-inkubator:hover::after,
-.btn-inkubator:focus::after,
-.btn-inkubator:active::after{
-  color: #fff !important;
+/* ✅ FIX: text btn-selengkapnya tetap putih di semua state */
+.btn-selengkapnya,
+.btn-selengkapnya:visited,
+.btn-selengkapnya:hover,
+.btn-selengkapnya:focus,
+.btn-selengkapnya:active{
+  color: #ffffff !important;
 }
 
+.btn-selengkapnya *,
+.btn-selengkapnya:hover *,
+.btn-selengkapnya:focus *,
+.btn-selengkapnya:active *{
+  color: #ffffff !important;
+}
+
+.btn-selengkapnya::after,
+.btn-selengkapnya:hover::after{
+  color: #ffffff !important;
+}
+
+/* Inkubator (Primary) */
 .btn-inkubator{
   position: relative;
   display: inline-flex;
   align-items: center;
+
   padding: 12px 34px 12px 26px;
   font-size: 15px;
   font-weight: 700;
-  color: #ffffff;
-  background: #22466C;
-  border: 1.6px solid #22466C;
+
+  background: var(--sipensi-blue);
+  border: 1.6px solid var(--sipensi-blue);
   border-radius: 14px;
+
   box-shadow: 0 10px 22px rgba(34,70,108,.25);
   overflow: hidden;
-  transition: all .25s ease;
+
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+  text-decoration: none;
 }
+
+/* panah */
 .btn-inkubator::after{
   content: "→";
   position: absolute;
@@ -350,193 +258,49 @@ body.page-ready .app-bg.bg-gold::after{
   top: 50%;
   transform: translateY(-50%) translateX(-6px);
   opacity: 0;
+
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
-  transition: all .25s ease;
+
+  transition: opacity .25s ease, transform .25s ease;
 }
+
 .btn-inkubator:hover{
-  background: #1a3856;
-  border-color: #1a3856;
+  background: var(--sipensi-blue-dark);
+  border-color: var(--sipensi-blue-dark);
   box-shadow: 0 14px 28px rgba(34,70,108,.35);
   text-decoration: none;
 }
+
 .btn-inkubator:hover::after{
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
 
-/* RESPONSIVE */
-@media (max-width: 991.98px) {
-  .menu-center { padding-top: 10px; }
-  .navbar-actions { margin-top: 10px; }
-}
-@media (min-width: 992px) {
-  .menu-center { transform: translateX(65px); }
-}
-
-/* =========================
-   SECTION: INCUBATOR
-========================= */
-.incubator-section{
-  background: #f4f6f8;
-  padding: 64px 0;
-}
-.incubator-head{
-  max-width: 860px;
-  margin: 0 auto 28px;
-  overflow: visible;
-}
-.incubator-title{
-  font-weight: 800;
-  font-size: clamp(28px, 3vw, 44px);
-  line-height: 1.1;
-  color: #212121;
-  margin-bottom: 10px;
-  text-align: center;
+/* ✅ FIX: text btn-inkubator tetap putih di semua state */
+.btn-inkubator,
+.btn-inkubator:visited,
+.btn-inkubator:hover,
+.btn-inkubator:focus,
+.btn-inkubator:active{
+  color: #ffffff !important;
 }
 
-/* wrapper title */
-.incubator-title-wrap{
-  display: inline-block;
-  position: relative;
-  text-align: center;
-  overflow: visible;
+.btn-inkubator * ,
+.btn-inkubator:hover * ,
+.btn-inkubator:focus * ,
+.btn-inkubator:active *{
+  color: #ffffff !important;
 }
 
-/* miring + styling */
-.dotted-title{
-  font-style: italic;
-  letter-spacing: .3px;
-  margin: 0;
-  line-height: 1.1;
-  position: relative;
-  display: inline-block;
+.btn-inkubator::after,
+.btn-inkubator:hover::after{
+  color: #ffffff !important;
 }
 
 /* =========================
-   FIX: DOT IKUT TRANSISI REVEAL
-========================= */
-
-/* pastikan parent jadi reference */
-.incubator-title.dotted-title{
-  position: relative;
-}
-
-/* dot atas & bawah */
-.incubator-title.dotted-title::before,
-.incubator-title.dotted-title::after{
-  content: "\2022\00A0\2022\00A0\2022"; /* • • • */
-  display: block;
-  font-style: normal;
-  font-size: 35px;
-  letter-spacing: 10px;
-  color: rgba(34, 70, 108, 0.648);
-  line-height: 1;
-  pointer-events: none;
-
-  /* 🔑 KUNCI TRANSISI */
-  opacity: inherit;
-  transform: inherit;
-  transition: inherit;
-}
-
-/* jarak dot */
-.incubator-title.dotted-title::before{
-  margin-bottom: 14px;
-}
-
-.incubator-title.dotted-title::after{
-  margin-top: 14px;
-}
-
-/* responsive dikit */
-@media (max-width: 768px){
-  .incubator-title.dotted-title::before{ margin-bottom: 10px; }
-  .incubator-title.dotted-title::after{ margin-top: 10px; }
-}
-
-
-.incubator-subtitle{
-  color: #475569;
-  font-size: 16px;
-  line-height: 1.7;
-  margin: 0 auto;
-}
-
-.incubator-cards{ margin-top: 22px; }
-.incubator-card{
-  position: relative;
-  border-radius: 16px;
-  padding: 36px 26px 28px;
-  text-align: center;
-  color: #fff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  min-height: 240px;
-  flex: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.incubator-cards .col-12 {
-  display: flex;
-}
-
-.incubator-card::before,
-.incubator-card::after{
-  content: "";
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.14);
-}
-.incubator-card::before{ top: -55px; left: -55px; }
-.incubator-card::after{ top: -55px; right: -55px; }
-
-.incubator-card--teal{ background: #ffffff ; }
-.incubator-card--gold{ background: #ffffff ; }
-
-.incubator-number{
-  font-size: 80px;
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-.incubator-card-foot{
-  font-size: 14px;
-  opacity: .92;
-}
-
-.incubator-card-title,
-.incubator-number,
-.incubator-card-foot {
-  color: #212529;
-}
-
-.incubator-card-foot {
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
-  color: #6c757d;
-}
-
-/* Mobile logo */
-@media (max-width: 576px){
-  .hero-logo{
-    width: clamp(140px, 60vw, 280px);
-    max-height: 90px;
-  }
-  #mainNavbar .brand-logo{
-    height: 44px !important;
-  }
-}
-
-/* =========================
-   SCROLL ANIMATION – INCUBATOR
+   6) SCROLL REVEAL (GLOBAL)
 ========================= */
 html.js .reveal{
   opacity: 0;
@@ -556,6 +320,7 @@ html.js .reveal.is-visible{
 html.js .reveal.d-1{ transition-delay: .10s; }
 html.js .reveal.d-2{ transition-delay: .20s; }
 html.js .reveal.d-3{ transition-delay: .30s; }
+html.js .reveal.d-4{ transition-delay: .40s; }
 
 @media (prefers-reduced-motion: reduce){
   html.js .reveal{
@@ -565,176 +330,55 @@ html.js .reveal.d-3{ transition-delay: .30s; }
   }
 }
 
-/* ===== Page transition ===== */
-.sipensi-page {
-  opacity: 1;
-  transition: opacity .18s ease;
-}
-.sipensi-page.page-leave { opacity: 0; }
-.sipensi-page.page-enter { opacity: 0; }
-.sipensi-page.page-enter.page-enter-active { opacity: 1; }
-
-/* --- Shared navbar helpers --- */
-.navbar-shell{
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.btn-login{
-  background: #1d4f7a;
-  color:#fff;
-  border-radius: 10px;
-  padding: 10px 18px;
-  font-weight: 700;
-  text-decoration:none;
-  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-}
-.btn-login:hover{
-  background:#163e60;
-  color:#fff;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(0,0,0,.18);
-}
-
-.stat-number {
-  font-weight: 900;
-  font-size: 56px;
-}
-
 /* =========================
-   FOOTER – EHUB STYLE
+   7) REVEAL ONCE (SECTION ONLY)
 ========================= */
-.sipensi-footer{
-  background: #22466C;
-  color: #ffffff;
-  padding: 64px 0 32px;
-  font-family: "Montserrat", sans-serif;
+[data-reveal-once]{
+  opacity: 1;
+  transform: none;
 }
 
-.sipensi-footer-shell{
-  max-width: 1400px;
-  margin: 0 auto;
+[data-reveal-once].reveal-once-init{
+  opacity: 0;
+  transform: translateY(14px);
 }
 
-.footer-brand-logo{
-  height: 72px;
-  width: auto;
-  margin-bottom: 18px;
+[data-reveal-once].is-visible{
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .45s ease, transform .45s ease;
+  will-change: opacity, transform;
 }
 
-.footer-address{
-  max-width: 520px;
-  line-height: 1.7;
-  font-size: 15px;
-  opacity: .95;
-}
-
-.footer-title{
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 14px;
-}
-
-.footer-links,
-.footer-contact{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-links li,
-.footer-contact li{
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.footer-links a,
-.footer-contact a{
-  color: rgba(255,255,255,.92);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.footer-links a:hover,
-.footer-contact a:hover{
-  text-decoration: underline;
-  color: #ffffff;
-}
-
-.footer-contact i{
-  font-size: 16px;
-  min-width: 18px;
-}
-
-.footer-divider{
-  border: 0;
-  height: 1px;
-  background: rgba(255,255,255,.25);
-  margin: 32px 0 18px;
-}
-
-.footer-bottom{
-  text-align: center;
-  font-size: 14px;
-  opacity: .9;
-}
-
-.footer-contact li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer-contact i {
-  font-size: 18px;
-  color: #ffffff;
-}
-
-@media (max-width: 991px){
-  .footer-brand-logo{
-    height: 64px;
+@media (prefers-reduced-motion: reduce){
+  [data-reveal-once],
+  [data-reveal-once].reveal-once-init,
+  [data-reveal-once].is-visible{
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 
-/* fallback reveal (kalau ada yg gak pakai html.js) */
-.reveal{
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity .7s cubic-bezier(.22,1,.36,1),
-              transform .7s cubic-bezier(.22,1,.36,1);
-}
-.reveal.is-visible{
+/* =========================
+   8) PAGE TRANSITION
+========================= */
+.sipensi-page{
   opacity: 1;
-  transform: translateY(0);
+  transition: opacity .18s ease;
+}
+.sipensi-page.page-leave{ opacity: 0; }
+.sipensi-page.page-enter{ opacity: 0; }
+.sipensi-page.page-enter.page-enter-active{ opacity: 1; }
+
+/* Anti “jedar” / kedip first paint */
+html.no-js body { opacity: 0; }
+
+body.is-entering{
+  opacity: 0;
 }
 
-
-/* =================================
-   FOOTER: BIKIN KONTAK RATA (HANGING ICON)
-================================= */
-
-/* khusus kontak: jangan flex dorong teks */
-.sipensi-footer .footer-contact li{
-  position: relative;
-  display: block !important;
-  padding-left: 0 !important;    /* teks mulai dari kiri */
-  margin-bottom: 12px;
+body{
+  opacity: 1;
+  transition: opacity .18s ease;
 }
-
-/* icon digeser ke kiri supaya "gantung" */
-.sipensi-footer .footer-contact li i{
-  position: absolute;
-  left: -26px;                   /* atur: -22 s/d -30 sesuai pas */
-  top: 2px;
-  width: 18px;
-  text-align: center;
-  line-height: 1;
-}
-
-/* biar link gak turun/naik aneh */
-.sipensi-footer .footer-contact li a{
-  display: inline-block;
-}
-

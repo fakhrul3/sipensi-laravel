@@ -1,37 +1,52 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" class="no-js">
 <head>
-
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" crossorigin=""/>
-  <link rel="stylesheet" href="{{ asset('css/sebaran-inkubator.css') }}">
-
-
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', config('app.name','SIPENSI')) - {{ config('app.name','SIPENSI') }}</title>
 
+  {{-- ✅ HARD LOCK: cegah 1st paint kedip --}}
+  <style>
+    html.no-js body{ opacity:0; }
+  </style>
+
+  {{-- switch no-js -> js secepat mungkin (anti kedip first paint) --}}
+  <script>
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+  </script>
+
+  {{-- Fonts --}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   {{-- Bootstrap --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  {{-- Base CSS (dashboard) --}}
+  {{-- Icons --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+  {{-- Global Base CSS --}}
   <link rel="stylesheet" href="{{ asset('css/sipensi.css') }}">
   <link rel="stylesheet" href="{{ asset('css/page-transition.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
   <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/tentang.css') }}">
 
+  {{-- Page-specific CSS --}}
+  @if (request()->routeIs('home'))
+    <link rel="stylesheet" href="{{ asset('css/home-incubator.css') }}">
+  @endif
+
+  @if (request()->routeIs('tentang'))
+    <link rel="stylesheet" href="{{ asset('css/tentang.css') }}">
+  @endif
 
   @stack('styles')
 </head>
+
 <body class="app-body">
   @include('partials.navbar')
 
@@ -43,26 +58,10 @@
 
   @include('partials.footer')
 
-  {{-- Bootstrap JS --}}
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-
-  {{-- Global JS --}}
-  <script src="{{ asset('js/page-transition.js') }}" defer></script>
-  <script src="{{ asset('js/navbar.js') }}" defer></script>
-
-  {{-- Home JS only (optional) --}}
-  @if (request()->routeIs('home'))
-    <script src="{{ asset('js/home.js') }}" defer></script>
-  @endif
-
-  {{-- Reveal JS --}}
-  <script src="{{ asset('js/reveal.js') }}" defer></script>
-
   {{-- CHATBOT SIPENSI (GLOBAL) --}}
   <div class="sipensi-chatbot" id="sipensiChatbot">
     <button class="chatbot-fab" id="chatbotToggle" aria-label="Tanya SIPENSI">
       <svg class="chatbot-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <!-- bubble -->
         <path
           d="M10 10h28a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H22l-8 6v-6h-4a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6z"
           fill="none"
@@ -70,7 +69,6 @@
           stroke-width="3"
           stroke-linejoin="round"
         />
-        <!-- dots -->
         <circle cx="18" cy="24" r="2.2" fill="currentColor"/>
         <circle cx="24" cy="24" r="2.2" fill="currentColor"/>
         <circle cx="30" cy="24" r="2.2" fill="currentColor"/>
@@ -81,13 +79,15 @@
       <div class="chatbot-header">
         <div class="chatbot-title">
           <strong>Tanya SIPENSI</strong>
-          </div>
+        </div>
         <button class="chatbot-close" id="chatbotClose" aria-label="Tutup">✕</button>
       </div>
 
       <div class="chatbot-body" id="chatbotBody">
         <div class="bot-msg">
-          Halo! Apa yang bisa aku bantu? <br> Kamu bisa ikuti format berikut ini ya <b>“Jumlah inkubator di Jawa Barat”</b> atau <b>“Inkubator di DKI Jakarta ada berapa?”</b>
+          Halo! Apa yang bisa aku bantu? <br>
+          Kamu bisa ikuti format berikut ini ya <b>“Jumlah inkubator di Jawa Barat”</b>
+          atau <b>“Inkubator di DKI Jakarta ada berapa?”</b>
         </div>
       </div>
 
@@ -104,14 +104,20 @@
     </div>
   </div>
 
-  {{-- panggil js chatbot --}}
-  <script src="{{ asset('js/chatbot.js') }}"></script>
+  {{-- Bootstrap JS --}}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
+  {{-- Global JS --}}
+  <script src="{{ asset('js/page-transition.js') }}" defer></script>
+  <script src="{{ asset('js/navbar.js') }}" defer></script>
+  <script src="{{ asset('js/reveal.js') }}" defer></script>
 
+  {{-- Chatbot JS --}}
+  <script src="{{ asset('js/chatbot.js') }}" defer></script>
+
+  {{-- kalau masih kepake, tapi idealnya cukup reveal.js --}}
+  <script src="{{ asset('js/scroll-reveal.js') }}" defer></script>
 
   @stack('scripts')
-
-  
 </body>
-
 </html>
