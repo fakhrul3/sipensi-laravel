@@ -2,6 +2,19 @@
 
 @section('title', 'SIPENSI - Beranda')
 
+{{-- ================= STYLES ================= --}}
+@push('styles')
+  {{-- Leaflet (Map) --}}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  {{-- CSS Map --}}
+  <link rel="stylesheet" href="{{ asset('css/sebaran-inkubator.css') }}">
+
+  {{-- CSS Galeri --}}
+  <link rel="stylesheet" href="{{ asset('css/galeri.css') }}">
+@endpush
+
+
 @section('content')
 
 {{-- ================= HERO ================= --}}
@@ -86,55 +99,32 @@
 {{-- ================= SEBARAN MAP ================= --}}
 @include('partials.sebaran-inkubator')
 
-{{-- ================= CONTENT BAWAH ================= --}}
-<div class="container my-5">
-  <div class="row g-4">
-    <div class="col-md-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="fw-bold">Database Inkubator</h5>
-          <p class="text-muted mb-0">Akses profil inkubator dan detail program inkubasinya.</p>
-        </div>
-      </div>
-    </div>
+{{-- ================= GALERI ================= --}}
+@include('partials.galeri', ['galleryItems' => $galleryItems ?? []])
 
-    <div class="col-md-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="fw-bold">Sebaran Wilayah</h5>
-          <p class="text-muted mb-0">Lihat sebaran inkubator per provinsi melalui peta.</p>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-md-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="fw-bold">Skema & Tahapan</h5>
-          <p class="text-muted mb-0">Pelajari skema inkubasi, tahapan, dan mekanisme pembinaan.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 @endsection
 
-{{-- ================= STYLES ================= --}}
-@push('styles')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="{{ asset('css/sebaran-inkubator.css') }}">
-@endpush
 
 {{-- ================= SCRIPTS ================= --}}
 @push('scripts')
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  {{-- Leaflet (Map) --}}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-{{-- CONFIG DATA UNTUK MAP --}}
-<script>
-  window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);
-</script>
+  {{-- CONFIG DATA UNTUK MAP --}}
+  <script>
+    window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);
+  </script>
 
-<script src="{{ asset('js/sebaran-inkubator.js') }}"></script>
-<script src="{{ asset('js/home.js') }}"></script>
+  {{-- JS Map --}}
+  <script src="{{ asset('js/sebaran-inkubator.js') }}"></script>
+
+  {{-- JS Home (punya lu) --}}
+  <script src="{{ asset('js/home.js') }}"></script>
+
+  {{-- JS Galeri --}}
+  <script src="{{ asset('js/galeri.js') }}"></script>
+
+  
 @endpush

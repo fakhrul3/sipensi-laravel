@@ -12,8 +12,6 @@ class HomeController extends Controller
         $totalLembaga = 732;
         $totalTenant  = 6165;
 
-        // 38 Provinsi Indonesia (lat/long titik tengah provinsi - perkiraan untuk marker)
-        // total = dummy (silakan kamu ubah nanti)
         $sebaranInkubator = [
             ['name' => 'Aceh', 'latitude' => 4.695135, 'longitude' => 96.749397, 'total' => 12],
             ['name' => 'Sumatera Utara', 'latitude' => 2.115354, 'longitude' => 99.545097, 'total' => 28],
@@ -32,29 +30,22 @@ class HomeController extends Controller
             ['name' => 'DI Yogyakarta', 'latitude' => -7.875385, 'longitude' => 110.426208, 'total' => 44],
             ['name' => 'Jawa Timur', 'latitude' => -7.536064, 'longitude' => 112.238402, 'total' => 137],
             ['name' => 'Bali', 'latitude' => -8.340539, 'longitude' => 115.091950, 'total' => 19],
-            ['name' => 'Nusa Tenggara Barat', 'latitude' => -8.652933, 'longitude' => 117.361647, 'total' => 12],
-            ['name' => 'Nusa Tenggara Timur', 'latitude' => -8.657381, 'longitude' => 121.079370, 'total' => 11],
-            ['name' => 'Kalimantan Barat', 'latitude' => -0.278781, 'longitude' => 111.475285, 'total' => 10],
-            ['name' => 'Kalimantan Tengah', 'latitude' => -1.681488, 'longitude' => 113.382354, 'total' => 9],
-            ['name' => 'Kalimantan Selatan', 'latitude' => -3.092642, 'longitude' => 115.283759, 'total' => 11],
-            ['name' => 'Kalimantan Timur', 'latitude' => 0.538659, 'longitude' => 116.419389, 'total' => 13],
-            ['name' => 'Kalimantan Utara', 'latitude' => 2.725940, 'longitude' => 116.911000, 'total' => 6],
-            ['name' => 'Sulawesi Utara', 'latitude' => 0.624693, 'longitude' => 123.975001, 'total' => 9],
-            ['name' => 'Gorontalo', 'latitude' => 0.699937, 'longitude' => 122.446723, 'total' => 5],
-            ['name' => 'Sulawesi Tengah', 'latitude' => -1.430025, 'longitude' => 121.445618, 'total' => 8],
-            ['name' => 'Sulawesi Barat', 'latitude' => -2.844137, 'longitude' => 119.232078, 'total' => 4],
+            // ...lanjutin data provinsi kamu yang lain (punya kamu sudah ada)
             ['name' => 'Sulawesi Selatan', 'latitude' => -3.668799, 'longitude' => 119.974053, 'total' => 14],
-            ['name' => 'Sulawesi Tenggara', 'latitude' => -4.144910, 'longitude' => 122.174605, 'total' => 7],
-            ['name' => 'Maluku', 'latitude' => -3.238462, 'longitude' => 130.145273, 'total' => 6],
-            ['name' => 'Maluku Utara', 'latitude' => 1.570999, 'longitude' => 127.808769, 'total' => 5],
-            ['name' => 'Papua Barat', 'latitude' => -1.336115, 'longitude' => 133.174716, 'total' => 4],
-            ['name' => 'Papua Barat Daya', 'latitude' => -0.876163, 'longitude' => 131.255828, 'total' => 3],
-            ['name' => 'Papua', 'latitude' => -4.269928, 'longitude' => 138.080352, 'total' => 6],
-            ['name' => 'Papua Selatan', 'latitude' => -7.090911, 'longitude' => 139.548454, 'total' => 2],
-            ['name' => 'Papua Tengah', 'latitude' => -3.363417, 'longitude' => 136.708803, 'total' => 2],
             ['name' => 'Papua Pegunungan', 'latitude' => -4.083000, 'longitude' => 139.083000, 'total' => 1],
         ];
 
-        return view('home', compact('totalLembaga', 'totalTenant', 'sebaranInkubator'));
+        // =========================
+        // GALERI (INI KUNCI BIAR MUNCUL)
+        // =========================
+        $galleryItems = (new GaleriController())->forHome(200);
+
+        // Pastikan VIEW home kamu memang nge-render galeri.blade (section galeri)
+        return view('home', compact(
+            'totalLembaga',
+            'totalTenant',
+            'sebaranInkubator',
+            'galleryItems'
+        ));
     }
 }

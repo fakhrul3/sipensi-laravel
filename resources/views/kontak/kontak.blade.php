@@ -18,14 +18,18 @@
     <div class="faq-container">
       <div class="faq-header">
         <h2>Pertanyaan yang Sering Diajukan</h2>
-        <p>Temukan jawaban untuk pertanyaan umum tentang SIPENSI</p>
+        <p><i>Frequently Asked Questions (FAQ) </i></p>
       </div>
 
       <div class="faq-content-wrapper">
         {{-- FAQ Image --}}
-        <div class="faq-image-container">
-          {{-- ganti nama file kalau beda --}}
-          <img src="{{ asset('img/image9.jpg') }}" alt="FAQ SIPENSI">
+        <div class="faq-image-container bg-faq"
+          style="
+            --zoom:110%;
+            --posX:50%;
+            --posY:35%;
+            background-image:url('{{ asset('img/avatar_ktk.png') }}');
+          ">
         </div>
 
         {{-- FAQ Accordion --}}

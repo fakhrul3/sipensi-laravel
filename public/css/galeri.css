@@ -1,0 +1,330 @@
+/* =====================================================
+   GALERI HOME - SIPENSI (FINAL)
+   - 1 layar (desktop)
+   - 3x3 grid (9 foto)
+   - Arrow center otomatis (via --arrowTop)
+   - Hover arrow: bg #22466C & icon putih
+===================================================== */
+
+/* ============== Section ============== */
+.sipensi-gallery{
+  background: #f4f6f8;
+  min-height: 100vh;
+  padding: 34px 0;
+  overflow: hidden;            /* biar 1 layar rapi */
+}
+
+.sipensi-gallery .container{
+  max-width: 1400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============== Header ============== */
+.gallery-head{
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+
+.gallery-title{
+  font-weight: 800;
+  font-size: clamp(28px, 3vw, 44px);
+  margin: 0;
+  line-height: 1.08;
+}
+
+.gallery-subtitle{
+  margin: 8px 0 0 0;
+  color: rgba(15,23,42,.70);
+}
+
+/* ============== Filter Tabs ============== */
+.gallery-filter{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 0 14px;
+}
+
+.gallery-filter-btn{
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, color .18s ease;
+}
+
+.gallery-filter-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+}
+
+.gallery-filter-btn.active{
+  background: #22466C;
+  border-color: #22466C;
+  color: #fff;
+}
+
+/* ============== Stage (arrows anchor) ============== */
+.gallery-stage{
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: visible !important;
+}
+
+/* ============== Grid 3x3 (9 foto) ============== */
+.gallery-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+
+  height: 100%;
+  min-height: 0;
+  align-content: stretch;
+  position: relative;
+}
+
+/* item isi cell */
+.gallery-item{
+  height: 100%;
+  display: flex;
+  min-width: 0;
+}
+
+/* reset button */
+.gallery-card{
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* thumb: ini yang ngatur tinggi */
+.gallery-thumb{
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eef2f7;
+  box-shadow: 0 10px 26px rgba(0,0,0,.12);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.gallery-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* anti “border/gap bawah” */
+}
+
+.gallery-card:hover .gallery-thumb{
+  transform: translateY(-4px);
+  box-shadow: 0 18px 46px rgba(0,0,0,.18);
+}
+
+/* hide by JS */
+.gallery-item.is-hidden{
+  display: none !important;
+}
+
+/* empty state */
+.gallery-empty{
+  grid-column: 1 / -1;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgba(0,0,0,.06);
+  color: rgba(15,23,42,.78);
+}
+
+/* ============== Arrows ============== */
+.gallery-arrow{
+  position: absolute;
+  top: var(--arrowTop, 50%);
+  transform: translateY(-50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255,255,255,.96);
+  color: #22466C;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+  cursor: pointer;
+  box-shadow: 0 18px 46px rgba(0,0,0,.25);
+  transition: background-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+
+.gallery-arrow svg{
+  width: 44px;
+  height: 44px;
+  display: block;
+}
+
+.gallery-arrow svg path{
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* lebih nempel ke gambar */
+.gallery-arrow-prev{ left: 6px; }
+.gallery-arrow-next{ right: 6px; }
+
+.gallery-arrow:hover{
+  background: #22466C;
+  color: #fff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 26px 64px rgba(0,0,0,.32);
+}
+
+.gallery-arrow:disabled{
+  opacity: .30;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ============== Transisi (scroll + page) ============== */
+.gallery-item.reveal-ready{
+  opacity: 0;
+  transform: translateY(18px) scale(.98);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+}
+
+.gallery-item.reveal-ready.is-visible{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.gallery-grid.is-switching{
+  pointer-events: none;
+  opacity: .85;
+  transition: opacity .18s ease;
+}
+
+/* ============== Responsive ============== */
+@media (max-width: 992px){
+  .sipensi-gallery{
+    min-height: auto;
+    overflow: visible;
+    padding: 70px 0;
+  }
+  .sipensi-gallery .container{ height: auto; }
+  .gallery-grid{ height: auto; grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 576px){
+  .gallery-grid{ grid-template-columns: 1fr; }
+  .gallery-arrow{ width: 58px; height: 58px; }
+  .gallery-arrow svg{ width: 30px; height: 30px; }
+}
+
+/* =========================
+   FIX: ukuran gambar seragam
+   - 3 kolom, 3 baris (9 item)
+   - Tinggi kartu dipaksa sama
+========================= */
+
+/* biar full 1 layar tetap rapi (desktop) */
+.sipensi-gallery{
+  background: #f4f6f8;
+}
+
+/* kunci: grid area punya tinggi, item ngisi tinggi itu */
+.gallery-stage{
+  position: relative;
+  overflow: visible !important;
+}
+
+/* grid jadi "wadah" transisi */
+#sipensiGalleryGrid{
+  position: relative;
+}
+
+/* item default: jangan hilang kalau js error */
+.gallery-item{
+  opacity: 1;
+  transform: none;
+}
+
+/* hide (filter/pagination) */
+.gallery-item.is-hidden{
+  display: none !important;
+}
+
+/* KUNCI ukuran seragam: paksa thumb jadi tinggi fix */
+.gallery-thumb{
+  width: 100%;
+  height: 230px;          /* ✅ NAH INI yang bikin "height gede" */
+  aspect-ratio: auto !important;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eef2f7;
+  box-shadow: 0 10px 26px rgba(0,0,0,.12);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.gallery-thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* desktop gede bisa lebih tinggi dikit */
+@media (min-width: 1200px){
+  .gallery-thumb{ height: 260px; }
+}
+
+/* tablet/HP: jangan dipaksa 1 layar */
+@media (max-width: 992px){
+  .gallery-thumb{ height: auto; aspect-ratio: 4/3 !important; }
+}
+
+/* =========================
+   FIX: Transisi prev/next
+   - jangan rely ke display:none
+   - pakai opacity/transform pada grid
+========================= */
+
+#sipensiGalleryGrid.is-switching{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .22s ease, transform .22s ease;
+}
+
+#sipensiGalleryGrid:not(.is-switching){
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .22s ease, transform .22s ease;
+}
+
+/* =========================
+   Scroll reveal (yang kamu mau)
+========================= */
+
+.gallery-item.reveal-ready{
+  opacity: 0;
+  transform: translateY(18px) scale(.985);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+  will-change: opacity, transform;
+}
+
+.gallery-item.reveal-ready.is-visible{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
