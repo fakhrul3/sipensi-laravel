@@ -388,8 +388,8 @@ body.page-ready .app-bg.bg-gold::after{
   overflow: visible;
 }
 .incubator-title{
-  font-weight: 700;
-  font-size: 54px;
+  font-weight: 800;
+  font-size: clamp(28px, 3vw, 44px);
   line-height: 1.1;
   color: #212121;
   margin-bottom: 10px;

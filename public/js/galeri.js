@@ -1,175 +1,123 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const stage = document.querySelector(".gallery-stage");
   const grid = document.getElementById("sipensiGalleryGrid");
-  const items = Array.from(document.querySelectorAll(".gallery-item"));
-  const buttons = Array.from(document.querySelectorAll(".gallery-filter-btn"));
+  const filterBtns = document.querySelectorAll(".gallery-filter-btn");
+  const btnPrev = document.getElementById("galleryPrevPage");
+  const btnNext = document.getElementById("galleryNextPage");
 
-  const prevBtn = document.getElementById("galleryPrevPage") || document.querySelector(".gallery-arrow-prev");
-  const nextBtn = document.getElementById("galleryNextPage") || document.querySelector(".gallery-arrow-next");
+  // Lightbox
+  const lightbox = document.getElementById("sipensiLightbox");
+  const lightboxImg = document.getElementById("sipensiLightboxImg");
+  const closeBtn = document.querySelector(".sipensi-lightbox__close");
+  const backdrop = document.querySelector(".sipensi-lightbox__backdrop");
 
   const PAGE_SIZE = 9;
+  if (!grid) return;
+
+  const allItems = Array.from(grid.querySelectorAll(".gallery-item"));
 
   let currentFilter = "all";
   let currentPage = 1;
-  let isAnimating = false;
 
-  // ===== helper =====
-  const getFilteredItems = () => {
-    return items.filter((item) => {
-      const cat = item.dataset.category;
+  const getFilteredItems = () =>
+    allItems.filter((it) => {
+      const cat = it.dataset.category || "kegiatan";
       return currentFilter === "all" || cat === currentFilter;
     });
+
+  const pageCount = (filtered) => Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+  const setArrowTop = () => {
+    if (!stage) return;
+    stage.style.setProperty("--arrowTop", `${Math.round(stage.clientHeight / 2)}px`);
   };
 
-  // bikin item siap animasi reveal
-  const armRevealForVisible = () => {
-    const visible = items.filter((it) => !it.classList.contains("is-hidden"));
-    visible.forEach((it) => it.classList.add("reveal-ready"));
+  const switchWithAnim = (fn) => {
+    grid.classList.add("is-switching");
+    setTimeout(() => {
+      fn();
+      requestAnimationFrame(() => grid.classList.remove("is-switching"));
+    }, 180);
   };
 
-  // arrow center (pakai bounding visible items)
-  const updateArrowCenter = () => {
-    if (!grid) return;
-
-    const visible = items.filter((it) => !it.classList.contains("is-hidden"));
-    if (visible.length === 0) return;
-
-    const gridRect = grid.getBoundingClientRect();
-
-    let top = Infinity;
-    let bottom = -Infinity;
-
-    visible.forEach((it) => {
-      const r = it.getBoundingClientRect();
-      top = Math.min(top, r.top);
-      bottom = Math.max(bottom, r.bottom);
-    });
-
-    const centerY = (top + bottom) / 2;
-    const arrowTopPx = centerY - gridRect.top;
-
-    grid.style.setProperty("--arrowTop", `${arrowTopPx}px`);
-  };
-
-  // render tanpa animasi (initial)
-  const renderInstant = () => {
+  const render = () => {
     const filtered = getFilteredItems();
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    const totalPages = pageCount(filtered);
 
-    if (currentPage > totalPages) currentPage = totalPages;
-    if (currentPage < 1) currentPage = 1;
+    currentPage = Math.min(Math.max(currentPage, 1), totalPages);
 
-    items.forEach((it) => it.classList.add("is-hidden"));
+    allItems.forEach((it) => it.classList.add("is-hidden"));
 
     const start = (currentPage - 1) * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     filtered.slice(start, end).forEach((it) => it.classList.remove("is-hidden"));
 
-    // state disabled
-    if (prevBtn) prevBtn.disabled = currentPage === 1;
-    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+    if (btnPrev) btnPrev.disabled = currentPage <= 1;
+    if (btnNext) btnNext.disabled = currentPage >= totalPages;
 
-    // set reveal & compute arrow
-    armRevealForVisible();
-    requestAnimationFrame(() => {
-      updateArrowCenter();
-      runRevealObserver(); // supaya yang tampil langsung bisa anim saat scroll
-    });
+    setArrowTop();
   };
 
-  // render dengan animasi page transition
-  const renderAnimated = () => {
-    if (!grid || isAnimating) return;
-    isAnimating = true;
-
-    // 1) fade-out grid
-    grid.classList.add("is-switching");
-
-    // 2) tunggu sedikit, baru swap item
-    window.setTimeout(() => {
-      const filtered = getFilteredItems();
-      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-
-      if (currentPage > totalPages) currentPage = totalPages;
-      if (currentPage < 1) currentPage = 1;
-
-      items.forEach((it) => it.classList.add("is-hidden"));
-
-      const start = (currentPage - 1) * PAGE_SIZE;
-      const end = start + PAGE_SIZE;
-      filtered.slice(start, end).forEach((it) => it.classList.remove("is-hidden"));
-
-      if (prevBtn) prevBtn.disabled = currentPage === 1;
-      if (nextBtn) nextBtn.disabled = currentPage === totalPages;
-
-      // 3) prepare reveal + update arrow
-      armRevealForVisible();
-      updateArrowCenter();
-
-      // 4) fade-in balik
-      grid.classList.remove("is-switching");
-
-      // 5) re-observe yang tampil (biar transisi scroll jalan)
-      runRevealObserver();
-
-      window.setTimeout(() => {
-        isAnimating = false;
-      }, 260);
-    }, 220);
-  };
-
-  // ===== Scroll Reveal (re-usable observer) =====
-  let observer = null;
-
-  const runRevealObserver = () => {
-    if (observer) observer.disconnect();
-
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    // observe hanya yang terlihat (biar gak berat)
-    const visible = items.filter((it) => !it.classList.contains("is-hidden"));
-    visible.forEach((it) => observer.observe(it));
-  };
-
-  // ===== events =====
-  buttons.forEach((btn) => {
+  // Filter
+  filterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      if (isAnimating) return;
-
-      buttons.forEach((b) => b.classList.remove("active"));
+      filterBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-
       currentFilter = btn.dataset.filter || "all";
       currentPage = 1;
-
-      renderAnimated();
+      switchWithAnim(render);
     });
   });
 
-  prevBtn?.addEventListener("click", () => {
-    if (isAnimating) return;
-    currentPage--;
-    renderAnimated();
+  // Paging
+  btnPrev?.addEventListener("click", () => {
+    if (btnPrev.disabled) return;
+    currentPage -= 1;
+    switchWithAnim(render);
   });
 
-  nextBtn?.addEventListener("click", () => {
-    if (isAnimating) return;
-    currentPage++;
-    renderAnimated();
+  btnNext?.addEventListener("click", () => {
+    if (btnNext.disabled) return;
+    currentPage += 1;
+    switchWithAnim(render);
   });
 
-  window.addEventListener("resize", () => {
-    requestAnimationFrame(updateArrowCenter);
+  // Lightbox
+  const openLightbox = (src, altText = "") => {
+    if (!lightbox || !lightboxImg || !src) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = altText || "Preview gambar";
+    lightbox.classList.add("active");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+  };
+
+  const closeLightbox = () => {
+    if (!lightbox || !lightboxImg) return;
+    lightbox.classList.remove("active");
+    lightbox.setAttribute("aria-hidden", "true");
+    lightboxImg.src = "";
+    document.documentElement.style.overflow = "";
+  };
+
+  // Klik card -> lightbox
+  grid.addEventListener("click", (e) => {
+    const card = e.target.closest(".gallery-card");
+    if (!card) return;
+    const fullSrc = card.dataset.full || "";
+    const img = card.querySelector("img");
+    const altText = img ? img.getAttribute("alt") : "";
+    openLightbox(fullSrc, altText);
   });
 
-  // initial
-  renderInstant();
+  // Close actions
+  closeBtn?.addEventListener("click", closeLightbox);
+  backdrop?.addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lightbox?.classList.contains("active")) closeLightbox();
+  });
+
+  window.addEventListener("resize", setArrowTop);
+
+  render();
 });

@@ -162,7 +162,7 @@ html, body{
 .auth-title{
   font-size: 48px;
   font-weight: 800;
-  color: #22466C;
+  color: #212121;
   margin-top: 6px;
   text-shadow: 0 10px 24px rgba(0,0,0,0.10);
 }
@@ -173,7 +173,7 @@ html, body{
 }
 
 .auth-subtitle{
-  color: rgba(0,0,0,0.65);
+  color: #fff;
   margin-top: 10px;
 }
 

@@ -2,7 +2,7 @@
    SEBARAN INKUBATOR
 ========================= */
 .sebaran-section{
-  padding: 80px 24px;
+  padding: 32px 24px 24px;
   background: #ffffff;
 }
 
@@ -12,18 +12,19 @@
 }
 
 .sebaran-title{
-  font-size: 2rem;
+  font-size: clamp(28px, 3vw, 44px);
   font-weight: 800;
-  color: #22466C;
+  color: #212121;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 4px; /* default biasanya 12px */
 }
+
 
 .sebaran-subtitle{
   text-align: center;
   color: #64748b;
   max-width: 48rem;
-  margin: 0 auto 3rem;
+  margin: 0 auto 1rem; /* dari 3rem → 1rem */
   line-height: 1.7;
 }
 

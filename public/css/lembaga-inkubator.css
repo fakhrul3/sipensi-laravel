@@ -133,14 +133,14 @@ body.page-ready .app-bg.bg-detail-inkubator::after{
 
 /* Kasih ruang dari navbar */
 .li-shell{
-  padding-top: 120px; /* adjust kalau navbar lebih tinggi */
+  padding: 80px 16px 60px; /* adjust kalau navbar lebih tinggi */
 }
 
 /* Wrapper header halaman */
+/* header */
 .li-head{
-  margin-top: 20px;
-  margin-bottom: 28px;
-  overflow: hidden;
+  margin-top: 0;
+  margin-bottom: 18px;
 }
 
 /* FIX POSISI JUDUL (NAIK) */
@@ -148,27 +148,27 @@ body.page-ready .app-bg.bg-detail-inkubator::after{
   padding-top: 90px !important;
 }
 .li-head{
-  transform: translateY(-18px) !important;
+  transform: translateY(-6px) !important;
 }
 
 .li-title{
-  font-size: 56px;
+  font-size: clamp(28px, 3vw, 44px);
   line-height: 1.05;
   font-weight: 800;
   letter-spacing: -0.5px;
   margin: 0 0 8px 0 !important;
-  color: #2B6685;
+  color: #212121;
   text-shadow: 0 2px 0 rgba(255,255,255,.6);
 }
 
 .li-subtitle{
-  color: #375b62;
+  color: #fff;
   font-weight: 500;
-  margin: 6px 0 18px !important;
+  margin: 2px 0 6px !important;
 }
 
 .li-toolbar{
-  margin: 22px 0 14px;
+  margin: 6px 0 6px;
   display:flex;
   gap: 12px;
   justify-content: space-between;
