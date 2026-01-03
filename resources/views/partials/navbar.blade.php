@@ -66,11 +66,9 @@
         </li>
 
         <li class="nav-item">
-          <a
-            class="nav-link {{ $isMitra ? 'active' : '' }}"
+          <a class="nav-link {{ request()->routeIs('mitra.*') ? 'active' : '' }}"
             href="{{ route('mitra.index') }}"
-            data-page-link
-          >
+            >
             MITRA
           </a>
         </li>
