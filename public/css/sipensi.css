@@ -117,7 +117,7 @@ body.page-ready .app-bg.bg-gold::after{
 .hero-overlay{
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.38);
   z-index: 1;
 }
 

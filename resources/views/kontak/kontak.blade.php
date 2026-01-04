@@ -29,10 +29,10 @@
           <div
             class="faq-image-container bg-faq page-enter d-2"
             style="
-              --zoom:110%;
+              --zoom:90%;
               --posX:50%;
-              --posY:35%;
-              background-image:url('{{ asset('img/avatar_ktk.png') }}');
+              --posY:30%;
+              background-image:url('{{ asset('img/smesco_hub.jpeg') }}');
             ">
           </div>
 
