@@ -108,6 +108,10 @@
 {{-- ================= GALERI ================= --}}
 @include('partials.galeri', ['galleryItems' => $galleryItems ?? []])
 
+{{-- ================= BERITA ================= --}}
+@include('partials.berita')
+
+
 
 
 @endsection

@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
   <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
   <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/berita.css') }}">
 
   {{-- Page-specific CSS --}}
   @if (request()->routeIs('home'))
@@ -111,6 +112,7 @@
   <script src="{{ asset('js/page-transition.js') }}" defer></script>
   <script src="{{ asset('js/navbar.js') }}" defer></script>
   <script src="{{ asset('js/reveal.js') }}" defer></script>
+  <script src="{{ asset('js/berita.js') }}" defer></script>
 
   {{-- Chatbot JS --}}
   <script src="{{ asset('js/chatbot.js') }}" defer></script>

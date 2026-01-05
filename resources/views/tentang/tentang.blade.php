@@ -3,7 +3,6 @@
 @push('styles')
   <link rel="stylesheet" href="{{ asset('css/tentang.css') }}">
   <link rel="stylesheet" href="{{ asset('css/tahapan-inkubasi.css') }}">
-
 @endpush
 
 @section('content')
@@ -12,12 +11,15 @@
 <div id="tentangRoot" class="page-enter">
 
   {{-- HERO TENTANG --}}
-  <section class="tentang-hero" style="background-image: url('{{ asset('/img/bg_tentang.jpg') }}');">
+  <section
+    class="tentang-hero"
+    style="--hero-bg: url('{{ asset('/img/bg_tentang.jpg') }}');"
+  >
     <div class="tentang-hero__overlay"></div>
 
     <div class="tentang-container tentang-hero__content">
-      <p class="tentang-hero__kicker reveal d-1">SIPENSI KEMENTERIAN UMKM</p>
-      <h1 class="tentang-hero__title reveal d-2">Tentang SIPENSI</h1>
+      <p class="tentang-hero__kicker reveal d-1">SIPENSI</p>
+      <h1 class="tentang-hero__title reveal d-2">Mengenal SIPENSI</h1>
       <p class="tentang-hero__subtitle reveal d-3">
         Platform digital strategis Kementerian UMKM dalam memantau dan memperkuat ekosistem inkubasi nasional guna mencetak wirausaha baru yang inovatif dan berdaya saing global.
       </p>
@@ -25,21 +27,44 @@
   </section>
 
   {{-- KONTEN UTAMA --}}
- <section class="tentang-section tentang-section--white">
+  <section class="tentang-section tentang-section--white">
     <div class="tentang-content-card">
       <div class="tentang-content-wrap">
         <p class="tentang-text reveal">
-          <strong> SIPENSI </strong> adalah <strong>platform informasi nasional yang menghubungkan lembaga inkubator dan usaha rintisan</strong> dalam satu ekosistem inkubasi. Dikelola oleh Kementerian UMKM, SIPENSI menjadi <strong>sistem resmi untuk pendaftaran dan pemutakhiran data lembaga inkubator di Indonesia</strong>, sekaligus sumber informasi terbuka bagi usaha rintisan yang ingin menemukan inkubator yang sesuai.
+          <strong>SIPENSI</strong> adalah <strong>Platform Informasi Nasional</strong> yang menghubungkan
+          <strong>Lembaga Inkubator</strong> dan <strong>Usaha Rintisan</strong> dalam satu
+          <strong>Ekosistem Inkubasi</strong>.
+          Dikelola oleh <strong>Kementerian UMKM</strong>, SIPENSI menjadi
+          Sistem Resmi untuk pendaftaran dan pemutakhiran data Lembaga Inkubator
+          di Indonesia, sekaligus sumber informasi terbuka bagi Usaha Rintisan
+          yang ingin menemukan Inkubator yang sesuai dengan kebutuhan pengembangan usahanya.
         </p>
 
         <p class="tentang-text reveal d-1">
-          Lembaga inkubator yang tercatat di SIPENSI dapat diselenggarakan oleh berbagai pihak, termasuk Pemerintah Pusat, Pemerintah Daerah, lembaga pendidikan, badan usaha, maupun masyarakat. Melalui <strong>satu sistem terintegrasi</strong>, SIPENSI menghimpun informasi inkubator secara nasional agar <strong>mudah diakses, ditelusuri, dan dimanfaatkan oleh ekosistem inkubasi</strong>.
-          Selain sebagai basis data resmi, SIPENSI juga mendukung <strong>pemantauan dan evaluasi penyelenggaraan inkubasi secara berkala</strong>, sehingga tata kelola inkubasi dapat berjalan lebih <strong>transparan, terhubung, dan berkelanjutan</strong>.
+          Lembaga inkubator yang tercatat di SIPENSI dapat diselenggarakan oleh berbagai pihak,
+          termasuk <strong>Pemerintah Pusat</strong>, <strong>Pemerintah Daerah</strong>,
+          <strong>Lembaga Pendidikan</strong>, <strong>Badan Usaha</strong>, maupun
+          <strong>Masyarakat</strong>.
+          Melalui satu sistem terintegrasi, SIPENSI menghimpun informasi Inkubator
+          secara nasional agar mudah diakses, ditelusuri,
+          dan dimanfaatkan oleh Ekosistem Inkubasi.
         </p>
 
         <p class="tentang-text tentang-text--last reveal d-2">
-          <small> Pengelolaan SIPENSI mengacu pada <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021</strong>. </small> 
+          Selain sebagai basis data resmi, SIPENSI juga mendukung
+          <strong>Pemantauan dan Evaluasi</strong> penyelenggaraan inkubasi secara berkala,
+          sehingga tata kelola inkubasi dapat berjalan lebih
+          <strong>Transparan</strong>, <strong>Terhubung</strong>, dan
+          <strong>Berkelanjutan</strong>.
         </p>
+        <br>
+        <p class="tentang-text tentang-text--last reveal d-2">
+          <small>
+            Pengelolaan SIPENSI mengacu pada
+            <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021</strong>.
+          </small>
+        </p>
+
       </div>
     </div>
   </section>
@@ -49,8 +74,9 @@
     <div class="tentang-container">
       <h2 class="tentang-title reveal">Skema Inkubasi</h2>
       <p class="tentang-subtitle reveal d-1">
-       Skema inkubasi dirancang sebagai kerangka pendampingan untuk mendukung UMKM dan usaha rintisan berkembang secara bertahap, terarah, dan berkelanjutan.
-<small> Skema ini disusun mengacu pada <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021. </strong></small></p>
+        Skema inkubasi dirancang sebagai kerangka pendampingan untuk mendukung UMKM dan usaha rintisan berkembang secara bertahap, terarah, dan berkelanjutan.
+        <small> Skema ini disusun mengacu pada <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021. </strong></small>
+      </p>
 
       <div class="row g-4">
         <div class="col-md-6 col-lg-4 reveal d-1">
@@ -111,14 +137,20 @@
 
 @push('scripts')
 <script>
-  // Optional: kasih class active ke menu "Tentang" TANPA jQuery
-  // Pastikan di navbar ada id="tentang" pada link Tentang
   document.addEventListener('DOMContentLoaded', () => {
+    // active menu
     const el = document.getElementById('tentang');
     if (el) el.classList.add('active');
+
+    // page-enter khusus Tentang
+    const root = document.getElementById('tentangRoot');
+    if (root) requestAnimationFrame(() => root.classList.add('is-loaded'));
   });
 </script>
 
+<script src="{{ asset('js/tentang.js') }}"></script>
+<script src="{{ asset('js/scroll-reveal.js') }}"></script>
+<script src="{{ asset('js/tahapan-inkubasi.js') }}"></script>
 <script src="{{ asset('js/scroll-reveal.js') }}"></script>
 <script src="{{ asset('js/tahapan-inkubasi.js') }}"></script>
 

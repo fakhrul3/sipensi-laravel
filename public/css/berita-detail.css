@@ -1,0 +1,216 @@
+:root{
+  --bg-1: #BFE4EE;
+  --bg-2: #8EC9DA;
+  --bg-3: rgba(234, 244, 248, .92);
+  --bg-4: #ffffff;
+
+  /* =========================
+     BUNGA CONTROL (EDIT INI)
+  ========================= */
+  --bunga-top: -275px;
+  --bunga-right: -345px;
+  --bunga-left: auto;
+  --bunga-bottom: auto;
+
+  --bunga-size: 700px;
+  --bunga-opacity: .60;
+  --bunga-rotate: 0deg;
+
+  /* arah masuk (offset awal animasi) */
+  --bunga-offset-x: 80px;   /* geser horizontal awal */
+  --bunga-offset-y: -40px;  /* geser vertical awal */
+}
+
+/* =========================
+   PAGE ENTER (GLOBAL LOAD)
+========================= */
+.page-enter{
+  animation: pageEnter .6s ease-out both;
+}
+
+@keyframes pageEnter{
+  from{
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   DETAIL PAGE
+========================= */
+.berita-detail{
+  position: relative;
+  overflow: hidden;
+  padding: 110px 0 80px;
+
+  background: linear-gradient(
+    170deg,
+    var(--bg-1) 0%,
+    var(--bg-2) 28%,
+    var(--bg-3) 58%,
+    var(--bg-4) 100%
+  );
+}
+
+.berita-detail-shell{
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 22px;
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   ORNAMEN BUNGA
+   - SIMPLE MOVE TRANSITION
+   - NO bounce, NO overshoot
+========================= */
+.berita-ornament{
+  position: absolute;
+  top: var(--bunga-top);
+  right: var(--bunga-right);
+  left: var(--bunga-left);
+  bottom: var(--bunga-bottom);
+
+  width: var(--bunga-size);
+  height: auto;
+
+  opacity: var(--bunga-opacity);
+  pointer-events: none;
+  z-index: 1;
+
+  transform:
+    translate(
+      var(--bunga-offset-x),
+      var(--bunga-offset-y)
+    )
+    rotate(var(--bunga-rotate));
+
+  animation: bungaMove .7s ease-out both;
+}
+
+@keyframes bungaMove{
+  from{
+    opacity: 0;
+    transform:
+      translate(
+        var(--bunga-offset-x),
+        var(--bunga-offset-y)
+      )
+      rotate(var(--bunga-rotate));
+  }
+  to{
+    opacity: var(--bunga-opacity);
+    transform:
+      translate(0, 0)
+      rotate(var(--bunga-rotate));
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px){
+  .berita-detail{
+    padding-top: 95px;
+  }
+
+  :root{
+    --bunga-size: 420px;
+    --bunga-opacity: .35;
+    --bunga-offset-x: 50px;
+    --bunga-offset-y: -25px;
+  }
+}
+
+/* =========================
+   UI ELEMENTS
+========================= */
+.berita-back{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 800;
+  color: #22466C;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(34,70,108,.18);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(6px);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.berita-back:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15,23,42,.12);
+}
+
+.berita-head{ margin-top: 18px; }
+
+.berita-badge{
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(34,70,108,.95);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.berita-title{
+  margin: 12px 0 8px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: clamp(26px, 3vw, 40px);
+  color: #0f172a;
+  line-height: 1.15;
+}
+
+.berita-date{
+  margin: 0;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.berita-hero{
+  margin-top: 22px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(15,23,42,.08);
+  box-shadow: 0 12px 30px rgba(15,23,42,.10);
+  background: #e2e8f0;
+}
+
+.berita-hero img{
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.berita-content{
+  margin-top: 22px;
+  color: #334155;
+  line-height: 1.95;
+  font-size: 16px;
+}
+
+.berita-content p{
+  margin: 0 0 14px;
+}
+
+/* =========================
+   ACCESSIBILITY
+========================= */
+@media (prefers-reduced-motion: reduce){
+  .page-enter,
+  .berita-ornament{
+    animation: none;
+    transform: none;
+  }
+}
