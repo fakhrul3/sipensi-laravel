@@ -24,9 +24,7 @@
 
       @for ($i = 1; $i <= 5; $i++)
       <div class="carousel-item {{ $i === 1 ? 'active' : '' }} position-relative">
-        <div class="hero-bg" style="background-image:url('{{ asset("img/slide$i.jpg") }}?v={{ filemtime(public_path("img/slide$i.jpg")) }}');"></div>
-        <div class="hero-overlay"></div>
-
+      <div class="hero-bg" style="background-image:url('{{ asset("img/slide$i.jpg") }}?v={{ file_exists(public_path("img/slide$i.jpg")) ? filemtime(public_path("img/slide$i.jpg")) : time() }}');"></div>        <div class="hero-overlay"></div>
         <div class="hero-content">
           <div class="wrap">
             <div class="hero-title-logo mb-3 reveal">
