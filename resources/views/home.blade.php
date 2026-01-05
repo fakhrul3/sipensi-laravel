@@ -31,7 +31,7 @@
               <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
             </div>
             <p class="fs-6 mb-4 text-white reveal d-1">
-              Akses informasi Inkubator dan Usaha Rintisan Indonesia dan NUSANTARA melalui SIPENSI
+              Akses informasi Inkubator dan Usaha Rintisan Indonesia
             </p>
             <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
               Selengkapnya
