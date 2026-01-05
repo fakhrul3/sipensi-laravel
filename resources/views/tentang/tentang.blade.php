@@ -17,7 +17,7 @@
 
     <div class="tentang-container tentang-hero__content">
       <p class="tentang-hero__kicker reveal d-1">SIPENSI KEMENTERIAN UMKM</p>
-      <h1 class="tentang-hero__title reveal d-2">Tentang eggy</h1>
+      <h1 class="tentang-hero__title reveal d-2">Tentang SIPENSI</h1>
       <p class="tentang-hero__subtitle reveal d-3">
         Platform digital strategis Kementerian UMKM dalam memantau dan memperkuat ekosistem inkubasi nasional guna mencetak wirausaha baru yang inovatif dan berdaya saing global.
       </p>
