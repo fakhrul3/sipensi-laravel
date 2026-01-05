@@ -2,10 +2,11 @@
   <div class="container-fluid px-lg-5">
 
     <div class="tahapan-inkubasi-title reveal">
-      <h1 class="reveal">Tahapan Inkubasi</h1>
+      <h1 class="reveal">Tahapan / Perjalanan Inkubasi</h1>
       <p class="reveal d-1">
-        Proses inkubasi terdiri dari tiga tahapan utama yang dirancang untuk memberikan pendampingan berkelanjutan dari persiapan hingga pengembangan bisnis yang mandiri.
-      </p>
+       
+Inkubasi mendampingi usaha rintisan melalui tahapan yang saling terhubung, membantu usaha rintisan membangun fondasi bisnis, mengembangkan kapasitas, dan siap tumbuh secara mandiri
+</p>
     </div>
 
     <div class="tahapan-tabs reveal d-2" data-tahapan-tabs>
@@ -41,8 +42,7 @@
           <h2>Tahap Pra-Inkubasi</h2>
         </div>
         <p class="tahap-description">
-          Tahap persiapan dan seleksi sebelum masuk ke program inkubasi. Meliputi identifikasi potensi bisnis, seleksi peserta, dan persiapan dokumen kontrak.
-        </p>
+          Tahap awal untuk memastikan kesiapan calon tenant sebelum mengikuti program inkubasi, dengan fokus pada kesiapan usaha dan kebutuhan pengembangan. </p>
         <div class="aktivitas-utama-section">
           <h3>Aktivitas Utama</h3>
           <ol class="aktivitas-list">
@@ -60,8 +60,7 @@
           <h2>Tahap Inkubasi</h2>
         </div>
         <p class="tahap-description">
-          Tahap pengembangan dan pendampingan aktif selama masa inkubasi. Meliputi pelatihan, bimbingan, konsultasi, dan pendampingan pengembangan usaha.
-        </p>
+         Pendampingan intensif yang berfokus pada penguatan model bisnis, peningkatan kapasitas usaha, serta perluasan akses pasar dan kemitraan. </p>
         <div class="aktivitas-utama-section">
           <h3>Aktivitas Utama</h3>
           <ol class="aktivitas-list">
@@ -81,8 +80,7 @@
           <h2>Tahap Pasca-Inkubasi</h2>
         </div>
         <p class="tahap-description">
-          Tahap pengawasan dan pengembangan lanjutan setelah masa inkubasi. Meliputi monitoring pertumbuhan bisnis, evaluasi keberlanjutan, dan pengembangan jaringan bisnis.
-        </p>
+          Penguatan lanjutan untuk mendukung pertumbuhan dan keberlanjutan usaha pasca inkubasi </p>
         <div class="aktivitas-utama-section">
           <h3>Aktivitas Utama</h3>
           <ol class="aktivitas-list">

@@ -25,29 +25,20 @@
   </section>
 
   {{-- KONTEN UTAMA --}}
-  <section class="tentang-section tentang-section--white">
+ <section class="tentang-section tentang-section--white">
     <div class="tentang-content-card">
       <div class="tentang-content-wrap">
         <p class="tentang-text reveal">
-          Berdasarkan <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021</strong>
-          Tentang Kemudahan, Perlindungan dan Pemberdayaan Koperasi dan Usaha Mikro, Kecil dan Menengah,
-          <strong>Pasal 134 ayat 3</strong> mengamanatkan agar lembaga inkubator terdaftar dalam
-          Sistem Pendaftaran Informasi dan Evaluasi Inkubasi.
+          <strong> SIPENSI </strong> adalah <strong>platform informasi nasional yang menghubungkan lembaga inkubator dan usaha rintisan</strong> dalam satu ekosistem inkubasi. Dikelola oleh Kementerian UMKM, SIPENSI menjadi <strong>sistem resmi untuk pendaftaran dan pemutakhiran data lembaga inkubator di Indonesia</strong>, sekaligus sumber informasi terbuka bagi usaha rintisan yang ingin menemukan inkubator yang sesuai.
         </p>
 
         <p class="tentang-text reveal d-1">
-          Selanjutnya, <strong>Pasal 134 ayat 6</strong> mengamanatkan bahwa lembaga inkubator wajib
-          melaporkan penyelenggaraan lembaga inkubator kepada Menteri Koperasi dan UKM
-          <strong>dua (2) kali dalam satu (1) tahun</strong>, yaitu pada <strong>bulan Juni dan bulan Desember</strong>
-          melalui Sistem Pendaftaran Informasi dan Evaluasi Inkubasi.
+          Lembaga inkubator yang tercatat di SIPENSI dapat diselenggarakan oleh berbagai pihak, termasuk Pemerintah Pusat, Pemerintah Daerah, lembaga pendidikan, badan usaha, maupun masyarakat. Melalui <strong>satu sistem terintegrasi</strong>, SIPENSI menghimpun informasi inkubator secara nasional agar <strong>mudah diakses, ditelusuri, dan dimanfaatkan oleh ekosistem inkubasi</strong>.
+          Selain sebagai basis data resmi, SIPENSI juga mendukung <strong>pemantauan dan evaluasi penyelenggaraan inkubasi secara berkala</strong>, sehingga tata kelola inkubasi dapat berjalan lebih <strong>transparan, terhubung, dan berkelanjutan</strong>.
         </p>
 
         <p class="tentang-text tentang-text--last reveal d-2">
-          <strong>Kementerian Koperasi dan Usaha Kecil dan Menengah Republik Indonesia</strong> telah membangun
-          Sistem Pendaftaran Informasi dan Evaluasi Inkubasi melalui laman
-          <span class="tentang-link">https://sipensi.umkm.go.id</span>.
-          Seluruh Lembaga Inkubator di Indonesia diharapkan mendaftarkan lembaganya
-          secara berkala untuk pelaporan penyelenggaraan program inkubasi yang transparan.
+          <small> Pengelolaan SIPENSI mengacu pada <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021</strong>. </small> 
         </p>
       </div>
     </div>
@@ -58,8 +49,8 @@
     <div class="tentang-container">
       <h2 class="tentang-title reveal">Skema Inkubasi</h2>
       <p class="tentang-subtitle reveal d-1">
-        Sesuai PP No. 7 Tahun 2021, skema inkubasi dirancang untuk memperkuat fondasi bisnis UMKM melalui berbagai layanan strategis.
-      </p>
+       Skema inkubasi dirancang sebagai kerangka pendampingan untuk mendukung UMKM dan usaha rintisan berkembang secara bertahap, terarah, dan berkelanjutan.
+<small> Skema ini disusun mengacu pada <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021. </strong></small></p>
 
       <div class="row g-4">
         <div class="col-md-6 col-lg-4 reveal d-1">
