@@ -32,7 +32,7 @@
               --zoom:90%;
               --posX:50%;
               --posY:30%;
-              background-image:url('{{ asset('img/smesco_hub.jpeg') }}');
+              background-image:url('{{ asset('img/content_faq.jpeg') }}');
             ">
           </div>
 

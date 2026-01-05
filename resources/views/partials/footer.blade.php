@@ -73,7 +73,7 @@
     <hr class="footer-divider">
 
     <div class="footer-bottom">
-      © 2026 SIPENSI – Sistem Pendaftaran Informasi dan Evaluasi Inkubasi. All rights reserved.
+      Copyright © 2026 Hak Cipta Dilindungi. SIPENSI – Kementerian Usaha Mikro Kecil dan Menengah Republik Indonesia.
     </div>
   </div>
 </footer>
