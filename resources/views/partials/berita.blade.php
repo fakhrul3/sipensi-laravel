@@ -26,7 +26,7 @@
     ],
     [
       'slug' => 'digitalisasi-layanan-inkubator-lebih-cepat-lebih-rapi',
-      'type' => 'Update Sistem',
+      'type' => 'Kolaborasi',
       'title' => 'Digitalisasi Layanan Inkubator: Lebih Cepat, Lebih Rapi',
       'excerpt' => 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       'date' => '20 Des 2025',
@@ -34,7 +34,7 @@
     ],
     [
       'slug' => 'best-practice-inkubator-daerah-bangun-ekosistem-lokal',
-      'type' => 'Best Practice',
+      'type' => 'Kolaborasi',
       'title' => 'Best Practice: Inkubator Daerah Bangun Ekosistem Lokal',
       'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       'date' => '15 Des 2025',
@@ -50,7 +50,7 @@
     ],
     [
       'slug' => 'integrasi-data-inkubator-monitoring-nasional',
-      'type' => 'Update Sistem',
+      'type' => 'Kolaborasi',
       'title' => 'Integrasi Data Inkubator untuk Monitoring Nasional',
       'excerpt' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
       'date' => '10 Des 2025',

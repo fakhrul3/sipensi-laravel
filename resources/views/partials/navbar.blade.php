@@ -1,9 +1,6 @@
 @php
   use Illuminate\Support\Facades\Route;
-
-  $isHome = request()->routeIs('home');
-  $isMitra = request()->routeIs('mitra.*');
-  $isInkubator = request()->routeIs('inkubator.*');
+  use Illuminate\Support\Facades\Auth;
 
   // Login route fallback
   $loginUrl = Route::has('login') ? route('login') : url('/login');
@@ -66,9 +63,11 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('mitra.*') ? 'active' : '' }}"
+          <a
+            class="nav-link {{ request()->routeIs('mitra.*') ? 'active' : '' }}"
             href="{{ route('mitra.index') }}"
-            >
+            data-page-link
+          >
             MITRA
           </a>
         </li>
@@ -85,11 +84,45 @@
 
       </ul>
 
-      {{-- CTA --}}
+      {{-- CTA (KANAN) --}}
       <div class="d-flex align-items-center gap-2">
-        <a class="btn btn-login" href="{{ $loginUrl }}">
-          MASUK
-        </a>
+
+        @auth
+          {{-- Dropdown User --}}
+          <div class="dropdown">
+            <button
+              class="btn btn-login dropdown-toggle btn-user"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ Auth::user()->username ?? 'USER' }}
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end nav-user-dropdown">
+              <li class="px-3 py-2 small text-muted">
+                Login sebagai <strong>{{ Auth::user()->username ?? '-' }}</strong>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+
+              <li>
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                  @csrf
+                  <button type="submit" class="dropdown-item nav-user-logout">
+                    Logout
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        @endauth
+
+        @guest
+          <a class="btn btn-login" href="{{ $loginUrl }}">
+            MASUK
+          </a>
+        @endguest
+
       </div>
     </div>
   </div>
