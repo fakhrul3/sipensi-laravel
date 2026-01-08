@@ -21,39 +21,46 @@
 <section class="hero">
   <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
     <div class="carousel-inner">
-
-      @for ($i = 1; $i <= 5; $i++)
-      <div class="carousel-item {{ $i === 1 ? 'active' : '' }} position-relative">
-      <div class="hero-bg" style="background-image:url('{{ asset("img/slide$i.jpg") }}?v={{ file_exists(public_path("img/slide$i.jpg")) ? filemtime(public_path("img/slide$i.jpg")) : time() }}');"></div>        <div class="hero-overlay"></div>
-        <div class="hero-content">
-          <div class="wrap">
-            <div class="hero-title-logo mb-3 reveal">
-              <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}" alt="SIPENSI" class="hero-logo">
+      @foreach ($carousel as $i => $item)
+        <div class="carousel-item {{ $i === 0 ? 'active' : '' }} position-relative">
+        <div class="hero-bg"
+          style="background-image:url('{{ asset($item->path_gambar) }}?v={{ file_exists(public_path($item->path_gambar)) ? filemtime(public_path($item->path_gambar)) : time() }}');">
+        </div>
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <div class="wrap">
+              <div class="hero-title-logo mb-3 reveal">
+                <img src="{{ asset('img/logo/sipensi_white_nobg.png') }}"
+                     alt="SIPENSI"
+                     class="hero-logo">
+              </div>
+              <p class="fs-6 mb-4 text-white reveal d-1">
+                Akses informasi Inkubator dan Usaha Rintisan Indonesia
+              </p>
+              <a href="{{ url('/lembaga-inkubator') }}"
+                 class="btn btn-selengkapnya reveal d-2">
+                Selengkapnya
+              </a>
             </div>
-            <p class="fs-6 mb-4 text-white reveal d-1">
-              Akses informasi Inkubator dan Usaha Rintisan Indonesia
-            </p>
-            <a href="{{ url('/lembaga-inkubator') }}" class="btn btn-selengkapnya reveal d-2">
-              Selengkapnya
-            </a>
           </div>
         </div>
-      </div>
-      @endfor
-
+      @endforeach
     </div>
-
-    <button class="carousel-control-prev" type="button"
-            data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <button class="carousel-control-prev"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="prev">
       <span class="carousel-control-prev-icon"></span>
     </button>
-
-    <button class="carousel-control-next" type="button"
-            data-bs-target="#heroCarousel" data-bs-slide="next">
+    <button class="carousel-control-next"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="next">
       <span class="carousel-control-next-icon"></span>
     </button>
   </div>
 </section>
+
 
 {{-- ================= INCUBATOR ================= --}}
 <section class="incubator-section">

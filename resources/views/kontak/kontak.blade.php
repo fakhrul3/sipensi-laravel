@@ -131,7 +131,15 @@
       CONTACT SECTION (PAKAI PUNYA KAMU)
       NOTE: MASIH MOCKUP (BELUM BACKEND)
   ========================== --}}
-  <section class="contact-top">
+  @php
+  $kontakPath = isset($kontakBg->path_gambar)
+    ? ltrim(str_replace('public/', '', $kontakBg->path_gambar), '/')
+    : null;
+
+  $kontakBgUrl = $kontakPath ? asset($kontakPath) : null;
+  @endphp
+
+  <section class="contact-top" style="{{ $kontakBgUrl ? "--contact-bg: url('{$kontakBgUrl}');" : '' }}">
     <div class="container">
 
       <div class="contact-top-grid">
