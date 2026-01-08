@@ -10,7 +10,7 @@ class Provinsi extends Model
 
     public function inkubators()
     {
-        // hasMany(Model, foreignKey di Inkubator, localKey di Provinsi)
+    
         return $this->hasMany(Inkubator::class, 'kode_provinsi', 'kode_provinsi');
     }
 }
