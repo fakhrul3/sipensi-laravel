@@ -10,3 +10,13 @@
     </div>
   </div>
 </section>
+
+<script>
+  window.SIPENSI = {
+    // Route ini harus sesuai dengan route daftar lembaga kamu
+    lembagaUrl: "{{ url('/inkubator') }}" 
+  };
+  
+  // Mengambil data $sebaranInkubator dari HomeController
+  window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator);
+</script>
