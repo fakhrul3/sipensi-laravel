@@ -459,3 +459,26 @@ html, body{
   user-select: none;
   filter: blur(.25px);
 }
+
+
+/* Eye toggle button (password) */
+.auth-eye-btn{
+  border-radius: 0 12px 12px 0 !important;
+  border-color: rgba(34,70,108,0.25) !important;
+  color: rgba(34,70,108,0.85) !important;
+  background: rgba(255,255,255,0.65) !important;
+}
+
+.auth-eye-btn:hover{
+  background: rgba(34,70,108,0.08) !important;
+  border-color: rgba(34,70,108,0.45) !important;
+  color: rgba(34,70,108,1) !important;
+}
+
+/* rapihin input group biar radius mulus */
+.input-group .form-control{
+  border-right: 0;
+}
+.input-group .form-control:focus{
+  border-right: 0;
+}
