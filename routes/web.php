@@ -6,6 +6,8 @@ use App\Http\Controllers\MitraController;
 use App\Http\Controllers\LembagaInkubatorController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\KontakController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +37,19 @@ Route::view('/forgot-password', 'auth.forgot-password')->name('password.request'
 
     // kalau register cuma tampilan dulu
 Route::view('/register', 'auth.register')->name('register');
+
+
+
+
+
+Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
+Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
+
+
+// Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri.index');
+
+// // sementara untuk import dari folder ke DB (hapus/lock setelah beres)
+// Route::get('/galeri/sync', [GaleriController::class, 'syncFromFolder'])->name('galeri.sync');
+
 
 });

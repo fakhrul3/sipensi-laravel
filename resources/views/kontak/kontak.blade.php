@@ -168,8 +168,20 @@
             {{-- overlay biar ada efek gelap transparan --}}
             <div class="contact-form-overlay contact-form-overlay--blue"></div>
 
-            <form class="contact-form contact-form--onblue" action="#" method="POST">
+            <form class="contact-form contact-form--onblue" action="{{ route('kontak.store') }}" method="POST">
               @csrf
+
+            @if (session('success'))
+              <div class="alert alert-success mb-3">{{ session('success') }}</div>
+            @endif
+
+            @if ($errors->any())
+              <div class="alert alert-danger mb-3">
+                {{ $errors->first() }}
+              </div>
+            @endif
+
+
 
               <div class="row g-3">
 

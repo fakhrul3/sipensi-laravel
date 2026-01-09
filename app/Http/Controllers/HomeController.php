@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Galeri;
+
 class HomeController extends Controller
 {
     public function index()
@@ -36,11 +38,35 @@ class HomeController extends Controller
         ];
 
         // =========================
-        // GALERI (INI KUNCI BIAR MUNCUL)
+        // GALERI (AMBIL DARI DB: tabel galeri)
+        // Outputnya DISAMAKAN dengan format yang dipakai blade galeri lu:
+        // src, full, title, category
         // =========================
-        $galleryItems = (new GaleriController())->forHome(200);
+        $galleryItems = Galeri::query()
+            ->where('is_show', 1)
+            ->where(function ($q) {
+                $q->whereNull('published_at')
+                  ->orWhere('published_at', '<=', now());
+            })
+            ->orderBy('sort_order', 'asc')
+            ->orderByRaw('tanggal_kegiatan IS NULL ASC')
+            ->orderBy('tanggal_kegiatan', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->limit(200)
+            ->get()
+            ->map(function ($g) {
+                $path = ltrim((string) $g->path_gambar, '/');
 
-        // Pastikan VIEW home kamu memang nge-render galeri.blade (section galeri)
+                return [
+                    'id'       => $g->id,
+                    'src'      => asset($path),
+                    'full'     => asset($path),
+                    'title'    => $g->judul ?? '',
+                    'category' => $g->kategori ?? 'kegiatan',
+                ];
+            })
+            ->all();
+
         return view('home', compact(
             'totalLembaga',
             'totalTenant',
