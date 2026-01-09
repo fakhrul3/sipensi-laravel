@@ -7,6 +7,7 @@ use App\Http\Controllers\LembagaInkubatorController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\TentangController;
 use App\Http\Controllers\KontakController;
 
 /*
@@ -24,6 +25,13 @@ Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'
 Route::view('/kontak', 'kontak.kontak')->name('kontak');
 Route::view('/tentang', 'tentang.tentang')->name('tentang');
 
+Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
+Route::get('/login', function () {return view('auth.login');});
+Route::get('/forgot-password', function () {return view('auth.forgot-password');});
+Route::view('/login', 'auth.login')->name('login.mock');
+Route::view('/forgot-password', 'auth.forgot-password')->name('password.request.mock');
+Route::view('/register', 'auth.register')->name('register.mock');
+Route::get('/tentang', [TentangController::class, 'index'])->name('tentang');
 Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.detail');
 
 

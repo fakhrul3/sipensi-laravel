@@ -12,14 +12,8 @@
 
 @section('content')
 @php
-  $bgSlides = [
-    asset('img/slide1.JPG'),
-    asset('img/slide2.JPG'),
-    asset('img/slide3.JPG'),
-    asset('img/slide4.JPG'),
-    asset('img/slide5.JPG'),
-  ];
   $firstKey = array_key_first($tabs);
+  $bgSlides = $bgSlides ?? [];
 @endphp
 
 <div class="page-mitra">
