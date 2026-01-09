@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -9,8 +10,8 @@ class HomeController extends Controller
         // =========================
         // MOCKUP DATA (TANPA DATABASE)
         // =========================
-        $totalLembaga = 732;
-        $totalTenant  = 6165;
+        $totalLembaga = DB::table('inkubator')->count('id');
+        $totalTenant  = DB::table('tenant')->count('id');
 
         $sebaranInkubator = [
             ['name' => 'Aceh', 'latitude' => 4.695135, 'longitude' => 96.749397, 'total' => 12],
@@ -35,6 +36,16 @@ class HomeController extends Controller
             ['name' => 'Papua Pegunungan', 'latitude' => -4.083000, 'longitude' => 139.083000, 'total' => 1],
         ];
 
+         // =========================
+        // CAROUSEL DARI TABLE manajemen_gambar
+        // =========================
+        $carousel = DB::table('manajemen_gambar')
+            ->select('option_gambar', 'path_gambar')
+            ->whereIn('option_gambar', ['carousel_1','carousel_2','carousel_3','carousel_4','carousel_5'])
+            ->where('is_show', 1)
+            ->orderByRaw("FIELD(option_gambar, 'carousel_1','carousel_2','carousel_3','carousel_4','carousel_5')")
+            ->get();
+
         // =========================
         // GALERI (INI KUNCI BIAR MUNCUL)
         // =========================
@@ -45,6 +56,7 @@ class HomeController extends Controller
             'totalLembaga',
             'totalTenant',
             'sebaranInkubator',
+            'carousel',
             'galleryItems'
         ));
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+
 class MitraController extends Controller
 {
     public function index()
@@ -163,18 +165,37 @@ class MitraController extends Controller
            
         ];
 
-        $mitraBaseUrl = 'img/mitra/'; // default
-        foreach ($candidates as $c) {
-            if (is_dir($c['disk'])) {
-                // cek minimal satu file ada
-                $probe = $tabs['investasi_keuangan']['files'][0] ?? null;
-                if ($probe && file_exists($c['disk'] . DIRECTORY_SEPARATOR . $probe)) {
-                    $mitraBaseUrl = $c['url'];
-                    break;
-                }
-            }
-        }
 
-        return view('mitra.index', compact('tabs', 'mitraBaseUrl'));
+             // DEFAULT WAJIB (INI YANG KURANG)
+             $mitraBaseUrl = 'img/mitra/';
+
+             foreach ($candidates as $c) {
+                 if (is_dir($c['disk'])) {
+                     $probe = $tabs['investasi_keuangan']['files'][0] ?? null;
+                     if ($probe && file_exists($c['disk'] . DIRECTORY_SEPARATOR . $probe)) {
+                         $mitraBaseUrl = $c['url'];
+                         break;
+                     }
+                 }
+             }
+
+         // ===================================================
+        // TAMBAHAN: BACKGROUND SLIDES (CAROUSEL) DARI DATABASE
+        // ===================================================
+        $bgSlides = DB::table('manajemen_gambar')
+            ->select('option_gambar', 'path_gambar')
+            ->whereIn('option_gambar', ['carousel_1','carousel_2','carousel_3','carousel_4','carousel_5'])
+            ->where('is_show', 1)
+            ->orderByRaw("FIELD(option_gambar,'carousel_1','carousel_2','carousel_3','carousel_4','carousel_5')")
+            ->get()
+            ->map(function ($row) {
+                // jaga-jaga kalau masih ada 'public/' nyangkut
+                $path = ltrim(str_replace('public/', '', $row->path_gambar), '/');
+                return asset($path);
+            })
+            ->values()
+            ->toArray();
+
+        return view('mitra.index', compact('tabs', 'mitraBaseUrl', 'bgSlides'));
     }
 }
