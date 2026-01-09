@@ -8,6 +8,9 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\TentangController;
 use App\Http\Controllers\KontakController;
 
 /*
@@ -21,6 +24,10 @@ Route::get('/mitra-kolaborator', [MitraController::class, 'index'])->name('mitra
 
 Route::get('/lembaga-inkubator', [LembagaInkubatorController::class, 'index'])->name('lembaga.index');
 Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'])->name('lembaga.show');
+
+Route::view('/kontak', 'kontak.kontak')->name('kontak');
+Route::view('/tentang', 'tentang.tentang')->name('tentang');
+
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::get('/login', function () {return view('auth.login');});
 Route::get('/forgot-password', function () {return view('auth.forgot-password');});
