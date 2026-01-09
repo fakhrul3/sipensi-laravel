@@ -2,10 +2,14 @@
    NAVBAR – SIPENSI (FIX ACTIVE TEXT ALWAYS WHITE)
 ===================================================== */
 
-/* (Optional) fallback variable biar aman kalau sipensi.css kebaca belakangan */
+/* fallback variable */
 :root{
   --sipensi-blue: #22466C;
   --sipensi-blue-dark: #1a3856;
+
+  /* biru soft untuk press/focus */
+  --sipensi-blue-soft: #2b5d86;
+  --sipensi-blue-soft-2: #3a79a4;
 }
 
 /* =========================
@@ -107,7 +111,7 @@
 
 /* hover NON-active */
 #mainNavbar .menu-center .nav-link:hover{
-  background: #22466C;
+  background: var(--sipensi-blue);
   color: #fff !important;
 }
 
@@ -125,22 +129,20 @@
 }
 
 /* =========================
-   ✅ FIX: ACTIVE MUST STAY WHITE (ALL STATES)
-   (ini yang ngebunuh kasus MITRA text jadi hitam)
+   ✅ ACTIVE MUST STAY WHITE
 ========================= */
 #mainNavbar .menu-center .nav-link.active,
 #mainNavbar .menu-center .nav-link.active:hover,
 #mainNavbar .menu-center .nav-link.active:focus{
-  background: #22466C !important;
+  background: var(--sipensi-blue) !important;
   color: #ffffff !important;
   font-weight: 800;
 }
 
-/* kalau navbar scrolled, pastiin ga ketimpa rule scrolled */
 #mainNavbar.navbar-scrolled .menu-center .nav-link.active,
 #mainNavbar.navbar-scrolled .menu-center .nav-link.active:hover,
 #mainNavbar.navbar-scrolled .menu-center .nav-link.active:focus{
-  background: #22466C !important;
+  background: var(--sipensi-blue) !important;
   color: #ffffff !important;
 }
 
@@ -151,22 +153,70 @@
 }
 
 /* =========================
-   BTN LOGIN
+   BTN LOGIN / USER
 ========================= */
 .btn-login{
   background: #1d4f7a;
   color:#fff;
   border-radius: 10px;
   padding: 10px 18px;
-  font-weight: 700;
+  font-weight: 800;
   text-decoration:none;
-  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+
+  /* ini yang biasanya bikin “border biru terang” pas click */
+  border: 1px solid rgba(255,255,255,.25);
+
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
 }
+
 .btn-login:hover{
   background:#163e60;
   color:#fff;
   transform: translateY(-1px);
   box-shadow: 0 10px 26px rgba(0,0,0,.18);
+  border-color: rgba(255,255,255,.25);
+}
+
+/* ✅ HILANGIN outline/focus ring biru bawaan browser/bootstrap */
+.btn-login:focus,
+.btn-login:focus-visible,
+.btn-login:active,
+.btn-login.active{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ✅ pas ditekan (on click) jangan biru neon */
+.btn-login:active{
+  background: var(--sipensi-blue-soft) !important;
+  border-color: rgba(255,255,255,.20) !important;
+  transform: translateY(0);
+}
+
+/* tombol user dropdown (biar sama persis) */
+.btn-user{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* dropdown user */
+.nav-user-dropdown{
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+  padding: 8px 0;
+  min-width: 220px;
+}
+
+.nav-user-logout{
+  font-weight: 700;
+}
+.nav-user-logout:focus,
+.nav-user-logout:active{
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* =========================
