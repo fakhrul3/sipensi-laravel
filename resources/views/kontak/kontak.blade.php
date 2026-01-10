@@ -131,7 +131,15 @@
       CONTACT SECTION (PAKAI PUNYA KAMU)
       NOTE: MASIH MOCKUP (BELUM BACKEND)
   ========================== --}}
-  <section class="contact-top">
+  @php
+  $kontakPath = isset($kontakBg->path_gambar)
+    ? ltrim(str_replace('public/', '', $kontakBg->path_gambar), '/')
+    : null;
+
+  $kontakBgUrl = $kontakPath ? asset($kontakPath) : null;
+  @endphp
+
+  <section class="contact-top" style="{{ $kontakBgUrl ? "--contact-bg: url('{$kontakBgUrl}');" : '' }}">
     <div class="container">
 
       <div class="contact-top-grid">
@@ -168,8 +176,20 @@
             {{-- overlay biar ada efek gelap transparan --}}
             <div class="contact-form-overlay contact-form-overlay--blue"></div>
 
-            <form class="contact-form contact-form--onblue" action="#" method="POST">
+            <form class="contact-form contact-form--onblue" action="{{ route('kontak.store') }}" method="POST">
               @csrf
+
+            @if (session('success'))
+              <div class="alert alert-success mb-3">{{ session('success') }}</div>
+            @endif
+
+            @if ($errors->any())
+              <div class="alert alert-danger mb-3">
+                {{ $errors->first() }}
+              </div>
+            @endif
+
+
 
               <div class="row g-3">
 

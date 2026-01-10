@@ -7,13 +7,19 @@
 
 @section('content')
 
+@php
+  $tentangPath = isset($tentangHero->path_gambar)
+    ? ltrim(str_replace('public/', '', $tentangHero->path_gambar), '/')
+    : 'img/bg_tentang.jpg';
+@endphp
+
 {{-- WRAPPER: page enter khusus Tentang --}}
 <div id="tentangRoot" class="page-enter">
 
   {{-- HERO TENTANG --}}
   <section
     class="tentang-hero"
-    style="--hero-bg: url('{{ asset('/img/bg_tentang.jpg') }}');"
+    style="--hero-bg: url('{{ asset($tentangPath) }}');">
   >
     <div class="tentang-hero__overlay"></div>
 

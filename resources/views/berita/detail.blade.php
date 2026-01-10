@@ -1,44 +1,38 @@
 @extends('layouts.app')
 
-@section('title', $berita['title'])
-
-@push('styles')
-  <link rel="stylesheet" href="{{ asset('css/berita-detail.css') }}">
-@endpush
+@section('title', $berita->judul . ' | SIPENSI')
 
 @section('content')
+<section class="berita-detail page-enter">
 
-<div class="page-enter">
-  <section class="berita-detail">
+  <img src="{{ asset('img/bunga.png') }}" class="berita-ornament" alt="">
 
-    {{-- ORNAMEN BUNGA (POSISI DIATUR DARI CSS VARIABLE) --}}
-    <img
-      src="{{ asset('img/bunga_kemenumkm.png') }}"
-      alt=""
-      class="berita-ornament is-bunga"
-      aria-hidden="true"
-    >
+  <div class="berita-detail-shell">
 
-    <div class="berita-detail-shell">
+    <a href="{{ route('berita.index') }}" class="berita-back">
+      ← Kembali ke Berita
+    </a>
 
-      <a class="berita-back" href="{{ url('/#berita') }}">← Kembali</a>
+    <div class="berita-head">
+      @if($berita->is_highlight)
+        <span class="berita-badge">Highlight</span>
+      @endif
 
-      <div class="berita-head">
-        <span class="berita-badge">{{ $berita['type'] ?? 'Rilis Kegiatan' }}</span>
-        <h1 class="berita-title">{{ $berita['title'] }}</h1>
-        <p class="berita-date">{{ $berita['date'] ?? '' }}</p>
-      </div>
+      <h1 class="berita-title">{{ $berita->judul }}</h1>
 
-      <div class="berita-hero">
-        <img src="{{ $berita['image'] }}" alt="{{ $berita['title'] }}">
-      </div>
-
-      <article class="berita-content">
-        {!! $berita['content'] !!}
-      </article>
-
+      <p class="berita-date">
+        {{ $berita->tgl_tayang?->translatedFormat('d F Y') }}
+      </p>
     </div>
-  </section>
-</div>
 
+    <div class="berita-hero">
+      <img src="{{ asset($berita->path_gambar) }}" alt="{{ $berita->judul }}">
+    </div>
+
+    <article class="berita-content">
+      {!! nl2br(e($berita->isi)) !!}
+    </article>
+
+  </div>
+</section>
 @endsection
