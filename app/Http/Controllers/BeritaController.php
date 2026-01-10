@@ -1,64 +1,36 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Berita;
+use Illuminate\Http\Request;
 
-class Galeri extends Model
+class BeritaController extends Controller
 {
-    use SoftDeletes;
-
-    protected $table = 'galeri';
-
-    protected $fillable = [
-        'user_id',
-        'path_gambar',
-        'judul',
-        'slug',
-        'kategori',
-        'is_show',
-        'tanggal_kegiatan',
-        'deskripsi',
-        'excerpt',
-        'alt_text',
-        'sort_order',
-        'published_at',
-    ];
-
-    protected $casts = [
-        'is_show' => 'boolean',
-        'tanggal_kegiatan' => 'date',
-        'published_at' => 'datetime',
-    ];
-
-    protected $appends = ['image_url'];
-
-    public function user(): BelongsTo
+    // LIST BERITA
+    public function index()
     {
-        return $this->belongsTo(User::class);
+        // Ambil data berita yang sama dengan logika di BeritaController
+        $berita = Berita::where('is_publikasi', 1)
+            ->where(function ($q) {
+                $q->whereNull('tgl_akhir')
+                ->orWhere('tgl_akhir', '>=', now()->toDateString());
+            })
+            ->orderByDesc('is_highlight')
+            ->orderByDesc('tgl_tayang')
+            ->get();
+
+        // Kirim variabel $berita ke view home
+        return view('home', compact('berita')); 
     }
 
-    // Biar blade aman: bisa asset(), bisa Storage::url(), bisa URL full
-    public function getImageUrlAttribute(): string
+    // DETAIL BERITA
+    public function show($slug)
     {
-        $path = $this->path_gambar ?? '';
+        $berita = Berita::where('is_publikasi', 1)
+            ->whereRaw("LOWER(REPLACE(judul,' ','-')) = ?", [$slug])
+            ->firstOrFail();
 
-        if ($path === '') return '';
-
-        // kalau udah URL full
-        if (preg_match('/^https?:\/\//i', $path)) {
-            return $path;
-        }
-
-        // kalau nyimpen "img/berita/xxx.jpg" (public)
-        if (str_starts_with($path, 'img/') || str_starts_with($path, 'images/') || str_starts_with($path, 'uploads/')) {
-            return asset($path);
-        }
-
-        // kalau nyimpen "public/..." atau "berita/..." di storage
-        return Storage::url($path);
+        return view('detail', compact('berita'));
     }
 }

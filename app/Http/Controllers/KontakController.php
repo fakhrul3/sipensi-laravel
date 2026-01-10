@@ -6,10 +6,7 @@ use App\Models\ManajemenGambar;
 use App\Models\KontakKami;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Models\KontakKami;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use App\Models\ManajemenGambar;
+
 
 class KontakController extends Controller
 {
