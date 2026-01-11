@@ -1,4 +1,4 @@
-<section class="sipensi-news" data-news-section>
+<section class="sipensi-news" id="berita" data-news-section>
   <div class="sipensi-news-shell">
 
     <div class="sipensi-news-header">
@@ -21,7 +21,26 @@
             <a href="{{ route('berita.detail', Str::slug($item->judul)) }}" class="news-card-link">
 
               <div class="news-card-image">
-                <img src="{{ asset($item->path_gambar) }}" alt="{{ $item->judul }}">
+                @php
+                  // Normalize path - hapus 'public/' jika ada
+                  $imagePath = ltrim(str_replace('public/', '', $item->path_gambar ?? ''), '/');
+                  $imageUrl = asset('img/placeholder-news.png'); // Default placeholder
+                  
+                  // Cek apakah file ada dan valid
+                  if ($imagePath) {
+                    $fullPath = public_path($imagePath);
+                    if (file_exists($fullPath)) {
+                      // Cek apakah file adalah SVG dengan extension PNG
+                      $content = file_get_contents($fullPath);
+                      if (strpos($content, '<svg') === false) {
+                        // File valid, bukan SVG
+                        $imageUrl = asset($imagePath);
+                      }
+                      // Jika SVG, tetap pakai placeholder
+                    }
+                  }
+                @endphp
+                <img src="{{ $imageUrl }}" alt="{{ $item->judul }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='{{ asset('img/placeholder-news.png') }}'">
                 @if($item->is_highlight)
                   <span class="news-card-badge">Highlight</span>
                 @endif
@@ -63,5 +82,5 @@
 @endpush
 
 @push('scripts')
-<script src="{{ asset('js/berita.js') }}"></script>
+<script src="{{ asset('js/berita.js') }}" defer></script>
 @endpush

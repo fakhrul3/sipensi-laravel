@@ -30,6 +30,17 @@
         </div>
 
         <div class="li-filter">
+            <select id="liProvinsi" class="form-select">
+                <option value="">Semua Provinsi</option>
+                @foreach($provinsiList ?? [] as $prov)
+                    <option value="{{ $prov['kode_provinsi'] }}" {{ request('kode_provinsi') == $prov['kode_provinsi'] ? 'selected' : '' }}>
+                        {{ $prov['name'] }} ({{ $prov['count'] }})
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="li-filter">
             <select id="liJenis" class="form-select">
                 <option value="">Semua Jenis</option>
                 <option value="1">Pemerintah Pusat</option>
@@ -69,9 +80,10 @@
 <script>
     window.LI_CONFIG = {
         baseUrl: "{{ url('') }}",
-        rows: @json($inkubators ?? []), 
-        jenisMap: @json($jenisMap ?? [])
+        rows: @json($inkubators->toArray() ?? []), 
+        jenisMap: @json($jenisMap ?? []),
+        currentProvinsi: "{{ request('kode_provinsi') ?? '' }}"
     };
 </script>
-<script src="{{ asset('js/lembaga-inkubator.js') }}"></script>
+<script src="{{ asset('js/lembaga-inkubator.js') }}" defer></script>
 @endpush

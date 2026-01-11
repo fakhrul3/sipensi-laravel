@@ -4,14 +4,21 @@
 
 {{-- ================= STYLES ================= --}}
 @push('styles')
-  {{-- Leaflet (Map) --}}
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  {{-- Preconnect untuk Leaflet --}}
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
 
-  {{-- CSS Map --}}
-  <link rel="stylesheet" href="{{ asset('css/sebaran-inkubator.css') }}">
+  {{-- Leaflet (Map) - Defer loading karena tidak critical --}}
+  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
 
-  {{-- CSS Galeri --}}
-  <link rel="stylesheet" href="{{ asset('css/galeri.css') }}">
+  {{-- CSS Map - Defer loading --}}
+  <link rel="preload" href="{{ asset('css/sebaran-inkubator.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('css/sebaran-inkubator.css') }}"></noscript>
+
+  {{-- CSS Galeri - Defer loading --}}
+  <link rel="preload" href="{{ asset('css/galeri.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('css/galeri.css') }}"></noscript>
 @endpush
 
 
@@ -24,7 +31,7 @@
       @foreach ($carousel as $i => $item)
         <div class="carousel-item {{ $i === 0 ? 'active' : '' }} position-relative">
         <div class="hero-bg"
-          style="background-image:url('{{ asset($item->path_gambar) }}?v={{ file_exists(public_path($item->path_gambar)) ? filemtime(public_path($item->path_gambar)) : time() }}');">
+          style="background-image:url('{{ asset($item->path_gambar) }}');">
         </div>
           <div class="hero-overlay"></div>
           <div class="hero-content">
@@ -126,32 +133,28 @@
 
 {{-- ================= SCRIPTS ================= --}}
 @push('scripts')
-  {{-- Leaflet (Map) --}}
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  {{-- CONFIG DATA UNTUK MAP --}}
+  {{-- Preload Leaflet untuk performa lebih baik --}}
+  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" as="script">
+  
+  {{-- CONFIG DATA UNTUK MAP - Inline karena kecil dan diperlukan segera --}}
   <script>
     window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);
+    window.SIPENSI = window.SIPENSI || {};
+    window.SIPENSI.lembagaUrl = "{{ route('lembaga.index') }}";
   </script>
 
-  <script>
-  window.SIPENSI = window.SIPENSI || {};
-  window.SIPENSI.lembagaUrl = "{{ route('lembaga.index') }}";
-  </script>
+  {{-- Leaflet (Map) - Defer karena tidak critical untuk first paint --}}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
+  {{-- JS Map - Defer, bergantung pada Leaflet --}}
+  <script src="{{ asset('js/sebaran-inkubator.js') }}" defer></script>
 
-  {{-- JS Map --}}
-  <script src="{{ asset('js/sebaran-inkubator.js') }}"></script>
+  {{-- JS Home - Defer --}}
+  <script src="{{ asset('js/home.js') }}" defer></script>
 
-  {{-- JS Home (punya lu) --}}
-  <script src="{{ asset('js/home.js') }}"></script>
+  {{-- JS Galeri - Defer --}}
+  <script src="{{ asset('js/galeri.js') }}" defer></script>
 
-  {{-- JS Galeri --}}
-  <script src="{{ asset('js/galeri.js') }}"></script>
-
-  {{-- JS counter scroll --}}
-  <script src="{{ asset('js/counter-scroll.js') }}"></script>
-
-
-  
+  {{-- JS counter scroll - Defer --}}
+  <script src="{{ asset('js/counter-scroll.js') }}" defer></script>
 @endpush

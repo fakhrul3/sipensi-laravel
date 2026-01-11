@@ -75,17 +75,20 @@
     function applyFilter() {
         const q = ($("liSearch")?.value || "").toLowerCase().trim();
         const selectedJenis = $("liJenis")?.value || "";
+        const selectedProvinsi = $("liProvinsi")?.value || "";
 
         filteredRows = rows.filter((x) => {
             const nama = String(x.nama_inkubator || "").toLowerCase();
             
             // SESUAIKAN DI SINI JUGA: jenis_inkubator
             const valJenis = String(x.jenis_inkubator || "");
+            const valProvinsi = String(x.kode_provinsi || "");
 
             const matchName = nama.includes(q);
             const matchJenis = selectedJenis === "" || valJenis === selectedJenis;
+            const matchProvinsi = selectedProvinsi === "" || valProvinsi === selectedProvinsi;
             
-            return matchName && matchJenis;
+            return matchName && matchJenis && matchProvinsi;
         });
 
         currentPage = 1;
@@ -109,6 +112,7 @@
 
         $("liSearch")?.addEventListener("input", applyFilter);
         $("liJenis")?.addEventListener("change", applyFilter);
+        $("liProvinsi")?.addEventListener("change", applyFilter);
 
         $("liPrev")?.addEventListener("click", () => {
             if (currentPage > 1) { currentPage--; renderPage(); window.scrollTo(0,0); }

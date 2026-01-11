@@ -252,5 +252,5 @@
 @endsection
 
 @push('scripts')
-  <script src="{{ asset('js/kontak.js') }}"></script>
+  <script src="{{ asset('js/kontak.js') }}" defer></script>
 @endpush

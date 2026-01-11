@@ -2,6 +2,10 @@
 
 @section('title', $berita->judul . ' | SIPENSI')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/berita-detail.css') }}">
+@endpush
+
 @section('content')
 <section class="berita-detail page-enter">
 
@@ -9,7 +13,7 @@
 
   <div class="berita-detail-shell">
 
-    <a href="{{ route('berita.index') }}" class="berita-back">
+    <a href="{{ route('home') }}#berita" class="berita-back" onclick="event.preventDefault(); window.location.href='{{ route('home') }}#berita'; setTimeout(() => { document.getElementById('berita')?.scrollIntoView({behavior: 'smooth'}); }, 100);">
       ← Kembali ke Berita
     </a>
 
@@ -26,11 +30,30 @@
     </div>
 
     <div class="berita-hero">
-      <img src="{{ asset($berita->path_gambar) }}" alt="{{ $berita->judul }}">
+      @php
+        // Normalize path - hapus 'public/' jika ada
+        $imagePath = ltrim(str_replace('public/', '', $berita->path_gambar ?? ''), '/');
+        $imageUrl = asset('img/placeholder-news.png'); // Default placeholder
+        
+        // Cek apakah file ada dan valid
+        if ($imagePath) {
+          $fullPath = public_path($imagePath);
+          if (file_exists($fullPath)) {
+            // Cek apakah file adalah SVG dengan extension PNG
+            $content = file_get_contents($fullPath);
+            if (strpos($content, '<svg') === false) {
+              // File valid, bukan SVG
+              $imageUrl = asset($imagePath);
+            }
+            // Jika SVG, tetap pakai placeholder
+          }
+        }
+      @endphp
+      <img src="{{ $imageUrl }}" alt="{{ $berita->judul }}" loading="eager" onerror="this.src='{{ asset('img/placeholder-news.png') }}'">
     </div>
 
     <article class="berita-content">
-      {!! nl2br(e($berita->isi)) !!}
+      {!! $berita->isi !!}
     </article>
 
   </div>

@@ -21,5 +21,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Seed provinsi data
+        $this->call(ProvinsiSeeder::class);
+        
+        // Seed inkubator data
+        $this->call(InkubatorSeeder::class);
     }
 }

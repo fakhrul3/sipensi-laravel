@@ -154,10 +154,8 @@
   });
 </script>
 
-<script src="{{ asset('js/tentang.js') }}"></script>
-<script src="{{ asset('js/scroll-reveal.js') }}"></script>
-<script src="{{ asset('js/tahapan-inkubasi.js') }}"></script>
-<script src="{{ asset('js/scroll-reveal.js') }}"></script>
-<script src="{{ asset('js/tahapan-inkubasi.js') }}"></script>
-
+{{-- Hapus duplikasi - hanya load sekali --}}
+<script src="{{ asset('js/tentang.js') }}" defer></script>
+<script src="{{ asset('js/tahapan-inkubasi.js') }}" defer></script>
+{{-- scroll-reveal.js sudah di-load di app.blade.php, tidak perlu diulang --}}
 @endpush

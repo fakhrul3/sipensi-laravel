@@ -11,12 +11,15 @@
   </div>
 </section>
 
+{{-- Data sudah di-set di home.blade.php, tidak perlu duplikasi --}}
+{{-- Hanya set jika belum ada --}}
 <script>
-  window.SIPENSI = {
-    // Route ini harus sesuai dengan route daftar lembaga kamu
-    lembagaUrl: "{{ url('/inkubator') }}" 
-  };
-  
-  // Mengambil data $sebaranInkubator dari HomeController
-  window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator);
+  if (!window.SIPENSI) {
+    window.SIPENSI = {
+      lembagaUrl: "{{ url('/inkubator') }}" 
+    };
+  }
+  if (!window.SEBARAN_INKUBATOR_DATA) {
+    window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);
+  }
 </script>

@@ -25,27 +25,59 @@ class LembagaInkubatorController extends Controller
     }
 
     public function index(Request $request)
-{
-    $query = \App\Models\Inkubator::query();
+    {
+        try {
+            // Select hanya kolom yang diperlukan untuk performa
+            $query = Inkubator::select(
+                'id', 'nama_inkubator', 'jenis_inkubator', 'kode_provinsi', 
+                'provinsi_id', 'logo', 'alamat_kantor', 'no_kontak', 'email', 'website'
+            );
 
-    // Filter berdasarkan kode_provinsi
-    if ($request->filled('kode_provinsi')) {
-        $query->where('kode_provinsi', $request->kode_provinsi);
+            // Filter berdasarkan kode_provinsi
+            if ($request->filled('kode_provinsi')) {
+                $query->where('kode_provinsi', $request->kode_provinsi);
+            }
+
+            // Ambil semua data (tidak pakai pagination di server, karena pagination di client-side)
+            $inkubators = $query->get();
+
+            // TAMBAHKAN INI: Ambil nama provinsi kalau ada filternya
+            $namaProvinsi = null;
+            if ($request->filled('kode_provinsi')) {
+                try {
+                    $namaProvinsi = Provinsi::where('kode_provinsi', $request->kode_provinsi)
+                        ->value('name');
+                } catch (\Exception $e) {
+                    $namaProvinsi = null;
+                }
+            }
+        } catch (\Exception $e) {
+            $inkubators = collect();
+            $namaProvinsi = null;
+        }
+
+        // Ambil daftar provinsi untuk dropdown
+        try {
+            $provinsiList = Provinsi::select('kode_provinsi', 'name')
+                ->orderBy('name')
+                ->get()
+                ->map(function ($p) {
+                    $count = Inkubator::where('kode_provinsi', $p->kode_provinsi)->count();
+                    return [
+                        'kode_provinsi' => $p->kode_provinsi,
+                        'name' => $p->name,
+                        'count' => $count
+                    ];
+                });
+        } catch (\Exception $e) {
+            $provinsiList = collect();
+        }
+
+        $jenisMap = $this->jenisMap();
+
+        // Masukkan $namaProvinsi dan $provinsiList ke compact
+        return view('lembaga-inkubator.index', compact('inkubators', 'jenisMap', 'namaProvinsi', 'provinsiList'));
     }
-
-    $inkubators = $query->get();
-
-    // TAMBAHKAN INI: Ambil nama provinsi kalau ada filternya
-    $namaProvinsi = null;
-    if ($request->filled('kode_provinsi')) {
-        $namaProvinsi = \App\Models\Provinsi::where('kode_provinsi', $request->kode_provinsi)->value('name');
-    }
-
-    $jenisMap = $this->jenisMap();
-
-    // Masukkan $namaProvinsi ke compact
-    return view('lembaga-inkubator.index', compact('inkubators', 'jenisMap', 'namaProvinsi'));
-}
 
     public function show($id)
     {

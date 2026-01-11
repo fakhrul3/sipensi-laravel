@@ -48,36 +48,41 @@ class GaleriController extends Controller
      */
     private function fetchGalleryItems(int $limit = 200, ?string $kategori = null): array
     {
-        $q = Galeri::query()
-            ->where('is_show', 1)
-            ->where(function ($x) {
-                $x->whereNull('published_at')
-                  ->orWhere('published_at', '<=', now());
-            })
-            ->orderBy('sort_order', 'asc')
-            ->orderByRaw('tanggal_kegiatan IS NULL ASC')
-            ->orderBy('tanggal_kegiatan', 'desc')
-            ->orderBy('created_at', 'desc');
+        try {
+            $q = Galeri::select('id', 'path_gambar', 'judul', 'kategori')
+                ->where('is_show', 1)
+                ->where(function ($x) {
+                    $x->whereNull('published_at')
+                      ->orWhere('published_at', '<=', now());
+                })
+                ->orderBy('sort_order', 'asc')
+                ->orderByRaw('tanggal_kegiatan IS NULL ASC')
+                ->orderBy('tanggal_kegiatan', 'desc')
+                ->orderBy('created_at', 'desc');
 
-        if ($kategori && $kategori !== 'all' && $kategori !== 'semua') {
-            $q->where('kategori', $kategori);
+            if ($kategori && $kategori !== 'all' && $kategori !== 'semua') {
+                $q->where('kategori', $kategori);
+            }
+
+            $rows = $q->limit($limit)->get();
+
+            // Map ke format blade yang sudah ada (tanpa ubah blade/CSS)
+            return $rows->map(function (Galeri $g) {
+                $src = $this->publicAssetFromPath($g->path_gambar);
+
+                return [
+                    'id'       => $g->id,
+                    'src'      => $src,
+                    'full'     => $src,
+                    'title'    => $g->judul ?? '',
+                    'category' => $g->kategori ?? 'kegiatan',
+                    'filename' => basename($g->path_gambar ?? ''),
+                ];
+            })->all();
+        } catch (\Exception $e) {
+            // Return empty array jika database error
+            return [];
         }
-
-        $rows = $q->limit($limit)->get();
-
-        // Map ke format blade yang sudah ada (tanpa ubah blade/CSS)
-        return $rows->map(function (Galeri $g) {
-            $src = $this->publicAssetFromPath($g->path_gambar);
-
-            return [
-                'id'       => $g->id,
-                'src'      => $src,
-                'full'     => $src,
-                'title'    => $g->judul ?? '',
-                'category' => $g->kategori ?? 'kegiatan',
-                'filename' => basename($g->path_gambar ?? ''),
-            ];
-        })->all();
     }
 
     /**

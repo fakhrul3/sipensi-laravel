@@ -17,24 +17,52 @@
     document.documentElement.classList.add('js');
   </script>
 
-  {{-- Fonts --}}
+  {{-- Polyfill untuk preload CSS (fallback untuk browser lama) --}}
+  <script>
+    !function(e){"use strict";var t=function(t,n,o){var i,r=e.document,a=r.createElement("link");if(n)i=n;else{var l=(r.body||r.getElementsByTagName("head")[0]).childNodes;i=l[l.length-1]}var d=r.styleSheets;a.rel="stylesheet",a.href=t,a.media="only x",function e(t){if(r.body)return t();setTimeout(function(){e(t)})}(function(){i.parentNode.insertBefore(a,n?i:i.nextSibling)});var f=function(e){for(var t=a.href,n=d.length;n--;)if(d[n].href===t)return e();setTimeout(function(){f(e)})};return a.addEventListener&&a.addEventListener("load",function(){this.media=o||"all"}),a.onloadcssdefined=f,f(function(){a.media!==o&&(a.media=o||"all")}),a};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this);
+  </script>
+
+  {{-- DNS Prefetch untuk external resources --}}
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+
+  {{-- Preconnect untuk critical resources --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
 
-  {{-- Bootstrap --}}
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  {{-- Critical CSS: Bootstrap (harus load pertama) --}}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-  {{-- Icons --}}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  {{-- Global Base CSS --}}
+  {{-- Critical CSS: Base styles (load inline atau early) --}}
   <link rel="stylesheet" href="{{ asset('css/sipensi.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/page-transition.css') }}">
   <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/berita.css') }}">
+
+  {{-- Non-critical CSS: Load dengan defer/async --}}
+  <link rel="preload" href="{{ asset('css/page-transition.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('css/page-transition.css') }}"></noscript>
+
+  <link rel="preload" href="{{ asset('css/footer.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('css/footer.css') }}"></noscript>
+
+  <link rel="preload" href="{{ asset('css/chatbot.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('css/chatbot.css') }}"></noscript>
+
+  <link rel="preload" href="{{ asset('css/berita.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('css/berita.css') }}"></noscript>
+
+  {{-- Fonts: Optimize dengan font-display swap --}}
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+  {{-- Icons: Defer loading --}}
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
   {{-- Page-specific CSS --}}
   @if (request()->routeIs('home'))
@@ -105,20 +133,21 @@
     </div>
   </div>
 
-  {{-- Bootstrap JS --}}
+  {{-- Bootstrap JS - Preload untuk performa lebih baik --}}
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" as="script">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
-  {{-- Global JS --}}
+  {{-- Global JS - Semua di-defer untuk tidak blocking render --}}
   <script src="{{ asset('js/page-transition.js') }}" defer></script>
   <script src="{{ asset('js/navbar.js') }}" defer></script>
   <script src="{{ asset('js/reveal.js') }}" defer></script>
   <script src="{{ asset('js/berita.js') }}" defer></script>
 
-  {{-- Chatbot JS --}}
+  {{-- Chatbot JS - Defer karena tidak critical --}}
   <script src="{{ asset('js/chatbot.js') }}" defer></script>
 
-  {{-- kalau masih kepake, tapi idealnya cukup reveal.js --}}
-  <script src="{{ asset('js/scroll-reveal.js') }}" defer></script>
+  {{-- scroll-reveal.js - Hanya load jika diperlukan (bisa dihapus jika reveal.js sudah cukup) --}}
+  {{-- <script src="{{ asset('js/scroll-reveal.js') }}" defer></script> --}}
 
   @stack('scripts')
 </body>

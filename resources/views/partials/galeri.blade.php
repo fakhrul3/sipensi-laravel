@@ -81,5 +81,5 @@
 @endpush
 
 @push('scripts')
-  <script src="{{ asset('js/galeri.js') }}"></script>
+  <script src="{{ asset('js/galeri.js') }}" defer></script>
 @endpush
