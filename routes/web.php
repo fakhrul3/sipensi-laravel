@@ -27,6 +27,7 @@ Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.de
 // LAINNYA
 Route::get('/mitra-kolaborator', [MitraController::class, 'index'])->name('mitra.index');
 Route::get('/lembaga-inkubator', [LembagaInkubatorController::class, 'index'])->name('lembaga.index');
+Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'])->name('lembaga.show');
 
 // AUTH
 Route::controller(AuthController::class)->group(function () {

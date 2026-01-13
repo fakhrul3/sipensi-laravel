@@ -267,6 +267,41 @@ body.page-ready .app-bg.bg-detail-inkubator::after{
 .li-pagination .btn{
   padding: 8px 14px;
   border-radius: 10px;
+  border: 1.5px solid #22466C;
+  background: transparent;
+  color: #22466C;
+  font-weight: 600;
+  transition:
+    background-color .25s ease,
+    color .25s ease,
+    box-shadow .25s ease,
+    transform .15s ease;
+}
+
+/* hover & focus */
+.li-pagination .btn:hover{
+  background: linear-gradient(135deg, #22466C 0%, #1b3a57 100%);
+  color: #ffffff;
+  border-color: #22466C;
+  box-shadow: none;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+/* active (saat diklik) */
+.li-pagination .btn:active{
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(34,70,108,.35);
+}
+
+/* disabled */
+.li-pagination .btn:disabled{
+  background: transparent;
+  border-color: rgba(34,70,108,.35);
+  color: rgba(34,70,108,.35);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* DETAIL CARD */
@@ -365,3 +400,36 @@ body.page-ready .li-table tbody tr{
 .li-table tbody tr:nth-child(10){ transition-delay: .32s; }
 
 
+/* =========================
+  E) BUTTON BACK (KEMBALI)
+========================= */
+.btn-li-back{
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #22466C;
+  background: transparent;
+  color: #22466C;
+  font-weight: 600;
+  transition:
+    background-color .25s ease,
+    color .25s ease,
+    box-shadow .25s ease,
+    transform .15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-li-back:hover{
+  background: linear-gradient(135deg, #22466C 0%, #1b3a57 100%);
+  color: #ffffff;
+  border-color: #22466C;
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.btn-li-back:active{
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(34,70,108,.35);
+}

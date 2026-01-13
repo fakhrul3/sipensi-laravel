@@ -1,5 +1,5 @@
 /* ==========================================================
-   LEMBAGA INKUBATOR - LIST PAGE JS (FIXED COLUMN NAME)
+   LEMBAGA INKUBATOR - LIST PAGE JS (FINAL FIXED VERSION)
    ========================================================== */
 
    (function () {
@@ -7,7 +7,11 @@
     const rows = Array.isArray(CFG.rows) ? CFG.rows : [];
     const baseUrl = (CFG.baseUrl || "").replace(/\/$/, "");
 
-    // Mapping Label & Badge (Pastikan ID 1-5 sesuai dengan isi kolom jenis_inkubator)
+    // ✅ base URL untuk halaman detail (dikirim dari blade)
+    // fallback kalau belum ada: `${baseUrl}/lembaga-inkubator`
+    const detailBase = (CFG.detailBase || `${baseUrl}/lembaga-inkubator`).replace(/\/$/, "");
+
+    // Mapping Label & Badge
     const jenisInfoMap = {
         1: { label: "Pemerintah Pusat", badge: "badge-pusat" },
         2: { label: "Pemerintah Daerah", badge: "badge-pemda" },
@@ -22,6 +26,13 @@
 
     const $ = (id) => document.getElementById(id);
 
+    // normalisasi angka/string (atasi "01" vs "1")
+    const norm = (v) => {
+        if (v === "" || v === null || v === undefined) return "";
+        const n = Number(v);
+        return Number.isFinite(n) ? String(n) : String(v).trim();
+    };
+
     function safeText(s) {
         if (!s) return "-";
         return String(s).replace(/[&<>"']/g, (m) => (
@@ -29,25 +40,50 @@
         ));
     }
 
+    // ✅ ambil id yang benar (fallback beberapa kemungkinan key)
+    function getRowId(r) {
+        return (
+            r?.id ??
+            r?.id_inkubator ??
+            r?.inkubator_id ??
+            r?.id_lembaga ??
+            r?.uuid ??
+            null
+        );
+    }
+
     function renderPage() {
         const tbody = $("liTbody");
         if (!tbody) return;
 
         tbody.innerHTML = "";
+
         const start = (currentPage - 1) * PAGE_SIZE;
         const end = start + PAGE_SIZE;
         const pageRows = filteredRows.slice(start, end);
 
         if (!pageRows.length) {
-            tbody.innerHTML = `<tr><td colspan="3" style="padding:40px; text-align:center; color:#94a3b8; font-weight:600;">Data tidak ditemukan...</td></tr>`;
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="padding:40px; text-align:center; color:#94a3b8; font-weight:600;">
+                        Data tidak ditemukan...
+                    </td>
+                </tr>
+            `;
             updatePaginationUI();
             return;
         }
 
         pageRows.forEach((r, idx) => {
-            // PAKAI NAMA KOLOM BARU: jenis_inkubator
-            const idJenis = r.jenis_inkubator; 
+            const idJenis = r.jenis_inkubator;
             const info = jenisInfoMap[idJenis] || { label: "Lainnya", badge: "badge-default" };
+
+            const id = getRowId(r);
+
+            // kalau id kosong, kasih warning biar gampang ngecek data
+            if (!id) {
+                console.warn("ID inkubator tidak ditemukan pada row ini:", r);
+            }
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
@@ -57,7 +93,7 @@
                 <td>
                     <div class="li-name-wrap">
                         <span class="li-avatar"></span>
-                        <a class="li-name" href="${baseUrl}/lembaga-inkubator/${r.id}">
+                        <a class="li-name" href="${detailBase}/${id}">
                             ${safeText(r.nama_inkubator)}
                         </a>
                     </div>
@@ -75,52 +111,79 @@
     function applyFilter() {
         const q = ($("liSearch")?.value || "").toLowerCase().trim();
         const selectedJenis = $("liJenis")?.value || "";
-        const selectedProvinsi = $("liProvinsi")?.value || "";
+        const selectedProvinsi = norm($("liProvinsi")?.value || "");
 
         filteredRows = rows.filter((x) => {
             const nama = String(x.nama_inkubator || "").toLowerCase();
-            
-            // SESUAIKAN DI SINI JUGA: jenis_inkubator
             const valJenis = String(x.jenis_inkubator || "");
-            const valProvinsi = String(x.kode_provinsi || "");
+            const valProvinsi = norm(x.kode_provinsi);
 
             const matchName = nama.includes(q);
             const matchJenis = selectedJenis === "" || valJenis === selectedJenis;
             const matchProvinsi = selectedProvinsi === "" || valProvinsi === selectedProvinsi;
-            
+
             return matchName && matchJenis && matchProvinsi;
         });
 
         currentPage = 1;
         renderPage();
+
+        // =========================
+        // UPDATE URL TANPA RELOAD
+        // =========================
+        const params = new URLSearchParams(window.location.search);
+
+        if (selectedProvinsi) params.set("kode_provinsi", selectedProvinsi);
+        else params.delete("kode_provinsi");
+
+        if (selectedJenis) params.set("jenis", selectedJenis);
+        else params.delete("jenis");
+
+        window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
     }
 
     function updatePaginationUI() {
         const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE) || 1;
-        const pageInfo = $("liPageInfo");
-        const prevBtn = $("liPrev");
-        const nextBtn = $("liNext");
 
-        if (pageInfo) pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
-        if (prevBtn) prevBtn.disabled = currentPage <= 1;
-        if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+        if ($("liPageInfo")) {
+            $("liPageInfo").textContent = `Halaman ${currentPage} dari ${totalPages}`;
+        }
+
+        if ($("liPrev")) $("liPrev").disabled = currentPage <= 1;
+        if ($("liNext")) $("liNext").disabled = currentPage >= totalPages;
     }
 
     function boot() {
-        filteredRows = [...rows];
-        renderPage();
+        // set default provinsi dari URL (map / dashboard)
+        if (CFG.currentProvinsi) {
+            const provEl = $("liProvinsi");
+            if (provEl) {
+                provEl.value = String(CFG.currentProvinsi);
+            }
+        }
+
+        // render pertama HARUS lewat filter
+        applyFilter();
 
         $("liSearch")?.addEventListener("input", applyFilter);
         $("liJenis")?.addEventListener("change", applyFilter);
         $("liProvinsi")?.addEventListener("change", applyFilter);
 
         $("liPrev")?.addEventListener("click", () => {
-            if (currentPage > 1) { currentPage--; renderPage(); window.scrollTo(0,0); }
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+                window.scrollTo(0, 0);
+            }
         });
 
         $("liNext")?.addEventListener("click", () => {
             const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE) || 1;
-            if (currentPage < totalPages) { currentPage++; renderPage(); window.scrollTo(0,0); }
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage();
+                window.scrollTo(0, 0);
+            }
         });
     }
 

@@ -15,7 +15,7 @@
 
   {{-- Tombol Kembali --}}
   <div class="reveal d-1">
-    <a href="{{ route('lembaga.index') }}" class="btn btn-outline-secondary btn-sm mb-3">
+    <a href="{{ route('lembaga.index') }}" class="btn-li-back mb-3"">
       ← Kembali
     </a>
   </div>
