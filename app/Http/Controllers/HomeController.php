@@ -67,7 +67,7 @@ class HomeController extends Controller
 
             // 3. AMBIL DATA GALERI
             $galeri = new GaleriController();
-            $galleryItems = $galeri->forHome(12);
+            $galleryItems = $galeri->forHome(200);
 
             // 4. AMBIL DATA SEBARAN (Peta) - hanya ambil kolom yang diperlukan
             $sebaranInkubator = cache()->remember('sebaran_inkubator', 300, function () {
@@ -92,7 +92,7 @@ class HomeController extends Controller
                     return [];
                 }
             });
-        
+    
             // 5. AMBIL DATA TOTAL (Counter) - gabungkan dalam 1 query jika mungkin
             $totalLembaga = cache()->remember('total_lembaga', 300, function () {
                 try {
@@ -121,6 +121,7 @@ class HomeController extends Controller
             ));
         } catch (\Exception $e) {
             // Fallback jika ada error
+            \Log::error('Home Index Error: ' . $e->getMessage());
             return view('home', [
                 'carousel' => collect(),
                 'berita' => collect(),
@@ -129,6 +130,139 @@ class HomeController extends Controller
                 'sebaranInkubator' => [],
                 'galleryItems' => []
             ]);
+        }
+    }
+
+    /**
+     * AJAX endpoint untuk load berita (lazy loading)
+     */
+    public function getBerita(Request $request)
+    {
+        try {
+            $page = $request->get('page', 1);
+            $limit = $request->get('limit', 10);
+            $offset = ($page - 1) * $limit;
+
+            $berita = cache()->remember('berita_home_page_' . $page, 60, function () use ($limit, $offset) {
+                try {
+                    $twoYearsAgo = now()->subYears(2)->toDateString();
+                    $today = now()->toDateString();
+                    
+                    return Berita::select('id', 'judul', 'isi', 'path_gambar', 'tgl_tayang', 'is_highlight')
+                        ->where('is_publikasi', 1)
+                        ->where(function ($q) use ($twoYearsAgo, $today) {
+                            $q->where(function ($subQ) use ($today) {
+                                $subQ->whereNull('tgl_akhir')
+                                     ->orWhere('tgl_akhir', '>=', $today);
+                            })
+                            ->orWhere(function ($subQ) use ($twoYearsAgo) {
+                                $subQ->whereNotNull('tgl_tayang')
+                                     ->where('tgl_tayang', '>=', $twoYearsAgo);
+                            });
+                        })
+                        ->orderByDesc('is_highlight')
+                        ->orderByDesc('tgl_tayang')
+                        ->offset($offset)
+                        ->limit($limit)
+                        ->get();
+                } catch (\Exception $e) {
+                    return collect();
+                }
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $berita->values()
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Get Berita Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Gagal memuat data'
+            ], 500);
+        }
+    }
+
+    /**
+     * AJAX endpoint untuk load galeri (lazy loading dengan pagination)
+     */
+    public function getGaleri(Request $request)
+    {
+        try {
+            $page = $request->get('page', 1);
+            $limit = $request->get('limit', 20); // Load 20 items per page
+            $offset = ($page - 1) * $limit;
+
+            $galeri = new GaleriController();
+            $allItems = $galeri->forHome(200); // Get all available items
+
+            // Manual pagination
+            $paginatedItems = $allItems->slice($offset, $limit)->values();
+            $totalItems = $allItems->count();
+            $totalPages = ceil($totalItems / $limit);
+
+            return response()->json([
+                'success' => true,
+                'data' => $paginatedItems,
+                'pagination' => [
+                    'current_page' => $page,
+                    'total_pages' => $totalPages,
+                    'total_items' => $totalItems,
+                    'per_page' => $limit,
+                    'has_more' => $page < $totalPages
+                ]
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Get Galeri Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Gagal memuat data'
+            ], 500);
+        }
+    }
+
+    /**
+     * AJAX endpoint untuk load sebaran inkubator (map data)
+     */
+    public function getSebaranInkubator(Request $request)
+    {
+        try {
+            $sebaranInkubator = cache()->remember('sebaran_inkubator', 300, function () {
+                try {
+                    return Provinsi::select('id', 'kode_provinsi', 'name', 'latitude', 'longitude')
+                        ->withCount('inkubators')
+                        ->get()
+                        ->map(function ($prov) {
+                            return [
+                                'id'            => $prov->id,
+                                'kode_provinsi' => (string) $prov->kode_provinsi,
+                                'name'          => $prov->name,
+                                'latitude'      => (float) ($prov->latitude ?? 0),
+                                'longitude'     => (float) ($prov->longitude ?? 0),
+                                'total'         => $prov->inkubators_count ?? 0,
+                            ];
+                        })
+                        ->filter(fn($item) => $item['total'] > 0) // Hanya provinsi dengan inkubator
+                        ->values()
+                        ->toArray();
+                } catch (\Exception $e) {
+                    return [];
+                }
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $sebaranInkubator
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Get Sebaran Inkubator Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Gagal memuat data'
+            ], 500);
         }
     }
 
