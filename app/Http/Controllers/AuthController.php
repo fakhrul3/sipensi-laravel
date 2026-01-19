@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail; 
 use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\User;
 use App\Models\Inkubator;
+use App\Mail\NotifDaftarAdmin;
 
 class AuthController extends Controller
 {
@@ -20,7 +22,10 @@ class AuthController extends Controller
 
     public function showRegister()
     {
+        // Ambil data provinsi diurutkan abjad
         $provinsi = Provinsi::orderBy('name', 'asc')->get();
+        
+        // Data jenis lembaga (sesuaikan dengan kebutuhan form)
         $jenis_lembaga = [
             1 => 'Pemerintah Pusat',
             2 => 'Pemerintah Daerah',
@@ -41,7 +46,7 @@ class AuthController extends Controller
         $credentials = [
             'username'  => $request->username,
             'password'  => $request->password,
-            'is_verify' => 1,
+            'is_verify' => 1, // Hanya user yang sudah di-ACC admin bisa login
         ];
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
@@ -70,12 +75,12 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
 
-            // 2. Simpan ke tabel users (Sekarang sudah aman karena fillable sudah diupdate)
+            // 2. Simpan ke tabel users
             $user = User::create([
                 'username'  => $request->username,
                 'password'  => Hash::make($request->password),
                 'is_admin'  => 0,
-                'is_verify' => 0, 
+                'is_verify' => 0, // Status default: Menunggu ACC
             ]);
 
             // 3. Handle Upload File
@@ -86,7 +91,8 @@ class AuthController extends Controller
             }
 
             // 4. Simpan ke tabel inkubator
-            Inkubator::create([
+            // ✅ FIX: kode_provinsi diisi manual dari provinsi_id agar tidak null
+            $inkubator = Inkubator::create([
                 'user_id'         => $user->id,
                 'nama_inkubator'  => $request->nama_inkubator,
                 'induk_inkubator' => $request->induk_inkubator,
@@ -94,10 +100,15 @@ class AuthController extends Controller
                 'email'           => $request->email,
                 'alamat_kantor'   => $request->alamat_kantor,
                 'provinsi_id'     => $request->provinsi_id,
+                'kode_provinsi'   => $request->provinsi_id, // Duplikat nilai agar terisi
                 'kabupaten_id'    => $request->kabupaten_id,
                 'jenis_inkubator' => $request->jenis_inkubator,
                 'path_legalitas'  => $fileName,
             ]);
+
+            // 5. KIRIM EMAIL NOTIFIKASI KE ADMIN
+            $adminEmail = env('ADMIN_EMAIL', 'diskarpuskesug@gmail.com');
+            Mail::to($adminEmail)->send(new NotifDaftarAdmin($inkubator));
 
             DB::commit();
 
@@ -105,8 +116,7 @@ class AuthController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            // Log error untuk debug internal jika perlu: \Log::error($e->getMessage());
-            return back()->withErrors(['error' => 'Gagal mendaftar. Silahkan coba lagi atau hubungi admin.'])->withInput();
+            return back()->withErrors(['error' => 'Gagal mendaftar: ' . $e->getMessage()])->withInput();
         }
     }
 

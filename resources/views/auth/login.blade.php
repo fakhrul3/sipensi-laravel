@@ -115,6 +115,33 @@
     });
   });
 </script>
+{{-- Pastikan JQuery & SweetAlert sudah di-load di layout atau di sini --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+$(document).ready(function () {
+    // Popup Berhasil (Pesan Success dari Redirect Register)
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#3085d6',
+        });
+    @endif
+
+    // Popup Gagal (Jika ada error login)
+    @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Masuk',
+            text: "{{ $errors->first() }}",
+            confirmButtonColor: '#d33',
+        });
+    @endif
+});
+</script>
 @endpush
 
 
