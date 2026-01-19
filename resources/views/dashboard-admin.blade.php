@@ -16,11 +16,17 @@
         .icon-card {
             display: flex;
             align-items: center;
-            background: #fff;
-            padding: 30px 20px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0px 10px 20px rgba(200, 208, 216, 0.3);
-            border-radius: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 35px 25px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            box-shadow: 0px 4px 15px rgba(200, 208, 216, 0.15);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 8px 25px rgba(200, 208, 216, 0.25);
         }
 
         .icon-card.icon-card-3 {
@@ -30,71 +36,82 @@
 
         .icon-card.icon-card-3 .card-content {
             display: flex;
-            padding: 20px;
+            padding: 25px;
             padding-bottom: 0;
         }
 
         @media only screen and (min-width: 1200px) and (max-width: 1399px) {
             .icon-card h6 {
-                font-size: 15px;
+                font-size: 17px;
             }
         }
 
         @media only screen and (min-width: 1200px) and (max-width: 1399px) {
             .icon-card h3 {
-                font-size: 20px;
+                font-size: 32px;
             }
         }
 
         .icon-card .icon {
-            font-size: 40px;
-            color: #007bff;
-            margin-right: 20px;
+            font-size: 52px;
+            color: #6c7ae0;
+            margin-right: 25px;
+            opacity: 0.85;
         }
 
         .icon-card h6 {
-            font-size: 14px;
-            color: #6c757d;
+            font-size: 16px;
+            color: #64748b;
             margin: 0;
             font-weight: 500;
+            letter-spacing: 0.3px;
         }
 
         .icon-card h3 {
-            font-size: 28px;
-            color: #2c3e50;
-            margin: 0;
+            font-size: 36px;
+            color: #334155;
+            margin: 8px 0 0 0;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .icon-card h5 {
-            font-size: 24px;
-            color: #2c3e50;
-            margin: 0;
+            font-size: 30px;
+            color: #334155;
+            margin: 8px 0 0 0;
             font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .card {
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(200, 208, 216, 0.3);
-            background: #fff;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 16px;
+            box-shadow: 0px 4px 15px rgba(200, 208, 216, 0.15);
+            background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0px 8px 25px rgba(200, 208, 216, 0.2);
         }
 
         .card-header {
-            background: #fff;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            padding: 25px;
+            border-radius: 16px 16px 0 0;
         }
 
         .card-title {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 700;
-            color: #2c3e50;
+            color: #334155;
             margin: 0;
+            letter-spacing: -0.2px;
         }
 
         .card-body {
-            padding: 20px;
+            padding: 25px;
         }
 
         .table {
@@ -102,15 +119,43 @@
         }
 
         .table td {
-            padding: 12px;
+            padding: 16px;
             vertical-align: middle;
-            font-size: 14px;
-            color: #495057;
+            font-size: 16px;
+            color: #475569;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
         }
 
         .table td.text-end {
             font-weight: 600;
-            color: #2c3e50;
+            color: #334155;
+            font-size: 17px;
+        }
+
+        /* Soft background colors untuk icon cards */
+        .icon-card[style*="background-color: #D6F4FA"] {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%) !important;
+            border-color: rgba(178, 235, 242, 0.4);
+        }
+
+        .icon-card[style*="background-color:#F5FBE0"] {
+            background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%) !important;
+            border-color: rgba(220, 237, 200, 0.4);
+        }
+
+        .icon-card[style*="background-color:#FFE7BA"] {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%) !important;
+            border-color: rgba(255, 224, 178, 0.4);
+        }
+
+        /* Loading spinner styling */
+        .spinner-border {
+            color: #6c7ae0;
+        }
+
+        .text-muted {
+            color: #94a3b8 !important;
+            font-size: 15px;
         }
     </style>
 @endpush

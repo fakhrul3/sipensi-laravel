@@ -11,6 +11,12 @@ use App\Http\Controllers\LembagaInkubatorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleUserController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\BidangUsahaController;
+use App\Http\Controllers\KlasifikasiBisnisController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PersetujuanController;
+use App\Http\Controllers\PemeringkatanController;
+use App\Http\Controllers\ManajemenGambarController;
 
 
 
@@ -40,6 +46,7 @@ Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');
     Route::post('/login', 'login')->name('login.post');
+    Route::get('/forgot-password', 'showForgotPassword')->name('forgot-password');
     Route::post('/logout', 'logout')->name('logout');
 });
 
@@ -66,6 +73,30 @@ Route::middleware('auth')->group(function () {
         Route::get('/export/{format}', [RoleUserController::class, 'lembagaInkubatorExport'])->name('export');
     });
     
+    // LAPORAN (Admin)
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/', [LaporanController::class, 'index'])->name('index');
+        Route::get('/download-laporan/{id}', [LaporanController::class, 'downloadLaporan'])->name('download-laporan');
+        Route::get('/download-lampiran/{id}', [LaporanController::class, 'downloadLampiran'])->name('download-lampiran');
+    });
+    
+    // PERSETUJUAN (Admin)
+    Route::prefix('persetujuan')->name('persetujuan.')->group(function () {
+        Route::get('/', [PersetujuanController::class, 'index'])->name('index');
+        Route::get('/{id}', [PersetujuanController::class, 'show'])->name('show');
+        Route::post('/approve/{id}', [PersetujuanController::class, 'approve'])->name('approve');
+        Route::post('/reject/{id}', [PersetujuanController::class, 'reject'])->name('reject');
+    });
+    
+    // PEMERINGKATAN (Admin)
+    Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
+        Route::get('/', [PemeringkatanController::class, 'index'])->name('index');
+        Route::get('/{id}', [PemeringkatanController::class, 'show'])->name('show');
+        Route::post('/approve/{id}', [PemeringkatanController::class, 'approve'])->name('approve');
+        Route::post('/reject/{id}', [PemeringkatanController::class, 'reject'])->name('reject');
+        Route::get('/download-file/{id}/{type}', [PemeringkatanController::class, 'downloadFile'])->name('download-file');
+    });
+    
     // WILAYAH (Admin)
     Route::prefix('wilayah')->name('wilayah.')->group(function () {
         // Provinsi CRUD
@@ -88,5 +119,53 @@ Route::middleware('auth')->group(function () {
         Route::get('/kecamatan/{id}', [WilayahController::class, 'kecamatanShow'])->name('kecamatan.show');
         Route::put('/kecamatan/{id}', [WilayahController::class, 'kecamatanUpdate'])->name('kecamatan.update');
         Route::delete('/kecamatan/{id}', [WilayahController::class, 'kecamatanDestroy'])->name('kecamatan.destroy');
+    });
+    
+    // BIDANG USAHA TENANT (Admin)
+    Route::prefix('bidang-usaha')->name('bidang-usaha.')->group(function () {
+        Route::get('/', [BidangUsahaController::class, 'index'])->name('index');
+        Route::post('/', [BidangUsahaController::class, 'store'])->name('store');
+        Route::get('/{id}', [BidangUsahaController::class, 'show'])->name('show');
+        Route::put('/{id}', [BidangUsahaController::class, 'update'])->name('update');
+        Route::delete('/{id}', [BidangUsahaController::class, 'destroy'])->name('destroy');
+    });
+    
+    // KLASIFIKASI BISNIS TENANT (Admin)
+    Route::prefix('klasifikasi-bisnis')->name('klasifikasi-bisnis.')->group(function () {
+        Route::get('/', [KlasifikasiBisnisController::class, 'index'])->name('index');
+        Route::post('/', [KlasifikasiBisnisController::class, 'store'])->name('store');
+        Route::get('/{id}', [KlasifikasiBisnisController::class, 'show'])->name('show');
+        Route::put('/{id}', [KlasifikasiBisnisController::class, 'update'])->name('update');
+        Route::delete('/{id}', [KlasifikasiBisnisController::class, 'destroy'])->name('destroy');
+    });
+    
+    // MANAJEMEN GAMBAR (Admin)
+    Route::prefix('manajemen-gambar')->name('manajemen-gambar.')->group(function () {
+        Route::get('/', [ManajemenGambarController::class, 'index'])->name('index');
+        Route::post('/', [ManajemenGambarController::class, 'store'])->name('store');
+        Route::get('/{id}', [ManajemenGambarController::class, 'show'])->name('show');
+        Route::put('/{id}', [ManajemenGambarController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ManajemenGambarController::class, 'destroy'])->name('destroy');
+        Route::post('/toggle-publish/{id}', [ManajemenGambarController::class, 'togglePublish'])->name('toggle-publish');
+        Route::get('/download/{id}', [ManajemenGambarController::class, 'download'])->name('download');
+    });
+    
+    // BERITA (Admin)
+    Route::prefix('admin/berita')->name('admin.berita.')->group(function () {
+        Route::get('/', [BeritaController::class, 'adminIndex'])->name('index');
+        Route::post('/', [BeritaController::class, 'store'])->name('store');
+        Route::get('/{id}', [BeritaController::class, 'adminShow'])->name('show');
+        Route::put('/{id}', [BeritaController::class, 'update'])->name('update');
+        Route::delete('/{id}', [BeritaController::class, 'destroy'])->name('destroy');
+        Route::post('/copy/{id}', [BeritaController::class, 'copy'])->name('copy');
+        Route::post('/toggle-publish/{id}', [BeritaController::class, 'togglePublish'])->name('toggle-publish');
+        Route::post('/toggle-highlight/{id}', [BeritaController::class, 'toggleHighlight'])->name('toggle-highlight');
+    });
+    
+    // KONTAK KAMI (Admin)
+    Route::prefix('admin/kontak')->name('admin.kontak.')->group(function () {
+        Route::get('/', [KontakController::class, 'adminIndex'])->name('index');
+        Route::get('/{id}', [KontakController::class, 'adminShow'])->name('show');
+        Route::delete('/{id}', [KontakController::class, 'destroy'])->name('destroy');
     });
 });

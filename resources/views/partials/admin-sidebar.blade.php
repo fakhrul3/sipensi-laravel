@@ -68,13 +68,13 @@
         </ul>
       </li>
       <li class="admin-menu-item">
-        <a href="#" class="admin-menu-link">
+        <a href="{{ route('bidang-usaha.index') }}" class="admin-menu-link {{ request()->routeIs('bidang-usaha.*') ? 'active' : '' }}">
           <i class="fas fa-credit-card admin-menu-icon"></i>
           <span class="admin-menu-text">Bidang Usaha Tenant</span>
         </a>
       </li>
       <li class="admin-menu-item">
-        <a href="#" class="admin-menu-link">
+        <a href="{{ route('klasifikasi-bisnis.index') }}" class="admin-menu-link {{ request()->routeIs('klasifikasi-bisnis.*') ? 'active' : '' }}">
           <i class="fas fa-list admin-menu-icon"></i>
           <span class="admin-menu-text">Klasifikasi Bisnis Tenant</span>
         </a>
@@ -98,19 +98,19 @@
             </a>
           </li>
           <li class="admin-submenu-item">
-            <a href="#" class="admin-submenu-link">
+            <a href="{{ route('laporan.index') }}" class="admin-submenu-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}">
               <i class="fas fa-chevron-right admin-submenu-icon"></i>
               <span>List Laporan Lembaga Inkubator</span>
             </a>
           </li>
           <li class="admin-submenu-item">
-            <a href="#" class="admin-submenu-link">
+            <a href="{{ route('persetujuan.index') }}" class="admin-submenu-link {{ request()->routeIs('persetujuan.*') ? 'active' : '' }}">
               <i class="fas fa-chevron-right admin-submenu-icon"></i>
               <span>Persetujuan</span>
             </a>
           </li>
           <li class="admin-submenu-item">
-            <a href="#" class="admin-submenu-link">
+            <a href="{{ route('pemeringkatan.index') }}" class="admin-submenu-link {{ request()->routeIs('pemeringkatan.*') ? 'active' : '' }}">
               <i class="fas fa-chevron-right admin-submenu-icon"></i>
               <span>Pemeringkatan</span>
             </a>
@@ -123,19 +123,19 @@
         <span class="admin-menu-section-title">MANAJEMEN DATA PUBLIK</span>
       </li>
       <li class="admin-menu-item">
-        <a href="#" class="admin-menu-link">
+        <a href="{{ route('manajemen-gambar.index') }}" class="admin-menu-link {{ request()->routeIs('manajemen-gambar.*') ? 'active' : '' }}">
           <i class="fas fa-image admin-menu-icon"></i>
-          <span class="admin-menu-text">Gambar Header</span>
+          <span class="admin-menu-text">Manajemen Gambar</span>
         </a>
       </li>
       <li class="admin-menu-item">
-        <a href="#" class="admin-menu-link">
+        <a href="{{ route('admin.berita.index') }}" class="admin-menu-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
           <i class="fas fa-newspaper admin-menu-icon"></i>
           <span class="admin-menu-text">Berita</span>
         </a>
       </li>
       <li class="admin-menu-item">
-        <a href="#" class="admin-menu-link">
+        <a href="{{ route('admin.kontak.index') }}" class="admin-menu-link {{ request()->routeIs('admin.kontak.*') ? 'active' : '' }}">
           <i class="fas fa-envelope admin-menu-icon"></i>
           <span class="admin-menu-text">Kontak Kami</span>
         </a>
