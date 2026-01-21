@@ -8,7 +8,13 @@ use App\Http\Controllers\KontakController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\LembagaInkubatorController;
+use App\Http\Controllers\Auth\NewVerifyController;
 
+
+// Halaman tunggu/resend setelah register
+Route::get('/verify-resend/{username}', [AuthController::class, 'showResendPage'])->name('resend.verify');
+Route::get('/verify-resend-mail/{username}', [AuthController::class, 'resendEmail'])->name('resend.mail');
+Route::get('/verify-email/{token}/{username}/{expired}', [NewVerifyController::class, 'verify'])->name('user.verify');
 /*
 |--------------------------------------------------------------------------
 | ROUTE UTAMA
@@ -60,4 +66,7 @@ Route::controller(AuthController::class)->group(function () {
 
     // AJAX Wilayah - Pastikan NAME route ini diingat untuk dipakai di View
     Route::get('/get-kabupaten/{provinsi_id}', 'getKabupaten')->name('get.kabupaten');
+
+    // Contoh jika menggunakan controller baru atau AuthController
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
 });

@@ -4,26 +4,29 @@
 @section('body_class', 'auth-register')
 
 @push('styles')
-{{-- Link Bootstrap Icons untuk Icon Mata --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
 <style>
-    .password-field {
-        position: relative;
+    .info-box {
+        background-color: #f0f7ff;
+        border-left: 4px solid #2563eb;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
     }
-    .toggle-password {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
+    .hr-text {
+        display: flex;
+        align-items: center;
+        text-align: center;
         color: #6c757d;
-        z-index: 10;
-        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 2rem 0 1rem;
     }
-    .password-field input {
-        padding-right: 45px;
+    .hr-text::before, .hr-text::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #dee2e6;
     }
+    .hr-text:not(:empty)::before { margin-right: .5rem; }
+    .hr-text:not(:empty)::after { margin-left: .5rem; }
 </style>
 @endpush
 
@@ -67,11 +70,11 @@
             {{-- KONTAK --}}
             <div class="row g-3 mt-2">
               <div class="col-md-6">
-                <label class="form-label">No HP</label>
+                <label class="form-label">No HP / WhatsApp</label>
                 <input type="text" name="no_kontak" class="form-control" value="{{ old('no_kontak') }}" required>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Email</label>
+                <label class="form-label">Email Lembaga</label>
                 <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
               </div>
             </div>
@@ -79,7 +82,7 @@
             {{-- ALAMAT --}}
             <div class="mt-3">
               <label class="form-label">Alamat Kantor</label>
-              <textarea name="alamat_kantor" class="form-control" rows="3">{{ old('alamat_kantor') }}</textarea>
+              <textarea name="alamat_kantor" class="form-control" rows="2">{{ old('alamat_kantor') }}</textarea>
             </div>
 
             {{-- WILAYAH --}}
@@ -121,37 +124,33 @@
             </div>
 
             {{-- AKUN --}}
-            <div class="hr-text mt-4">Informasi Akun</div>
+            <div class="hr-text">Konfigurasi Akun</div>
 
             <div class="mt-2">
-              <label class="form-label">Username</label>
-              <input type="text" name="username" class="form-control" value="{{ old('username') }}" required>
+              <label class="form-label">Username yang Diinginkan</label>
+              <input type="text" name="username" class="form-control" value="{{ old('username') }}" placeholder="Contoh: inkubator_maju" required>
             </div>
 
-            <div class="row g-3 mt-2">
-              {{-- PASSWORD --}}
-              <div class="col-md-6">
-                <label class="form-label">Password</label>
-                <div class="password-field">
-                  <input type="password" name="password" id="password" class="form-control" required>
-                  <i class="bi bi-eye-slash toggle-password" data-target="#password"></i>
+            {{-- INFORMASI OTOMATISASI PASSWORD --}}
+            <div class="info-box shadow-sm">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="bi bi-info-circle-fill text-primary" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <div>
+                        <p class="small mb-0">
+                            <strong>Penting:</strong> Anda tidak perlu membuat password sekarang. Sistem akan 
+                            <strong>mengirimkan password akses</strong> ke email Anda setelah pendaftaran ini 
+                            disetujui oleh Administrator SIPENSI.
+                        </p>
+                    </div>
                 </div>
-              </div>
-
-              {{-- KONFIRMASI PASSWORD --}}
-              <div class="col-md-6">
-                <label class="form-label">Konfirmasi Password</label>
-                <div class="password-field">
-                  <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-                  <i class="bi bi-eye-slash toggle-password" data-target="#password_confirmation"></i>
-                </div>
-              </div>
             </div>
 
             {{-- ACTION --}}
             <div class="d-flex justify-content-between mt-4">
-              <a href="{{ route('login') }}" class="btn btn-outline-secondary">Batal</a>
-              <button type="submit" class="btn auth-btn px-4">Daftar Sekarang</button>
+              <a href="{{ route('login') }}" class="btn btn-outline-secondary px-4">Kembali ke Login</a>
+              <button type="submit" class="btn auth-btn px-4 fw-bold">Daftar Sekarang</button>
             </div>
 
           </form>
@@ -168,7 +167,7 @@
 <script>
 $(document).ready(function () {
     
-    // --- 1. ALERT BERHASIL/GAGAL ---
+    // --- ALERT ---
     @if(session('success'))
         Swal.fire({
             icon: 'success',
@@ -187,25 +186,10 @@ $(document).ready(function () {
         });
     @endif
 
-    // --- 2. FITUR SHOW/HIDE PASSWORD (FIXED BOOTSTRAP ICONS) ---
-    $('.toggle-password').on('click', function() {
-        let target = $(this).data('target');
-        let input = $(target);
-        
-        if (input.attr('type') === 'password') {
-            input.attr('type', 'text');
-            $(this).removeClass('bi-eye-slash').addClass('bi-eye');
-        } else {
-            input.attr('type', 'password');
-            $(this).removeClass('bi-eye').addClass('bi-eye-slash');
-        }
-    });
-
-    // --- 3. AJAX WILAYAH ---
+    // --- AJAX WILAYAH ---
     $('#provinsi').on('change', function () {
         let provinsiId = $(this).val();
         let kabupatenDropdown = $('#kabupaten');
-
         kabupatenDropdown.prop('disabled', true).html('<option value="">Sedang memuat...</option>');
 
         if (provinsiId) {
@@ -223,19 +207,11 @@ $(document).ready(function () {
                             kabupatenDropdown.append('<option value="' + value.id + '">' + value.name + '</option>');
                         });
                         kabupatenDropdown.prop('disabled', false);
-                    } else {
-                        kabupatenDropdown.html('<option value="">Data tidak ditemukan</option>');
                     }
-                },
-                error: function (xhr) {
-                    kabupatenDropdown.html('<option value="">Gagal mengambil data</option>');
                 }
             });
-        } else {
-            kabupatenDropdown.html('<option value="">Pilih Provinsi dahulu</option>').prop('disabled', true);
         }
     });
 });
 </script>
-
 @endsection

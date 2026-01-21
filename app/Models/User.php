@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Inkubator;
 
 class User extends Authenticatable
 {
@@ -14,10 +15,11 @@ class User extends Authenticatable
      * Field yang boleh diisi secara mass-assignment
      */
     protected $fillable = [
-        'username',   // Tambahkan ini
+        'username',
         'password',
-        'is_admin',   // Tambahkan ini
-        'is_verify',  // Tambahkan ini
+        'is_admin',
+        'is_verify',
+        'verify_token', 
     ];
 
     protected $hidden = [
@@ -25,11 +27,25 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Relasi ke tabel Inkubator
+     */
+    public function inkubator()
+    {
+        return $this->hasOne(Inkubator::class, 'user_id', 'id');
+    }
+
+    /**
+     * Casting attributes
+     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
+            // 'is_verify' dihapus dari boolean agar bisa menyimpan angka 0, 1, dan 2
+            'is_verify' => 'integer', 
         ];
     }
 }
