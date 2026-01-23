@@ -40,8 +40,8 @@
           $fullPath = public_path($imagePath);
           if (file_exists($fullPath)) {
             // Cek apakah file adalah SVG dengan extension PNG
-            $content = file_get_contents($fullPath);
-            if (strpos($content, '<svg') === false) {
+            $content = @file_get_contents($fullPath);
+            if ($content && strpos($content, '<svg') === false) {
               // File valid, bukan SVG
               $imageUrl = asset($imagePath);
             }

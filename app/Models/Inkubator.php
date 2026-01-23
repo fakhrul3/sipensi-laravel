@@ -43,3 +43,15 @@ class Inkubator extends Model
         return $this->hasMany(Aktifitas::class, 'inkubator_id', 'id');
 }
 }
+    // Pastikan ini 'inkubator' (sesuai file SQL kamu), bukan 'inkubators'
+    protected $table = 'inkubator'; 
+    protected $guarded = [];
+
+    /**
+     * Relationship dengan Tenant
+     */
+    public function tenant()
+    {
+        return $this->hasMany(Tenant::class, 'inkubator_id');
+    }
+}

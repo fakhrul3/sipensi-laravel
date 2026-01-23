@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -31,25 +34,34 @@ class AuthController extends Controller
 
         $remember = $request->boolean('remember');
 
-        // Kalau mau paksa hanya akun yg sudah verify:
-        // (kalau kolom is_verify ada)
-        $credentials = [
-            'username' => $data['username'],
-            'password' => $data['password'],
-        ];
+        // Cari user berdasarkan username
+        $user = User::where('username', $data['username'])->first();
 
-        // Optional: kalau tabel users ada kolom is_verify
-        // Uncomment baris ini kalau emang dipakai buat login gate
-        $credentials['is_verify'] = 1;
-
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/'); // ubah kalau mau ke dashboard admin
+        if (!$user) {
+            return back()
+                ->withErrors(['username' => 'Username atau password salah / belum terverifikasi.'])
+                ->onlyInput('username');
         }
 
-        return back()
-            ->withErrors(['username' => 'Username atau password salah / belum terverifikasi.'])
-            ->onlyInput('username');
+        // Cek password
+        if (!Hash::check($data['password'], $user->password)) {
+            return back()
+                ->withErrors(['username' => 'Username atau password salah / belum terverifikasi.'])
+                ->onlyInput('username');
+        }
+
+        // Cek is_verify jika kolom ada
+        $hasIsVerify = Schema::hasColumn('users', 'is_verify');
+        if ($hasIsVerify && $user->is_verify != 1) {
+            return back()
+                ->withErrors(['username' => 'Akun belum terverifikasi.'])
+                ->onlyInput('username');
+        }
+
+        // Login berhasil
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+        return redirect()->intended('/dashboard'); // redirect ke dashboard setelah login
     }
 
     public function logout(Request $request)

@@ -7,7 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnPrev = document.querySelector(".news-nav-btn.prev");
   const btnNext = document.querySelector(".news-nav-btn.next");
 
-  const scrollAmount = 320;
+  // Scroll 4 cards sekaligus (card width 300px + gap 20px = 320px per card)
+  // 4 cards = 4 * 300px + 3 * 20px = 1200px + 60px = 1260px
+  const cardWidth = 300;
+  const cardGap = 20;
+  const cardsPerScroll = 4;
+  const scrollAmount = (cardWidth * cardsPerScroll) + (cardGap * (cardsPerScroll - 1));
 
   btnNext?.addEventListener("click", () => {
     track.scrollBy({ left: scrollAmount, behavior: "smooth" });

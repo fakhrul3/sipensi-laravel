@@ -175,6 +175,62 @@
 }
 .tentang-text--last{ margin-bottom: 0; }
 
+/* Font lebih kecil 2pt untuk section "Pengelolaan SIPENSI" */
+.tentang-text--small{
+  font-size: 0.96rem; /* 1.08rem - 2pt (sekitar 0.12rem) */
+}
+
+.tentang-text-list.tentang-text--small{
+  font-size: 0.96rem;
+}
+
+.tentang-text-list.tentang-text--small li{
+  font-size: 0.96rem;
+}
+
+/* Hilangkan space antara paragraf "Pengelolaan..." dengan ul */
+.tentang-text.reveal.d-4 + .tentang-text-list{
+  margin-top: 0;
+}
+
+/* Styling untuk ul di dalam tentang-text agar sama dengan paragraf */
+.tentang-text-list{
+  font-size: 1.08rem;
+  line-height: 2.05;
+  color: var(--text-main);
+  margin: 0 0 22px 0;
+  font-weight: 400;
+  text-align: justify;
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 20px;
+}
+
+.tentang-text-list li{
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 2.05;
+  color: var(--text-main);
+  font-weight: 400;
+  text-align: justify;
+  padding-left: 8px;
+}
+
+/* Hapus margin bottom dari li terakhir */
+.tentang-text-list li:last-child{
+  margin-bottom: 0;
+}
+
+/* Warna bullets sama dengan text */
+.tentang-text-list li::marker{
+  color: var(--text-main) !important;
+}
+
+.tentang-text-list li strong{
+  color: var(--ehub-blue);
+  font-weight: 800;
+}
+
 .tentang-link{
   color: var(--ehub-blue);
   font-weight: 800;

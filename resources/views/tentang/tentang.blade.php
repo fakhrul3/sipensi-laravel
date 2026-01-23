@@ -64,12 +64,25 @@
           <strong>Berkelanjutan</strong>.
         </p>
         <br>
-        <p class="tentang-text tentang-text--last reveal d-2">
-          <small>
-            Pengelolaan SIPENSI mengacu pada
-            <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021</strong>.
-          </small>
+        <p class="tentang-text tentang-text--last reveal d-3">
+          Lembaga Inkubator yang <strong>mendaftar</strong> dan <strong>mengajukan pemeringkatan</strong> melalui 
+          SIPENSI akan memperoleh Peringkat <strong>(<i>Grade</i>)</strong> sesuai ketentuan yang berlaku, 
+          dengan <strong>masa berlaku peringkat selama 3 (tiga) tahun.</strong>
         </p>
+        <br>
+        <p class="tentang-text tentang-text--last tentang-text--small reveal d-4">
+          Pengelolaan SIPENSI mengacu pada:
+        </p>
+        <ul class="tentang-text-list tentang-text--last tentang-text--small reveal d-4">
+          <li>
+            <strong>Peraturan Pemerintah Republik Indonesia Nomor 7 Tahun 2021</strong>
+            tentang Kemudahan, Pelindungan, dan Pemberdayaan Koperasi dan Usaha Mikro, Kecil, dan Menengah.
+          </li>
+          <li>
+            <strong>Peraturan Menteri Koperasi dan UKM Nomor 14 Tahun 2023</strong>
+            tentang Standar Penyelenggaraan Inkubasi Usaha.
+          </li>
+        </ul>
 
       </div>
     </div>

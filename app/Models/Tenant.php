@@ -29,3 +29,19 @@ class Tenant extends Model
         return $this->hasMany(\App\Models\Produk::class, 'tenant_id');
     }
 }
+    /**
+     * Relationship dengan Inkubator
+     */
+    public function inkubator()
+    {
+        return $this->belongsTo(Inkubator::class, 'inkubator_id');
+    }
+
+    /**
+     * Relationship dengan Pendanaan
+     */
+    public function pendanaan()
+    {
+        return $this->hasMany(Pendanaan::class, 'tenant_id');
+    }
+}
