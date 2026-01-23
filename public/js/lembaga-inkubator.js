@@ -11,6 +11,13 @@
     // fallback kalau belum ada: `${baseUrl}/lembaga-inkubator`
     const detailBase = (CFG.detailBase || `${baseUrl}/lembaga-inkubator`).replace(/\/$/, "");
 
+    // ✅ storage base untuk ambil file logo dari public storage
+    // wajib diset dari blade: storageBase: "{{ asset('storage') }}"
+    const storageBase = (CFG.storageBase || `${baseUrl}/storage`).replace(/\/$/, "");
+
+    // ✅ default logo (fallback)
+    const defaultLogo = `${baseUrl}/assets/images/brand/default-inkubator.png`;
+
     // Mapping Label & Badge
     const jenisInfoMap = {
         1: { label: "Pemerintah Pusat", badge: "badge-pusat" },
@@ -38,6 +45,26 @@
         return String(s).replace(/[&<>"']/g, (m) => (
             { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]
         ));
+    }
+
+    // ✅ build url logo dari value DB (kolom `logo`)
+    // support:
+    // - "file.jpg"
+    // - "folder/file.jpg"
+    // - "/storage/file.jpg"
+    // - "storage/file.jpg"
+    // - "http(s)://...."
+    function buildLogoUrl(logo) {
+        if (!logo) return "";
+        const s = String(logo).trim();
+        if (!s) return "";
+
+        if (s.startsWith("http://") || s.startsWith("https://")) return s;
+        if (s.startsWith("/storage/")) return s;
+        if (s.startsWith("storage/")) return "/" + s;
+
+        // default: path relatif ke storageBase
+        return `${storageBase}/${s.replace(/^\//, "")}`;
     }
 
     // ✅ ambil id yang benar (fallback beberapa kemungkinan key)
@@ -85,6 +112,9 @@
                 console.warn("ID inkubator tidak ditemukan pada row ini:", r);
             }
 
+            // ✅ logo url (kalau kosong, langsung pakai default)
+            const logoUrl = buildLogoUrl(r.logo) || defaultLogo;
+
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td class="li-no">
@@ -92,7 +122,16 @@
                 </td>
                 <td>
                     <div class="li-name-wrap">
-                        <span class="li-avatar"></span>
+
+                        <!-- ✅ ganti avatar kosong jadi img logo -->
+                        <img
+                          class="li-avatar"
+                          src="${logoUrl}"
+                          onerror="this.src='${defaultLogo}'"
+                          alt="${safeText(r.nama_inkubator)}"
+                          title="${safeText(r.nama_inkubator)}"
+                        />
+
                         <a class="li-name" href="${detailBase}/${id}">
                             ${safeText(r.nama_inkubator)}
                         </a>

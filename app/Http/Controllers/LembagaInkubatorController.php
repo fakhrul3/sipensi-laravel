@@ -6,11 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\Inkubator;
 use App\Models\Provinsi;
 
+// ✅ Tambahin model Tenant (sesuaikan nama model di project lu)
+use App\Models\Tenant;
+
+// ✅ Tambahin model Laporan
+use App\Models\Laporan;
+
+// ✅ TAMBAHAN: Import model Aktifitas agar bisa dipanggil
+use App\Models\Aktifitas;
+
+// ✅ TAMBAHAN: Import model Pemeringkatan
+use App\Models\Pemeringkatan;
+
 class LembagaInkubatorController extends Controller
 {
-    /**
-     * Mapping badge untuk UI
-     */
     private function jenisMap()
     {
         return [
@@ -24,15 +33,12 @@ class LembagaInkubatorController extends Controller
 
     public function index(Request $request)
     {
-        // ambil param untuk subtitle saja (JS akan handle filter)
         $kodeProv = $request->get('kode_provinsi');
 
-        /**
-         * 1) FULL DATASET untuk JS (JANGAN DI-FILTER KODE PROVINSI DI SINI)
-         */
         try {
             $allInkubators = Inkubator::select(
                 'id',
+                'logo',
                 'nama_inkubator',
                 'jenis_inkubator',
                 'kode_provinsi'
@@ -41,15 +47,8 @@ class LembagaInkubatorController extends Controller
             $allInkubators = collect();
         }
 
-        /**
-         * 2) Variabel $inkubators (opsional) - biar blade kompatibel
-         * Kita samakan saja
-         */
         $inkubators = $allInkubators;
 
-        /**
-         * 3) Nama provinsi untuk subtitle (kalau ada param dari map)
-         */
         $namaProvinsi = null;
         if (!empty($kodeProv)) {
             try {
@@ -59,14 +58,10 @@ class LembagaInkubatorController extends Controller
             }
         }
 
-        /**
-         * 4) List provinsi untuk dropdown + count
-         * NOTE: sekarang pakai query agregasi biar gak N+1
-         */
         try {
             $counts = Inkubator::selectRaw('kode_provinsi, COUNT(*) as total')
                 ->groupBy('kode_provinsi')
-                ->pluck('total', 'kode_provinsi'); // [kode => total]
+                ->pluck('total', 'kode_provinsi');
 
             $provinsiList = Provinsi::select('kode_provinsi', 'name')
                 ->orderBy('name')
@@ -84,7 +79,6 @@ class LembagaInkubatorController extends Controller
 
         $jenisMap = $this->jenisMap();
 
-        // penting: kirim allInkubators supaya blade bisa pakai untuk rows
         return view('lembaga-inkubator.index', compact(
             'allInkubators',
             'inkubators',
@@ -96,9 +90,125 @@ class LembagaInkubatorController extends Controller
 
     public function show($id)
     {
-        $row = Inkubator::findOrFail($id);
+        $jenisMap = $this->jenisMap();
+        $keyword = null;
+
+        // ✅ TAMBAHAN: Load relasi 'aktifitas' juga di sini
+        $row = Inkubator::with(['provinsi', 'kabupaten', 'kecamatan', 'aktifitas'])->findOrFail($id);
+
+        // ✅ ambil tenant by inkubator_id (sesuaikan kolom FK kalau beda)
+        $tenant = Tenant::where('inkubator_id', $id)
+            ->latest()
+            ->get();
+
+        // ✅ ambil laporan dari tabel laporan (pakai Model)
+        $laporan = Laporan::where('inkubator_id', $id)
+            ->latest()
+            ->get();
+
+        /**
+         * ✅ Normalisasi supaya siap dipakai viewer (array string path)
+         * DB bisa simpan JSON string di kolom path_laporan
+         */
+        $laporanFiles = [];
+        foreach ($laporan as $lp) {
+            $val = $lp->path_laporan;
+
+            // kalau path_laporan sudah dicasts (jadi array di model), ini akan langsung array
+            if (is_array($val)) {
+                foreach ($val as $f) {
+                    $laporanFiles[] = preg_replace('#^public[\\\\/]#', '', (string) $f);
+                }
+                continue;
+            }
+
+            // kalau masih string JSON
+            if (is_string($val)) {
+                $decoded = json_decode($val, true);
+                if (is_array($decoded)) {
+                    foreach ($decoded as $f) {
+                        $laporanFiles[] = preg_replace('#^public[\\\\/]#', '', (string) $f);
+                    }
+                }
+            }
+        }
+
+        // ✅ REVISI: ambil pemeringkatan terakhir dari tabel pemeringkatan (tanpa filter grade)
+        $grade_terakhir = Pemeringkatan::where('inkubator_id', $id)
+            ->orderByDesc('tanggal_sk')   // pakai tanggal_sk biar masuk akal
+            ->first();
+
+        return view('lembaga-inkubator.show', compact(
+            'row',
+            'jenisMap',
+            'tenant',
+            'keyword',
+            'grade_terakhir',
+            'laporan',
+            'laporanFiles'
+        ));
+    }
+
+    // ✅ route: inkubators.cari-tenant.detail
+    public function cariTenantDetail(Request $request, $id)
+    {
         $jenisMap = $this->jenisMap();
 
-        return view('lembaga-inkubator.show', compact('row', 'jenisMap'));
+        // ✅ TAMBAHAN: Load relasi 'aktifitas' agar galeri tidak hilang saat search tenant
+        $row = Inkubator::with(['provinsi', 'kabupaten', 'kecamatan', 'aktifitas'])->findOrFail($id);
+
+        $keyword = trim((string) $request->get('keyword', ''));
+
+        $tenantQuery = Tenant::where('inkubator_id', $id);
+
+        if ($keyword !== '') {
+            $tenantQuery->where(function ($q) use ($keyword) {
+                $q->where('nama_usaha', 'like', "%{$keyword}%")
+                  ->orWhere('alamat', 'like', "%{$keyword}%");
+            });
+        }
+
+        $tenant = $tenantQuery->latest()->get();
+
+        // ✅ ambil laporan juga biar modal laporan tetap bisa tampil saat search tenant
+        $laporan = Laporan::where('inkubator_id', $id)
+            ->latest()
+            ->get();
+
+        $laporanFiles = [];
+        foreach ($laporan as $lp) {
+            $val = $lp->path_laporan;
+
+            if (is_array($val)) {
+                foreach ($val as $f) {
+                    $laporanFiles[] = preg_replace('#^public[\\\\/]#', '', (string) $f);
+                }
+                continue;
+            }
+
+            if (is_string($val)) {
+                $decoded = json_decode($val, true);
+                if (is_array($decoded)) {
+                    foreach ($decoded as $f) {
+                        $laporanFiles[] = preg_replace('#^public[\\\\/]#', '', (string) $f);
+                    }
+                }
+            }
+        }
+
+        // ✅ REVISI: ambil pemeringkatan terakhir juga saat search tenant (tanpa filter grade)
+        $grade_terakhir = Pemeringkatan::where('inkubator_id', $id)
+            ->orderByDesc('tanggal_sk')
+            ->first();
+
+        return view('lembaga-inkubator.show', compact(
+            'row',
+            'jenisMap',
+            'tenant',
+            'keyword',
+            'grade_terakhir',
+            'laporan',
+            'laporanFiles'
+        ));
     }
 }

@@ -8,9 +8,7 @@ use App\Http\Controllers\KontakController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\LembagaInkubatorController;
-
-
-
+use App\Http\Controllers\TenantController; // ✅ tambah ini
 
 // ROUTE UTAMA (Wajib Paling Atas)
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -26,8 +24,19 @@ Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.de
 
 // LAINNYA
 Route::get('/mitra-kolaborator', [MitraController::class, 'index'])->name('mitra.index');
+
+// LIST INKUBATOR
 Route::get('/lembaga-inkubator', [LembagaInkubatorController::class, 'index'])->name('lembaga.index');
+
+// DETAIL INKUBATOR
 Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'])->name('lembaga.show');
+
+// ✅ TAMBAHAN: search tenant di halaman detail inkubator (dipakai di show.blade.php versi live)
+Route::get('/lembaga-inkubator/{id}/cari-tenant', [LembagaInkubatorController::class, 'cariTenantDetail'])
+    ->name('inkubators.cari-tenant.detail');
+
+// ✅ TAMBAHAN: detail tenant (dipakai di list tenant)
+Route::get('/tenant/{id}', [TenantController::class, 'show'])->name('tenant');
 
 // AUTH
 Route::controller(AuthController::class)->group(function () {
