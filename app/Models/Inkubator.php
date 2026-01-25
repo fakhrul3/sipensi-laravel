@@ -7,6 +7,8 @@ use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Laporan;
+use App\Models\Aktifitas;
+use App\Models\Tenant;
 
 class Inkubator extends Model
 {
@@ -41,11 +43,7 @@ class Inkubator extends Model
     public function aktifitas()
     {
         return $this->hasMany(Aktifitas::class, 'inkubator_id', 'id');
-}
-}
-    // Pastikan ini 'inkubator' (sesuai file SQL kamu), bukan 'inkubators'
-    protected $table = 'inkubator'; 
-    protected $guarded = [];
+    }
 
     /**
      * Relationship dengan Tenant

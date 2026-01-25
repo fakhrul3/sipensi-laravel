@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Inkubator;
+use App\Models\Pendanaan;
 
 class Tenant extends Model
 {
@@ -28,7 +30,7 @@ class Tenant extends Model
     {
         return $this->hasMany(\App\Models\Produk::class, 'tenant_id');
     }
-}
+
     /**
      * Relationship dengan Inkubator
      */

@@ -93,10 +93,6 @@ Route::controller(AuthController::class)->group(function () {
 
     // AJAX Wilayah - Pastikan NAME route ini diingat untuk dipakai di View
     Route::get('/get-kabupaten/{provinsi_id}', 'getKabupaten')->name('get.kabupaten');
-
-    // Contoh jika menggunakan controller baru atau AuthController
-Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-});
 });
 
 // DASHBOARD (Protected)

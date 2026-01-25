@@ -22,9 +22,6 @@ class User extends Authenticatable
         'verify_token', 
     ];
 
-        'verify_token',
-    ];
-
     /**
      * Find user by username for authentication
      */
