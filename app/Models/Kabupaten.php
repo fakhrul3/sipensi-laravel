@@ -33,4 +33,6 @@ class Kabupaten extends Model
 	{
 		return $this->hasMany(Inkubator::class);
 	}
+    // optional: kalau tabel ini cuma referensi (read-only)
+    // public $timestamps = false;
 }

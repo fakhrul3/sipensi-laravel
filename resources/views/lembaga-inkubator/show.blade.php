@@ -1,89 +1,305 @@
 @extends('layouts.app')
 
-{{-- Judul TAB (browser) menggunakan nama_inkubator --}}
 @section('title', 'Detail - ' . ($row->nama_inkubator ?? 'Lembaga Inkubator'))
-
-{{-- Background variant detail tetap --}}
 @section('bg-variant','bg-detail-inkubator')
 
 @push('styles')
   <link rel="stylesheet" href="{{ asset('css/lembaga-inkubator.css') }}">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ asset('theme/plugins/slick/slick.css') }}">
+  <link rel="stylesheet" type="text/css" media="all" href="{{ asset('theme/plugins/slick/slick-theme.css') }}">
 @endpush
 
 @section('content')
-<div class="container li-shell">
+@php
+  $inkubator = $row;
 
-  {{-- Tombol Kembali --}}
-  <div class="reveal d-1">
-    <a href="{{ route('lembaga.index') }}" class="btn-li-back mb-3"">
-      ← Kembali
-    </a>
-  </div>
+  $idJenis = $inkubator->jenis_inkubator ?? $inkubator->jenis_lembaga_id ?? null;
+  $jm = $jenisMap[$idJenis] ?? ['label' => 'Lainnya', 'badge' => 'badge-default'];
 
-  @php
-    // Sinkronisasi dengan kolom Database
-    $idJenis = $row->jenis_lembaga_id; 
-    $jm = $jenisMap[$idJenis] ?? ['label' => 'Lainnya', 'badge' => 'badge-default'];
-    
-    $nama   = trim($row->nama_inkubator ?? '');
-    $alamat = trim($row->alamat_kantor ?? '');
-    $kontak = trim($row->email ?? ''); // Menggunakan kolom email sesuai screenshot phpMyAdmin
-    $web    = trim($row->website ?? '');
+  $nama     = trim($inkubator->nama_inkubator ?? '');
+  $alamat   = $inkubator->alamat_kantor ?? '';
+  $induk    = $inkubator->induk_inkubator ?? '-';
+  $pimpinan = $inkubator->nama_pimpinan ?? '-';
+  $email    = $inkubator->email ?? '-';
+  $telp     = $inkubator->no_kontak ?? '-';
+  $web      = $inkubator->website ?? '';
 
-    // Ambil nama provinsi jika relasi sudah ada, atau tampilkan kodenya
-    $provNama = $row->provinsi->name ?? $row->kode_provinsi ?? '-';
+  // ✅ aman kalau relasi null
+  $kec  = optional($inkubator->kecamatan)->name ?? '-';
+  $kab  = optional($inkubator->kabupaten)->name ?? '-';
+  $prov = optional($inkubator->provinsi)->name ?? ($inkubator->kode_provinsi ?? '-');
 
-    // Website logic
-    $websiteUrl = $web;
-    if ($web && !preg_match('~^https?://~i', $web)) {
-      $websiteUrl = 'https://' . $web;
-    }
-  @endphp
+  $facebook  = $inkubator->facebook ?? '-';
+  $instagram = $inkubator->instagram ?? '-';
+  $tiktok    = $inkubator->tiktok ?? '-';
 
-  {{-- CARD DETAIL --}}
-  <div class="li-detail-card reveal d-2">
+  $logoPath = $inkubator->logo ?? $inkubator->logo_inkubator ?? null;
 
-    {{-- Judul: NAMA INKUBATOR DARI DB --}}
-    <h2 class="li-detail-title reveal d-3">
-      {{ $nama !== '' ? $nama : 'Nama Lembaga (belum tersedia)' }}
-    </h2>
+  // buat link website rapi
+  $websiteUrl = $web;
+  if ($web && !preg_match('~^https?://~i', $web)) $websiteUrl = 'https://' . $web;
+@endphp
 
-    {{-- Badge Jenis --}}
-    <div class="mb-3 reveal d-4">
-      <span class="badge-jenis {{ $jm['badge'] }}">
-        {{ $jm['label'] }}
-      </span>
-    </div>
+<section class="container-fluid li-detail-wrap mb-5 px-md-5">
+  <div class="row g-4">
 
-    {{-- Detail Info --}}
-    <div class="row g-3">
-      <div class="col-md-6 reveal d-5">
-        <div class="li-detail-item">
-          <b>Provinsi:</b> {{ $provNama }}
+    {{-- KOLOM KIRI --}}
+    <div class="col-md-6 col-lg-7 li-col-left">
+
+      
+  <a href="{{ route('lembaga.index') }}" class="btn-li-floating">
+    ← Kembali
+  </a>
+
+      <div class="card ink-card mb-3">
+        {{-- HEADER TEAL (mirip live) --}}
+        <div class="ink-card__top">
+          <div class="ink-logo">
+            <img
+              src="{{ $logoPath ? \Storage::url($logoPath) : '' }}"
+              onerror="this.src='{{ asset('assets/images/brand/default-inkubator.png') }}'"
+              alt="Logo Inkubator"
+            >
+          </div>
+
+          <div class="ink-head">
+            <h3 class="ink-title">{{ $nama !== '' ? $nama : '-' }}</h3>
+
+            <div class="ink-badges">
+              <span class="ink-badge ink-badge--ok">Terverifikasi</span>
+              <span class="badge-jenis {{ $jm['badge'] }}">{{ $jm['label'] }}</span>
+              @if($grade_terakhir)
+                  @if(!empty($grade_terakhir->grade))
+                    @if(($grade_terakhir->tanggal_habis_sk ?? null) && ($grade_terakhir->tanggal_habis_sk > date('Y-m-d')))
+                      <span class="ink-badge ink-badge--grade">{{ $grade_terakhir->grade }}</span>
+                    @else
+                      {{-- kalau expired / tanggal habis kosong, lu mau tampilkan apa? --}}
+                      <span class="ink-badge ink-badge--warn">{{ $grade_terakhir->grade }} (Expired)</span>
+                    @endif
+                  @else
+                    <span class="ink-badge ink-badge--info">Belum Dilakukan Pemeringkatan</span>
+                  @endif
+                @else
+                  <span class="ink-badge ink-badge--warn">Belum Mengajukan Pemeringkatan</span>
+              @endif
+            </div>
+          </div>
         </div>
-        <div class="li-detail-item">
-          <b>Alamat:</b> {{ $alamat !== '' ? $alamat : '-' }}
+
+        {{-- BODY --}}
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-borderless ink-table mb-0">
+              <tr>
+                <td class="ink-key"><i class="fa-regular fa-building me-2"></i>Nama Lembaga Inkubator</td>
+                <td class="ink-val">{{ $nama !== '' ? $nama : '-' }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-suitcase me-2"></i>Induk Lembaga Inkubator</td>
+                <td class="ink-val">{{ $induk }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-regular fa-user me-2"></i>Nama Pimpinan</td>
+                <td class="ink-val">{{ $pimpinan }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-regular fa-envelope me-2"></i>Email</td>
+                <td class="ink-val">{{ $email }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-phone me-2"></i>Nomor Telepon</td>
+                <td class="ink-val">{{ $telp }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-location-dot me-2"></i>Alamat Kantor</td>
+                <td class="ink-val">{!! $alamat ?: '-' !!}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-location me-2"></i>Kecamatan</td>
+                <td class="ink-val">{{ $kec }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-map-pin me-2"></i>Kabupaten</td>
+                <td class="ink-val">{{ $kab }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-map-marker me-2"></i>Provinsi</td>
+                <td class="ink-val">{{ $prov }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-solid fa-globe me-2"></i>Website</td>
+                <td class="ink-val">
+                  @if($web)
+                    <a href="{{ $websiteUrl }}" target="_blank" rel="noopener">{{ $web }}</a>
+                  @else
+                    -
+                  @endif
+                </td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-brands fa-facebook me-2"></i>Facebook</td>
+                <td class="ink-val">{{ $facebook }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-brands fa-instagram me-2"></i>Instagram</td>
+                <td class="ink-val">{{ $instagram }}</td>
+              </tr>
+              <tr>
+                <td class="ink-key"><i class="fa-brands fa-tiktok me-2"></i>Tiktok</td>
+                <td class="ink-val">{{ $tiktok }}</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div class="col-md-6 reveal d-6">
-        <div class="li-detail-item">
-          <b>Website:</b>
-          @if($web !== '')
-            <a href="{{ $websiteUrl }}" target="_blank" rel="noopener">
-              {{ $web }}
-            </a>
+      {{-- tombol modul (lu boleh keep dulu) --}}
+      <div class="d-flex flex-wrap gap-2 mt-3 ink-modal-tabs">
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalLegalitas">Legalitas</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalLaporan">Laporan</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSaranaPrasarana">Sarana Prasarana</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSpesialisasi">Spesialisasi Bidang Usaha</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalInkubasi">Model Inkubasi</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalRencanaStrategis">Rencana Strategis</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalGaleri">Galeri Kegiatan</button>
+      </div>
+    </div>
+
+    {{-- KOLOM KANAN --}}
+    <div class="col-md-6 col-lg-5 li-col-right">
+      <div class="card tenant-card">
+        <div class="tenant-card__head">
+          <h4 class="fw-bold m-0">List Tenant (<span>{{ isset($tenant) ? $tenant->count() : 0 }}</span>)</h4>
+          <form action="{{ route('inkubators.cari-tenant.detail',[$inkubator->id]) }}" method="GET" class="tenant-search" id="tenantSearchForm">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Cari"
+                name="keyword"
+                id="tenantSearch"
+                autocomplete="off"
+                value="{{ $keyword ?? old('keyword') }}"
+              >
+              <button class="btn btn-outline-dark" type="submit" aria-label="Cari">
+                <i class="fa-solid fa-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-body tenant-card__body">
+          @if(isset($tenant) && $tenant->count() > 0)
+            <ul class="tenant-lists" id="tenantList">
+            @foreach($tenant as $item)
+                <li class="tenant-item">
+                  <a href="{{ route('tenant', $item->id) }}" class="tenant-info">
+                    <img
+                      class="tenant-avatar"
+                      src="{{ ($item->foto_profil) ? \Storage::url($item->foto_profil) : '' }}"
+                      onerror="this.src='{{ asset('assets/images/brand/default-tenant.png') }}'"
+                      alt="Tenant"
+                    >
+                    <div>
+                      <div class="tenant-name">{{ $item->nama_usaha }}</div>
+                      <div class="tenant-addr">{!! $item->alamat ?: '-' !!}</div>
+                    </div>
+                  </a>
+                </li>
+              @endforeach
+            </ul>
           @else
-            -
+            <div class="p-5 text-center">
+              <p class="tenant-empty text-center m-0 py-4" id="tenantEmpty" style="display:none;">
+                Tidak ada Tenant dari lembaga inkubator.
+              </p>
+            </div>
           @endif
         </div>
-
-        <div class="li-detail-item">
-          <b>Kontak/Email:</b> {{ $kontak !== '' ? $kontak : '-' }}
-        </div>
       </div>
     </div>
 
   </div>
-</div>
+</section>
+
+{{-- ✅ PANGGIL 7 FILE MODAL (sesuai lokasi: resources/views/lembaga-inkubator/public/) --}}
+@include('lembaga-inkubator.public.legalitas')
+@include('lembaga-inkubator.public.laporan')
+@include('lembaga-inkubator.public.sarana-prasarana')
+@include('lembaga-inkubator.public.spesialisasi')
+@include('lembaga-inkubator.public.inkubasi')
+@include('lembaga-inkubator.public.rencana-strategis')
+@include('lembaga-inkubator.public.galeri')
+
 @endsection
+
+@push('scripts')
+  <script src="{{ asset('theme/plugins/slick/slick.js') }}"></script>
+  <script> $("#inkubator").addClass('active'); </script>
+  <script>
+    (function () {
+      const input = document.getElementById('tenantSearch');
+      const list  = document.getElementById('tenantList');
+      const empty = document.getElementById('tenantEmpty');
+      const form  = document.getElementById('tenantSearchForm');
+
+      if (!input || !list) return;
+
+      // Hindari submit kalau user pencet Enter (biar bener-bener live)
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+        });
+      }
+
+      const items = Array.from(list.querySelectorAll('.tenant-item'));
+
+      // util: normalisasi biar gampang match
+      const norm = (s) => (s || '')
+        .toString()
+        .toLowerCase()
+        .trim();
+
+      function applyFilter() {
+        const q = norm(input.value);
+
+        let shown = 0;
+        items.forEach(li => {
+          const name = norm(li.querySelector('.tenant-name')?.textContent);
+          const addr = norm(li.querySelector('.tenant-addr')?.textContent);
+
+          const ok = !q || name.includes(q) || addr.includes(q);
+          li.style.display = ok ? '' : 'none';
+          if (ok) shown++;
+        });
+
+        if (empty) empty.style.display = (shown === 0) ? '' : 'none';
+      }
+
+      // Live saat ngetik
+      input.addEventListener('input', applyFilter);
+
+      // Jika halaman kebuka dengan keyword lama, langsung apply
+      applyFilter();
+    })();
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const ids = [
+      'modalLegalitas',
+      'modalLaporan',
+      'modalSaranaPrasarana',
+      'modalSpesialisasi',
+      'modalInkubasi',
+      'modalRencanaStrategis',
+      'modalGaleri'
+    ];
+
+    ids.forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el && el.parentElement !== document.body) {
+        document.body.appendChild(el);
+      }
+    });
+  });
+</script>
+@endpush

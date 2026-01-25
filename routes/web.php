@@ -9,6 +9,7 @@ use App\Http\Controllers\TentangController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\LembagaInkubatorController;
 use App\Http\Controllers\Auth\NewVerifyController;
+use App\Http\Controllers\TenantController; // ✅ tambah ini
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleUserController;
 use App\Http\Controllers\WilayahController;
@@ -59,14 +60,26 @@ Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.de
 */
 Route::get('/mitra-kolaborator', [MitraController::class, 'index'])->name('mitra.index');
 
+// LIST INKUBATOR
 // Route public lembaga-inkubator (harus sebelum route protected dengan prefix yang sama)
 Route::get('/lembaga-inkubator', [LembagaInkubatorController::class, 'index'])->name('lembaga.index');
+
+// DETAIL INKUBATOR
 Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'])->name('lembaga.show');
 /*
 |--------------------------------------------------------------------------
 | AUTH & REGISTER ROUTES
 |--------------------------------------------------------------------------
 */
+
+// ✅ TAMBAHAN: search tenant di halaman detail inkubator (dipakai di show.blade.php versi live)
+Route::get('/lembaga-inkubator/{id}/cari-tenant', [LembagaInkubatorController::class, 'cariTenantDetail'])
+    ->name('inkubators.cari-tenant.detail');
+
+// ✅ TAMBAHAN: detail tenant (dipakai di list tenant)
+Route::get('/tenant/{id}', [TenantController::class, 'show'])->name('tenant');
+
+// AUTH
 Route::controller(AuthController::class)->group(function () {
     // Auth
     Route::get('/login', 'showLogin')->name('login');
