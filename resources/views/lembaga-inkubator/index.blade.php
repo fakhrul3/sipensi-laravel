@@ -99,23 +99,18 @@
 
 @push('scripts')
 <script>
-    /**
-     * PENTING:
-     * - rows HARUS FULL DATASET
-     * - filter awal dikontrol oleh JS (currentProvinsi)
-     */
-    window.LI_CONFIG = {
-    baseUrl: "{{ url('') }}",
-
-    // ✅ INI PENTING: base URL untuk halaman detail
-    // hasilnya nanti: /lembaga-inkubator/{id}
-    detailBase: "{{ url('/lembaga-inkubator') }}",
-
-    rows: @json(($allInkubators ?? $inkubators)->toArray()),
-    currentProvinsi: "{{ request('kode_provinsi') ?? '' }}"
+window.LI_CONFIG = {
+  baseUrl: "{{ url('') }}",
+  storageBase: "{{ asset('storage') }}",
+  detailBase: "{{ url('/lembaga-inkubator') }}",
+  rows: @json(($allInkubators ?? $inkubators)->toArray()),
+  currentProvinsi: "{{ request('kode_provinsi') ?? '' }}"
 };
 
+console.log("CEK ROW 0:", window.LI_CONFIG.rows?.[0]);
+console.log("CEK INWINOV:", window.LI_CONFIG.rows?.find(r => (r.nama_inkubator || "").includes("INWINOV")));
 </script>
+
 
 <script src="{{ asset('js/lembaga-inkubator.js') }}" defer></script>
 @endpush

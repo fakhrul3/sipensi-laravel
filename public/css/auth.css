@@ -482,3 +482,9 @@ html, body{
 .input-group .form-control:focus{
   border-right: 0;
 }
+/* =========================
+   REGISTER RIGHT PADDING
+========================= */
+.register-form-col .auth-register-wrapper{
+  padding-right: 50px; /* sesuaikan: 32 / 48 / 64 */
+}
