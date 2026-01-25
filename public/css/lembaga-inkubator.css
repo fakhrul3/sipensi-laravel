@@ -433,3 +433,265 @@ body.page-ready .li-table tbody tr{
   transform: translateY(0);
   box-shadow: 0 4px 10px rgba(34,70,108,.35);
 }
+
+/* ===============================
+   DETAIL INKUBATOR (LIVE-LIKE)
+================================ */
+
+/* Navbar lu nutup konten → kasih jarak aman */
+.li-detail-wrap{
+  padding-top: 110px; /* sesuaikan kalau navbar lu lebih tinggi/rendah */
+  margin-top: 0 !important;
+}
+
+/* Biar kolom kiri-kanan sejajar dari atas */
+.li-detail-wrap .row{
+  align-items: flex-start;
+}
+
+.li-detail-wrap .card{
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.08);
+  border-top-color: #4788AB;
+  box-shadow: 0 10px 24px rgba(16,24,40,.08);
+}
+
+
+/* header teal */
+.ink-card__top{
+  background: #4788AB;
+  color: #fff;
+  padding: 18px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  
+}
+
+.ink-logo{
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+  border: 3px solid rgba(255,255,255,.65);
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.ink-logo img{
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  object-fit: cover;
+  background: #fff;
+}
+
+.ink-title{
+  margin: 0;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.ink-badges{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* badges */
+.ink-badge{
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+}
+
+.ink-badge--ok{ background: rgba(25,135,84,.25); border-color: rgba(25,135,84,.35); }
+.ink-badge--warn{ background: rgba(255,193,7,.25); border-color: rgba(255,193,7,.35); }
+.ink-badge--info{ background: rgba(13,202,240,.25); border-color: rgba(13,202,240,.35); }
+.ink-badge--grade{ background: rgba(0,0,0,.18); border-color: rgba(255,255,255,.25); }
+
+/* tabel detail */
+.ink-table tr{
+  border-top: 1px solid rgba(0,0,0,.06);
+}
+.ink-table td{
+  padding: 12px 16px;
+  vertical-align: top;
+}
+.ink-key{
+  width: 38%;
+  color: rgba(0,0,0,.75);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ink-val{
+  color: rgba(0,0,0,.85);
+}
+
+.li-col-left{ 
+  position: relative;
+  padding-top: 32px; /* jarak aman dari navbar */ 
+}
+
+/* parent card yang punya ink-card__top */
+.li-col-left .card{
+  border-left: none;
+  border-right: none;
+}
+.li-col-right{
+  margin-top: 56px; /* coba 40–56px, 48px paling pas */
+}
+
+
+.btn-li-floating{
+  position: absolute;
+  top: -16px;
+  left: 16px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 16px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(0,0,0,.15);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(6px);
+
+  color: #0d3b44;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: 
+    background .25s ease,
+    color .25s ease,
+    box-shadow .25s ease,
+    transform .2s ease;
+}
+
+.btn-li-floating:hover,
+.btn-li-floating:focus{
+  background: #22466C;
+  color: #ffffff;
+
+  border-color: transparent;
+  box-shadow: 0 10px 24px rgba(34,70,108,.35);
+
+  transform: translateY(-1px);
+}
+
+
+/* === Tabs tombol modal (biar aktif kayak navbar) === */
+.ink-modal-tabs .btn{
+  border-radius: 999px;
+  font-weight: 700;
+  transition: 
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .15s ease;
+}
+
+.ink-modal-tabs .btn:hover,
+.ink-modal-tabs .btn.is-active{
+  transform: translateY(-1px);
+  background-color: #22466C;
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 10px 24px rgba(34,70,108,.35);
+}
+
+
+/* ===============================
+   TENANT CARD
+================================ */
+.tenant-card__head{
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tenant-search{
+  min-width: 220px;
+}
+
+.tenant-card__body{
+  padding: 0;
+  max-height: 520px;
+  overflow: auto;
+}
+
+/* hilangin bullet */
+.tenant-lists{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* item tenant */
+.tenant-item{
+  padding: 0;
+  margin: 0;
+}
+
+.tenant-avatar{
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;      /* biar kayak card kecil */
+  object-fit: cover;
+  flex: 0 0 56px;           /* jangan melebar */
+  background: #f1f5f9;
+}
+
+.tenant-info{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.tenant-name{
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 4px;
+  color: #0f172a;
+  text-transform: uppercase; /* kalau mau kayak di foto 2, optional */
+}
+
+.tenant-addr{
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.35;
+  display: -webkit-box;
+  line-clamp: 2;      /* alamat max 2 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* === ARROW DI MODAL DETAIL TENANT (biar aktif kayak navbar) === */
+#produkGaleriModal .carousel-control-prev-icon,
+#produkGaleriModal .carousel-control-next-icon {
+  filter: none;
+  background-color: #22466C;
+  border-radius: 999px;
+  padding: 18px;
+  background-size: 60% 60%;
+}
