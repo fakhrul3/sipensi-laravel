@@ -129,7 +129,7 @@
     }
 
     #inkubatorTable {
-        min-width: 1200px; /* Minimum width untuk semua kolom */
+        min-width: 1400px; /* Minimum width untuk semua kolom */
     }
 
     table.dataTable {
@@ -269,14 +269,12 @@
         <table id="inkubatorTable" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>NO</th>
-                    <th>ACCOUNT</th>
-                    <th>TANDA DAFTAR</th>
-                    <th>JENIS LEMBAGA INKUBATOR</th>
-                    <th>NAMA LEMBAGA INKUBATOR</th>
-                    <th>LEMBAGA INDUK INKUBATOR</th>
-                    <th>NAMA KETUA LEMBAGA INKUBATOR</th>
-                    <th>NO KONTAK</th>
+                    <th>NO <i class="fas fa-sort"></i></th>
+                    <th>NO TANDA DAFTAR <i class="fas fa-sort"></i></th>
+                    <th>JENIS LEMBAGA INKUBATOR <i class="fas fa-sort"></i></th>
+                    <th>INDUK LEMBAGA INKUBATOR <i class="fas fa-sort"></i></th>
+                    <th>NAMA PIMPINAN <i class="fas fa-sort"></i></th>
+                    <th>NO KONTAK <i class="fas fa-sort"></i></th>
                     <th>EMAIL</th>
                     <th>STATUS <i class="fas fa-sort"></i></th>
                     <th>STATUS LEGAL DOKUMEN <i class="fas fa-sort"></i></th>
@@ -287,27 +285,67 @@
             <tbody>
                 @forelse($inkubators as $index => $inkubator)
                     <tr>
-                        <td>{{ $inkubator->Nomor ?? ($index + 1) }}</td>
-                        <td>{{ $inkubator->Account ?? '-' }}</td>
-                        <td>{{ $inkubator->Tanda_Daftar ?? '-' }}</td>
-                        <td>{{ $inkubator->Jenis_Lembaga_Inkubator ?? '-' }}</td>
-                        <td>{{ $inkubator->Nama_Lembaga_Inkubator ?? '-' }}</td>
-                        <td>{{ $inkubator->Lembaga_Induk_Inkubator ?? '-' }}</td>
-                        <td>{{ $inkubator->Nama_Ketua_Lembaga_Inkubator ?? '-' }}</td>
-                        <td>{{ $inkubator->No_Kontak ?? '-' }}</td>
-                        <td>{{ $inkubator->Email ?? '-' }}</td>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $inkubator->no_tanda_daftar ?? '-' }}</td>
                         <td>
-                            @if($inkubator->is_verify == 1 || $inkubator->is_verify == 2)
+                            @php
+                                $jenisMap = [
+                                    1 => 'Pemerintah Pusat',
+                                    2 => 'Pemerintah Daerah',
+                                    3 => 'Lembaga Pendidikan',
+                                    4 => 'Badan Usaha',
+                                    5 => 'Masyarakat'
+                                ];
+                                $jenisLabel = $jenisMap[$inkubator->jenis_inkubator ?? 0] ?? '-';
+                            @endphp
+                            {{ $jenisLabel }}
+                        </td>
+                        <td>{{ $inkubator->induk_inkubator ?? '-' }}</td>
+                        <td>{{ $inkubator->nama_pimpinan ?? '-' }}</td>
+                        <td>{{ $inkubator->no_kontak ?? '-' }}</td>
+                        <td>{{ $inkubator->email ?? '-' }}</td>
+                        <td>
+                            @php
+                                $isVerified = ($inkubator->is_verify == 1 || $inkubator->is_verify == 2);
+                            @endphp
+                            @if($isVerified)
                                 <span class="badge-status badge-status-verified">Terverifikasi</span>
                             @else
-                                <span class="badge-status badge-status-pending">Verifikasi Email</span>
+                                <span class="badge-status badge-status-pending">Belum Terverifikasi</span>
                             @endif
                         </td>
                         <td>
                             @php
-                                $hasLegalitas = !empty($inkubator->path_legalitas) || !empty($inkubator->Tanda_Daftar);
+                                // Cek semua path yang diperlukan
+                                $requiredPaths = [
+                                    'path_kantor',
+                                    'path_ruang_usaha',
+                                    'path_ruang_rapat',
+                                    'path_ruang_pelatihan',
+                                    'path_ruang_komunikasi',
+                                    'path_legalitas',
+                                    'path_spesialisasi_inkubasi',
+                                    'path_model_inkubasi',
+                                    'path_rencana_strategis'
+                                ];
+                                $isLegalComplete = true;
+                                foreach ($requiredPaths as $path) {
+                                    $value = $inkubator->$path ?? null;
+                                    if (empty($value)) {
+                                        $isLegalComplete = false;
+                                        break;
+                                    }
+                                    // Jika JSON array, cek apakah ada isi
+                                    if (strpos($value, '[') === 0) {
+                                        $paths = json_decode($value, true);
+                                        if (!is_array($paths) || empty($paths)) {
+                                            $isLegalComplete = false;
+                                            break;
+                                        }
+                                    }
+                                }
                             @endphp
-                            @if($hasLegalitas)
+                            @if($isLegalComplete)
                                 <span class="badge-status badge-status-complete">Lengkap</span>
                             @else
                                 <span class="badge-status badge-status-incomplete">Belum Lengkap</span>
@@ -315,33 +353,77 @@
                         </td>
                         <td>
                             @php
-                                $peringkat = $inkubator->Peringkat ?? null;
+                                // Prioritas: peringkat dari tabel pemeringkatan, jika tidak ada gunakan pemeringkatan_rank dari inkubator
+                                $peringkat = $inkubator->peringkat ?? $inkubator->pemeringkatan_rank ?? null;
+                                $pemeringkatanStatus = $inkubator->pemeringkatan_status ?? null;
                             @endphp
-                            @if(!empty($peringkat) && $peringkat != '-')
-                                @if(in_array(strtoupper($peringkat), ['A', 'B', 'C', 'D']))
-                                    <span class="badge-ranking badge-ranking-grade">{{ strtoupper($peringkat) }}</span>
-                                @else
-                                    <span class="badge-ranking badge-ranking-blue">Belum Dilakukan Pemeringkatan</span>
-                                @endif
+                            @if(!empty($peringkat) && in_array(strtoupper($peringkat), ['A', 'B', 'C', 'D']))
+                                <span class="badge-ranking badge-ranking-grade">{{ strtoupper($peringkat) }}</span>
+                            @elseif($pemeringkatanStatus == 1)
+                                <span class="badge-ranking badge-ranking-blue">Belum Dilakukan Pemeringkatan</span>
                             @else
                                 <span class="badge-ranking badge-ranking-orange">Belum Mengajukan Pemeringkatan</span>
                             @endif
                         </td>
                         <td>
                             <div class="action-buttons">
-                                @if($inkubator->is_verify == 1 || $inkubator->is_verify == 2)
-                                    <button type="button" class="btn-action btn-action-view" title="View">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
+                                @php
+                                    $isVerified = ($inkubator->is_verify == 1 || $inkubator->is_verify == 2);
+                                    $requiredPaths = [
+                                        'path_kantor',
+                                        'path_ruang_usaha',
+                                        'path_ruang_rapat',
+                                        'path_ruang_pelatihan',
+                                        'path_ruang_komunikasi',
+                                        'path_legalitas',
+                                        'path_spesialisasi_inkubasi',
+                                        'path_model_inkubasi',
+                                        'path_rencana_strategis'
+                                    ];
+                                    $isLegalComplete = true;
+                                    foreach ($requiredPaths as $path) {
+                                        $value = $inkubator->$path ?? null;
+                                        if (empty($value)) {
+                                            $isLegalComplete = false;
+                                            break;
+                                        }
+                                        if (strpos($value, '[') === 0) {
+                                            $paths = json_decode($value, true);
+                                            if (!is_array($paths) || empty($paths)) {
+                                                $isLegalComplete = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $canDownload = $isVerified && $isLegalComplete;
+                                @endphp
+                                
+                                @if($canDownload)
+                                    <a href="{{ route('lembaga-inkubator.download-sertifikat', $inkubator->id) }}" 
+                                       class="btn-action btn-action-view" 
+                                       title="Download Sertifikat"
+                                       target="_blank"
+                                       download>
+                                        <i class="fas fa-download"></i>
+                                    </a>
                                 @else
-                                    <button type="button" class="btn-action btn-action-approve" title="Approve">
+                                    <button type="button" 
+                                            class="btn-action btn-action-approve" 
+                                            title="Verifikasi Inkubator"
+                                            onclick="approveInkubator({{ $inkubator->id }})">
                                         <i class="fas fa-thumbs-up"></i>
                                     </button>
                                 @endif
-                                <button type="button" class="btn-action btn-action-edit" title="Edit">
+                                
+                                <a href="{{ route('lembaga-inkubator.show', $inkubator->id) }}" 
+                                   class="btn-action btn-action-edit" 
+                                   title="Detail Lembaga Inkubator">
                                     <i class="fas fa-file-alt"></i>
-                                </button>
-                                <button type="button" class="btn-action btn-action-delete" title="Delete">
+                                </a>
+                                <button type="button" 
+                                        class="btn-action btn-action-delete" 
+                                        title="Hapus Inkubator"
+                                        onclick="deleteInkubator({{ $inkubator->id }})">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -390,5 +472,65 @@ $(document).ready(function() {
         }
     });
 });
+
+// Function untuk approve inkubator
+function approveInkubator(id) {
+    if (!confirm('Apakah Anda yakin ingin memverifikasi inkubator ini?')) {
+        return;
+    }
+
+    $.ajax({
+        url: '{{ url("admin/lembaga-inkubator/approve") }}/' + id,
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('Inkubator berhasil diverifikasi');
+                location.reload();
+            } else {
+                alert('Gagal memverifikasi: ' + (response.message || 'Terjadi kesalahan'));
+            }
+        },
+        error: function(xhr) {
+            var message = 'Gagal memverifikasi';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+            }
+            alert(message);
+        }
+    });
+}
+
+// Function untuk delete inkubator
+function deleteInkubator(id) {
+    if (!confirm('Apakah Anda yakin ingin menghapus data inkubator ini?')) {
+        return;
+    }
+
+    $.ajax({
+        url: '{{ url("admin/lembaga-inkubator") }}/' + id,
+        type: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('Data inkubator berhasil dihapus');
+                location.reload();
+            } else {
+                alert('Gagal menghapus data: ' + (response.message || 'Terjadi kesalahan'));
+            }
+        },
+        error: function(xhr) {
+            var message = 'Gagal menghapus data';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+            }
+            alert(message);
+        }
+    });
+}
 </script>
 @endpush

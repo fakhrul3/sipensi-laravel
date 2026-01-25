@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response as ResponseFacade;
 use App\Models\User;
 use App\Exports\AdminExport;
 use App\Exports\LembagaInkubatorExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RoleUserController extends Controller
 {
@@ -220,49 +222,70 @@ class RoleUserController extends Controller
 
     /**
      * Menampilkan daftar Lembaga Inkubator (Role User)
+     * Query disesuaikan dengan web asli: join users dengan filter is_admin=0 dan is_verify=2
      */
     public function lembagaInkubatorIndex(Request $request)
     {
         try {
-            // Query sesuai dengan SQL yang diberikan user
+            // Query sesuai dengan web asli (HomeController.php)
+            // Join users dengan filter is_admin=0 (tampilkan semua, termasuk yang belum terverifikasi)
             $inkubators = cache()->remember('lembaga_inkubator_list', 10, function () {
                 try {
-                    return DB::table('inkubator')
-                        ->join('provinsi', 'inkubator.provinsi_id', '=', 'provinsi.kode_provinsi')
-                        ->leftJoin('pemeringkatan as p', function($join) {
-                            $join->on('p.id', '=', DB::raw('(
-                                SELECT p2.id
-                                FROM pemeringkatan p2
-                                WHERE p2.inkubator_id = inkubator.id
-                                ORDER BY p2.tanggal_sk DESC, p2.id DESC
-                                LIMIT 1
-                            )'));
+                    // Query sesuai dengan HomeController.php web asli
+                    // Hapus filter is_verify=2 untuk menampilkan semua inkubator
+                    $inkubators = DB::table('inkubator')
+                        ->join('users', function($join) {
+                            $join->on('users.id', '=', 'inkubator.user_id')
+                                ->where('users.is_admin', 0);
                         })
-                        ->leftJoin('users as u', 'inkubator.user_id', '=', 'u.id')
                         ->select(
-                            'inkubator.id as Nomor',
-                            'inkubator.user_id as Account',
-                            'inkubator.no_tanda_daftar as Tanda_Daftar',
-                            'inkubator.jenis_inkubator as Jenis_Lembaga_Inkubator',
-                            'inkubator.nama_inkubator as Nama_Lembaga_Inkubator',
-                            'inkubator.induk_inkubator as Lembaga_Induk_Inkubator',
-                            'inkubator.nama_pimpinan as Nama_Ketua_Lembaga_Inkubator',
-                            'inkubator.no_kontak as No_Kontak',
-                            'inkubator.email as Email',
-                            'p.grade as Peringkat',
-                            'inkubator.alamat_kantor as Alamat_Kantor',
+                            'inkubator.id',
+                            'inkubator.no_tanda_daftar',
+                            'inkubator.jenis_inkubator',
+                            'inkubator.nama_inkubator',
+                            'inkubator.induk_inkubator',
+                            'inkubator.nama_pimpinan',
+                            'inkubator.no_kontak',
+                            'inkubator.email',
+                            'inkubator.alamat_kantor',
+                            'inkubator.path_kantor',
+                            'inkubator.path_ruang_usaha',
+                            'inkubator.path_ruang_rapat',
+                            'inkubator.path_ruang_pelatihan',
+                            'inkubator.path_ruang_komunikasi',
                             'inkubator.path_legalitas',
-                            'inkubator.created_at as Tanggal_Daftar',
-                            'inkubator.updated_at as Tanggal_Update',
-                            'provinsi.name as Provinsi',
-                            'p.tanggal_sk as Tanggal_SK_Terbit',
-                            'u.username',
-                            'u.password',
-                            'u.is_verify'
+                            'inkubator.path_spesialisasi_inkubasi',
+                            'inkubator.path_model_inkubasi',
+                            'inkubator.path_rencana_strategis',
+                            'inkubator.pemeringkatan_rank',
+                            'users.is_verify'
                         )
-                        ->whereNotNull('inkubator.no_tanda_daftar')
                         ->orderBy('inkubator.id', 'asc')
                         ->get();
+
+                    // Ambil data pemeringkatan terbaru untuk setiap inkubator
+                    if ($inkubators->isNotEmpty()) {
+                        $pemeringkatanMap = DB::table('pemeringkatan')
+                            ->select('inkubator_id', 'grade', 'status')
+                            ->whereIn('inkubator_id', $inkubators->pluck('id'))
+                            ->orderBy('tanggal_sk', 'desc')
+                            ->orderBy('id', 'desc')
+                            ->get()
+                            ->groupBy('inkubator_id')
+                            ->map(function($items) {
+                                return $items->first(); // Ambil yang terbaru
+                            });
+
+                        // Gabungkan data pemeringkatan ke inkubator
+                        return $inkubators->map(function($inkubator) use ($pemeringkatanMap) {
+                            $pemeringkatan = $pemeringkatanMap->get($inkubator->id);
+                            $inkubator->peringkat = $pemeringkatan->grade ?? null;
+                            $inkubator->pemeringkatan_status = $pemeringkatan->status ?? null;
+                            return $inkubator;
+                        });
+                    }
+
+                    return $inkubators;
                 } catch (\Exception $e) {
                     \Log::error('Lembaga Inkubator List Error: ' . $e->getMessage());
                     \Log::error('Stack Trace: ' . $e->getTraceAsString());
@@ -277,6 +300,279 @@ class RoleUserController extends Controller
             \Log::error('RoleUser Lembaga Inkubator Index Error: ' . $e->getMessage());
             return view('role-user.lembaga-inkubator.index', ['inkubators' => collect()]);
         }
+    }
+
+    /**
+     * Approve verifikasi inkubator
+     */
+    public function approveInkubator($id)
+    {
+        try {
+            $inkubator = DB::table('inkubator')->where('id', $id)->first();
+            
+            if (!$inkubator) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data inkubator tidak ditemukan'
+                ], 404);
+            }
+
+            // Update is_verify di tabel users menjadi 2 (terverifikasi)
+            $user = DB::table('users')->where('id', $inkubator->user_id)->first();
+            if ($user) {
+                DB::table('users')
+                    ->where('id', $inkubator->user_id)
+                    ->update(['is_verify' => 2]);
+            }
+
+            // Clear cache
+            cache()->forget('lembaga_inkubator_list');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inkubator berhasil diverifikasi'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Approve Inkubator Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memverifikasi inkubator: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Download sertifikat inkubator (PDF)
+     */
+    public function downloadSertifikat($id)
+    {
+        try {
+            \Log::info('Download Sertifikat Request - ID: ' . $id);
+            
+            $inkubator = DB::table('inkubator')
+                ->join('users', 'users.id', '=', 'inkubator.user_id')
+                ->select('inkubator.*', 'users.is_verify')
+                ->where('inkubator.id', $id)
+                ->first();
+            
+            if (!$inkubator) {
+                \Log::warning('Inkubator not found - ID: ' . $id);
+                return redirect()->back()->with('error', 'Data inkubator tidak ditemukan');
+            }
+
+            // Cek apakah sudah terverifikasi dan legal dokumen lengkap
+            $isVerified = ($inkubator->is_verify == 1 || $inkubator->is_verify == 2);
+            $isLegalComplete = $this->checkLegalComplete($inkubator);
+
+            \Log::info('Verification Status - Verified: ' . ($isVerified ? 'Yes' : 'No') . ', Legal Complete: ' . ($isLegalComplete ? 'Yes' : 'No'));
+
+            if (!$isVerified || !$isLegalComplete) {
+                \Log::warning('Download blocked - Verified: ' . ($isVerified ? 'Yes' : 'No') . ', Legal Complete: ' . ($isLegalComplete ? 'Yes' : 'No'));
+                return redirect()->back()->with('error', 'Sertifikat hanya dapat diunduh jika status terverifikasi dan dokumen legal lengkap');
+            }
+
+            // Generate nama file
+            $fileName = 'Sertifikat_SIPENSI-' . str_replace(' ', '_', $inkubator->nama_inkubator ?? 'Inkubator') . '.pdf';
+            
+            \Log::info('Generating PDF - File: ' . $fileName);
+            
+            // Generate PDF menggunakan dompdf
+            \Log::info('Loading view for PDF generation');
+            
+            // Test render view terlebih dahulu untuk memastikan tidak ada error
+            try {
+                $html = view('role-user.lembaga-inkubator.sertifikat', compact('inkubator'))->render();
+                \Log::info('View rendered successfully, HTML length: ' . strlen($html));
+            } catch (\Exception $viewError) {
+                \Log::error('View render error: ' . $viewError->getMessage());
+                \Log::error('View Stack Trace: ' . $viewError->getTraceAsString());
+                return redirect()->back()->with('error', 'Gagal memuat template sertifikat: ' . $viewError->getMessage());
+            }
+            
+            // Generate PDF
+            try {
+                $pdf = Pdf::loadView('role-user.lembaga-inkubator.sertifikat', compact('inkubator'));
+                $pdf->setPaper('a4', 'landscape');
+                
+                // Konfigurasi dompdf untuk handle gambar dengan benar
+                $pdf->setOption('enable-local-file-access', true);
+                $pdf->setOption('isHtml5ParserEnabled', true);
+                $pdf->setOption('isRemoteEnabled', true);
+                $pdf->setOption('chroot', public_path());
+                $pdf->setOption('defaultFont', 'Arial');
+                $pdf->setOption('isPhpEnabled', true);
+                $pdf->setOption('debugKeepTemp', false);
+                
+                \Log::info('PDF generated successfully, returning download response');
+                
+                // Gunakan method download() untuk memastikan response PDF yang benar
+                return $pdf->download($fileName);
+            } catch (\Exception $pdfError) {
+                \Log::error('PDF Generation Error: ' . $pdfError->getMessage());
+                \Log::error('PDF Stack Trace: ' . $pdfError->getTraceAsString());
+                
+                // Cek apakah error terkait dengan gambar
+                if (strpos($pdfError->getMessage(), 'image') !== false || strpos($pdfError->getMessage(), 'Image') !== false) {
+                    return redirect()->back()->with('error', 'Gagal menghasilkan PDF: File gambar tidak ditemukan atau tidak dapat dibaca. Pastikan file gambar background dan TTE ada di folder public/img/sertifikat/ atau public/assets/images/');
+                }
+                
+                return redirect()->back()->with('error', 'Gagal menghasilkan PDF: ' . $pdfError->getMessage());
+            }
+        } catch (\Exception $e) {
+            \Log::error('Download Sertifikat Error: ' . $e->getMessage());
+            \Log::error('Stack Trace: ' . $e->getTraceAsString());
+            return redirect()->back()->with('error', 'Gagal mengunduh sertifikat: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Check apakah semua dokumen legal sudah lengkap
+     */
+    private function checkLegalComplete($inkubator)
+    {
+        $requiredPaths = [
+            'path_kantor',
+            'path_ruang_usaha',
+            'path_ruang_rapat',
+            'path_ruang_pelatihan',
+            'path_ruang_komunikasi',
+            'path_legalitas',
+            'path_spesialisasi_inkubasi',
+            'path_model_inkubasi',
+            'path_rencana_strategis'
+        ];
+
+        foreach ($requiredPaths as $path) {
+            $value = $inkubator->$path ?? null;
+            
+            // Cek jika null atau empty
+            if (empty($value)) {
+                \Log::info("Legal check failed - Missing: {$path}");
+                return false;
+            }
+
+            // Jika JSON array, cek apakah ada isi
+            if (strpos($value, '[') === 0) {
+                $paths = json_decode($value, true);
+                if (!is_array($paths) || empty($paths)) {
+                    \Log::info("Legal check failed - Empty array: {$path}");
+                    return false;
+                }
+            }
+        }
+
+        \Log::info("Legal check passed - All documents complete");
+        return true;
+    }
+
+    /**
+     * Show detail lembaga inkubator
+     */
+    public function lembagaInkubatorShow($id)
+    {
+        try {
+            $inkubator = DB::table('inkubator')
+                ->join('users', 'users.id', '=', 'inkubator.user_id')
+                ->leftJoin('provinsi', 'provinsi.kode_provinsi', '=', 'inkubator.kode_provinsi')
+                ->select(
+                    'inkubator.*',
+                    'users.username',
+                    'users.is_verify',
+                    'provinsi.name as nama_provinsi'
+                )
+                ->where('inkubator.id', $id)
+                ->first();
+
+            if (!$inkubator) {
+                return redirect()->route('lembaga-inkubator.index')->with('error', 'Data inkubator tidak ditemukan');
+            }
+
+            // Mapping jenis inkubator
+            $jenisMap = [
+                1 => 'Pemerintah Pusat',
+                2 => 'Pemerintah Daerah',
+                3 => 'Lembaga Pendidikan',
+                4 => 'Badan Usaha',
+                5 => 'Masyarakat'
+            ];
+
+            return view('role-user.lembaga-inkubator.show', compact('inkubator', 'jenisMap'));
+        } catch (\Exception $e) {
+            \Log::error('Lembaga Inkubator Show Error: ' . $e->getMessage());
+            return redirect()->route('lembaga-inkubator.index')->with('error', 'Gagal memuat data inkubator');
+        }
+    }
+
+    /**
+     * Delete lembaga inkubator
+     */
+    public function lembagaInkubatorDestroy($id)
+    {
+        try {
+            $inkubator = DB::table('inkubator')->where('id', $id)->first();
+            
+            if (!$inkubator) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data inkubator tidak ditemukan'
+                ], 404);
+            }
+
+            // Hapus data inkubator
+            $deleted = DB::table('inkubator')->where('id', $id)->delete();
+            
+            if ($deleted) {
+                // Clear cache
+                cache()->forget('lembaga_inkubator_list');
+                
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data inkubator berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menghapus data inkubator'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Lembaga Inkubator Destroy Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus data inkubator: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Helper untuk mendapatkan path file
+     */
+    private function getFilePath($path)
+    {
+        // Normalisasi path - hapus 'public/' jika ada
+        $cleanPath = ltrim(str_replace('public/', '', $path), '/');
+        
+        // Cek berbagai kemungkinan lokasi file
+        $possiblePaths = [
+            public_path('file_legalitas/' . basename($cleanPath)),
+            public_path('storage/file_legalitas/' . basename($cleanPath)),
+            storage_path('app/public/file_legalitas/' . basename($cleanPath)),
+            storage_path('app/file_legalitas/' . basename($cleanPath)),
+            public_path($cleanPath),
+            storage_path('app/public/' . basename($cleanPath)),
+            storage_path('app/' . basename($cleanPath)),
+        ];
+
+        foreach ($possiblePaths as $possiblePath) {
+            if (file_exists($possiblePath)) {
+                \Log::info('File found at: ' . $possiblePath);
+                return $possiblePath;
+            }
+        }
+
+        \Log::warning('File not found for path: ' . $path);
+        // Jika tidak ditemukan, return path pertama sebagai fallback
+        return $possiblePaths[0];
     }
 
     /**

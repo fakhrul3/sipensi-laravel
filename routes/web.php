@@ -71,6 +71,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin/lembaga-inkubator')->name('lembaga-inkubator.')->group(function () {
         Route::get('/', [RoleUserController::class, 'lembagaInkubatorIndex'])->name('index');
         Route::get('/export/{format}', [RoleUserController::class, 'lembagaInkubatorExport'])->name('export');
+        Route::post('/approve/{id}', [RoleUserController::class, 'approveInkubator'])->name('approve');
+        Route::get('/download-sertifikat/{id}', [RoleUserController::class, 'downloadSertifikat'])->name('download-sertifikat');
+        Route::get('/detail/{id}', [RoleUserController::class, 'lembagaInkubatorShow'])->name('show');
+        Route::delete('/{id}', [RoleUserController::class, 'lembagaInkubatorDestroy'])->name('destroy');
     });
     
     // LAPORAN (Admin)
