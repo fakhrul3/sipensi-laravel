@@ -123,7 +123,7 @@
 @include('partials.galeri', ['galleryItems' => $galleryItems ?? []])
 
 {{-- ================= BERITA ================= --}}
-@include('partials.berita')
+@include('partials.berita', ['berita' => $berita ?? collect()])
 
 
 
@@ -135,7 +135,7 @@
 @push('scripts')
   {{-- Preload Leaflet untuk performa lebih baik --}}
   <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" as="script">
-  
+
   {{-- CONFIG DATA UNTUK MAP - Inline karena kecil dan diperlukan segera --}}
   <script>
     window.SEBARAN_INKUBATOR_DATA = @json($sebaranInkubator ?? []);

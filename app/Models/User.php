@@ -22,6 +22,22 @@ class User extends Authenticatable
         'verify_token', 
     ];
 
+        'verify_token',
+    ];
+
+    /**
+     * Find user by username for authentication
+     */
+    public function findForPassport($username)
+    {
+        return $this->where('username', $username)->first();
+    }
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
     protected $hidden = [
         'password',
         'remember_token',

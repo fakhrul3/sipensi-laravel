@@ -1,0 +1,394 @@
+@extends('layouts.admin')
+
+@section('title', 'Daftar Inkubator')
+@section('page-title', 'Daftar Inkubator')
+
+@section('breadcrumb')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Daftar Inkubator</li>
+</ol>
+@endsection
+
+@push('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<style>
+    .admin-table-container {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 10px 20px rgba(200, 208, 216, 0.3);
+        padding: 20px;
+    }
+
+    .admin-table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .admin-table-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    .admin-table-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .admin-btn-export {
+        background-color: #17a2b8;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .admin-btn-export:hover {
+        background-color: #138496;
+        color: #fff;
+    }
+
+    .admin-btn-export-xlsx {
+        background-color: #28a745;
+    }
+
+    .admin-btn-export-xlsx:hover {
+        background-color: #218838;
+    }
+
+    table.dataTable {
+        width: 100% !important;
+        border-collapse: collapse;
+    }
+
+    table.dataTable thead th {
+        background-color: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+        padding: 12px;
+        text-align: left;
+        border-bottom: 2px solid #dee2e6;
+        font-size: 14px;
+    }
+
+    table.dataTable tbody td {
+        padding: 12px;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 14px;
+        color: #495057;
+    }
+
+    table.dataTable tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .password-masked {
+        font-family: monospace;
+        letter-spacing: 2px;
+    }
+
+    .verifikasi-check {
+        color: #28a745;
+        font-size: 18px;
+    }
+
+    .dataTables_length {
+        margin-bottom: 15px;
+    }
+
+    .dataTables_length select {
+        padding: 5px 10px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin: 0 5px;
+    }
+
+    .dataTables_filter {
+        margin-bottom: 15px;
+    }
+
+    /* Horizontal Scroll untuk tabel */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #inkubatorTable {
+        min-width: 1200px; /* Minimum width untuk semua kolom */
+    }
+
+    table.dataTable {
+        width: 100% !important;
+    }
+
+    /* Badge Status Styles (Pill-shaped buttons) */
+    .badge-status {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .badge-status-verified {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-status-pending {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .badge-status-complete {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-status-incomplete {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    /* Badge Ranking Styles */
+    .badge-ranking {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .badge-ranking-grade {
+        background-color: #ffc107;
+        color: #000;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .badge-ranking-orange {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .badge-ranking-blue {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+
+    .btn-action {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 14px;
+    }
+
+    .btn-action:hover {
+        background-color: #5a6268;
+        color: #fff;
+    }
+
+    .btn-action-view {
+        background-color: #6c757d;
+    }
+
+    .btn-action-approve {
+        background-color: #6c757d;
+    }
+
+    .btn-action-edit {
+        background-color: #6c757d;
+    }
+
+    .btn-action-delete {
+        background-color: #6c757d;
+    }
+
+    /* Sorting arrows in header */
+    table.dataTable thead th {
+        position: relative;
+    }
+
+    table.dataTable thead th .fas.fa-sort {
+        margin-left: 5px;
+        opacity: 0.5;
+        font-size: 10px;
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="admin-table-container">
+    <div class="admin-table-header">
+        <h5 class="admin-table-title">Daftar Inkubator</h5>
+        <div class="admin-table-actions">
+            <a href="{{ route('lembaga-inkubator.export', ['format' => 'csv']) }}" class="admin-btn-export admin-btn-export-csv">
+                <i class="fas fa-file-csv"></i>
+                Export CSV
+            </a>
+            <a href="{{ route('lembaga-inkubator.export', ['format' => 'xlsx']) }}" class="admin-btn-export admin-btn-export-xlsx">
+                <i class="fas fa-file-excel"></i>
+                Export XLSX
+            </a>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="inkubatorTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>ACCOUNT</th>
+                    <th>TANDA DAFTAR</th>
+                    <th>JENIS LEMBAGA INKUBATOR</th>
+                    <th>NAMA LEMBAGA INKUBATOR</th>
+                    <th>LEMBAGA INDUK INKUBATOR</th>
+                    <th>NAMA KETUA LEMBAGA INKUBATOR</th>
+                    <th>NO KONTAK</th>
+                    <th>EMAIL</th>
+                    <th>STATUS <i class="fas fa-sort"></i></th>
+                    <th>STATUS LEGAL DOKUMEN <i class="fas fa-sort"></i></th>
+                    <th>PERINGKAT <i class="fas fa-sort"></i></th>
+                    <th>AKSI</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($inkubators as $index => $inkubator)
+                    <tr>
+                        <td>{{ $inkubator->Nomor ?? ($index + 1) }}</td>
+                        <td>{{ $inkubator->Account ?? '-' }}</td>
+                        <td>{{ $inkubator->Tanda_Daftar ?? '-' }}</td>
+                        <td>{{ $inkubator->Jenis_Lembaga_Inkubator ?? '-' }}</td>
+                        <td>{{ $inkubator->Nama_Lembaga_Inkubator ?? '-' }}</td>
+                        <td>{{ $inkubator->Lembaga_Induk_Inkubator ?? '-' }}</td>
+                        <td>{{ $inkubator->Nama_Ketua_Lembaga_Inkubator ?? '-' }}</td>
+                        <td>{{ $inkubator->No_Kontak ?? '-' }}</td>
+                        <td>{{ $inkubator->Email ?? '-' }}</td>
+                        <td>
+                            @if($inkubator->is_verify == 1 || $inkubator->is_verify == 2)
+                                <span class="badge-status badge-status-verified">Terverifikasi</span>
+                            @else
+                                <span class="badge-status badge-status-pending">Verifikasi Email</span>
+                            @endif
+                        </td>
+                        <td>
+                            @php
+                                $hasLegalitas = !empty($inkubator->path_legalitas) || !empty($inkubator->Tanda_Daftar);
+                            @endphp
+                            @if($hasLegalitas)
+                                <span class="badge-status badge-status-complete">Lengkap</span>
+                            @else
+                                <span class="badge-status badge-status-incomplete">Belum Lengkap</span>
+                            @endif
+                        </td>
+                        <td>
+                            @php
+                                $peringkat = $inkubator->Peringkat ?? null;
+                            @endphp
+                            @if(!empty($peringkat) && $peringkat != '-')
+                                @if(in_array(strtoupper($peringkat), ['A', 'B', 'C', 'D']))
+                                    <span class="badge-ranking badge-ranking-grade">{{ strtoupper($peringkat) }}</span>
+                                @else
+                                    <span class="badge-ranking badge-ranking-blue">Belum Dilakukan Pemeringkatan</span>
+                                @endif
+                            @else
+                                <span class="badge-ranking badge-ranking-orange">Belum Mengajukan Pemeringkatan</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                @if($inkubator->is_verify == 1 || $inkubator->is_verify == 2)
+                                    <button type="button" class="btn-action btn-action-view" title="View">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                @else
+                                    <button type="button" class="btn-action btn-action-approve" title="Approve">
+                                        <i class="fas fa-thumbs-up"></i>
+                                    </button>
+                                @endif
+                                <button type="button" class="btn-action btn-action-edit" title="Edit">
+                                    <i class="fas fa-file-alt"></i>
+                                </button>
+                                <button type="button" class="btn-action btn-action-delete" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="11" class="text-center">Tidak ada data</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#inkubatorTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [[10], [10]], // Hanya 10 entries, tidak ada opsi All
+        order: [[0, 'asc']],
+        paging: true, // Pastikan pagination aktif
+        searching: true,
+        scrollX: true, // Enable horizontal scroll
+        scrollCollapse: true,
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+            infoFiltered: "(difilter dari _MAX_ total data)",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Selanjutnya",
+                previous: "Sebelumnya"
+            },
+            infoPostFix: "",
+            emptyTable: "Tidak ada data",
+            zeroRecords: "Tidak ada data yang cocok"
+        }
+    });
+});
+</script>
+@endpush
