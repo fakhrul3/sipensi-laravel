@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="{{ asset('css/lembaga-inkubator.css') }}">
   <link rel="stylesheet" type="text/css" media="all" href="{{ asset('theme/plugins/slick/slick.css') }}">
   <link rel="stylesheet" type="text/css" media="all" href="{{ asset('theme/plugins/slick/slick-theme.css') }}">
+  <style>
+    /* Styling tambahan agar tampilan foto konsisten */
+    .ink-logo { background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .ink-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .tenant-avatar { width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 1px solid #eee; margin-right: 12px; }
+    .tenant-info { display: flex; align-items: center; text-decoration: none; }
+  </style>
 @endpush
 
 @section('content')
@@ -24,7 +31,6 @@
   $telp     = $inkubator->no_kontak ?? '-';
   $web      = $inkubator->website ?? '';
 
-  // ✅ aman kalau relasi null
   $kec  = optional($inkubator->kecamatan)->name ?? '-';
   $kab  = optional($inkubator->kabupaten)->name ?? '-';
   $prov = optional($inkubator->provinsi)->name ?? ($inkubator->kode_provinsi ?? '-');
@@ -33,9 +39,10 @@
   $instagram = $inkubator->instagram ?? '-';
   $tiktok    = $inkubator->tiktok ?? '-';
 
-  $logoPath = $inkubator->logo ?? $inkubator->logo_inkubator ?? null;
+  // FIX PATH LOGO LEMBAGA (Hapus 'public/' agar bisa diakses lewat symlink storage)
+  $logoPathRaw = $inkubator->logo ?? $inkubator->logo_inkubator ?? null;
+  $cleanLogo = $logoPathRaw ? asset('storage/' . str_replace('public/', '', $logoPathRaw)) : asset('assets/images/brand/default-inkubator.png');
 
-  // buat link website rapi
   $websiteUrl = $web;
   if ($web && !preg_match('~^https?://~i', $web)) $websiteUrl = 'https://' . $web;
 @endphp
@@ -46,17 +53,15 @@
     {{-- KOLOM KIRI --}}
     <div class="col-md-6 col-lg-7 li-col-left">
 
-      
-  <a href="{{ route('lembaga.index') }}" class="btn-li-floating">
-    ← Kembali
-  </a>
+      <a href="{{ route('lembaga.index') }}" class="btn-li-floating">
+        ← Kembali
+      </a>
 
       <div class="card ink-card mb-3">
-        {{-- HEADER TEAL (mirip live) --}}
         <div class="ink-card__top">
           <div class="ink-logo">
             <img
-              src="{{ $logoPath ? \Storage::url($logoPath) : '' }}"
+              src="{{ $cleanLogo }}"
               onerror="this.src='{{ asset('assets/images/brand/default-inkubator.png') }}'"
               alt="Logo Inkubator"
             >
@@ -73,7 +78,6 @@
                     @if(($grade_terakhir->tanggal_habis_sk ?? null) && ($grade_terakhir->tanggal_habis_sk > date('Y-m-d')))
                       <span class="ink-badge ink-badge--grade">{{ $grade_terakhir->grade }}</span>
                     @else
-                      {{-- kalau expired / tanggal habis kosong, lu mau tampilkan apa? --}}
                       <span class="ink-badge ink-badge--warn">{{ $grade_terakhir->grade }} (Expired)</span>
                     @endif
                   @else
@@ -86,7 +90,6 @@
           </div>
         </div>
 
-        {{-- BODY --}}
         <div class="card-body p-0">
           <div class="table-responsive">
             <table class="table table-borderless ink-table mb-0">
@@ -153,7 +156,6 @@
         </div>
       </div>
 
-      {{-- tombol modul (lu boleh keep dulu) --}}
       <div class="d-flex flex-wrap gap-2 mt-3 ink-modal-tabs">
         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalLegalitas">Legalitas</button>
         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalLaporan">Laporan</button>
@@ -191,17 +193,22 @@
           @if(isset($tenant) && $tenant->count() > 0)
             <ul class="tenant-lists" id="tenantList">
             @foreach($tenant as $item)
+                @php
+                  // FIX PATH FOTO PROFIL TENANT (Hapus 'public/')
+                  $pPath = $item->foto_profil;
+                  $cleanTPath = $pPath ? asset('storage/' . str_replace('public/', '', $pPath)) : asset('assets/images/brand/default-tenant.png');
+                @endphp
                 <li class="tenant-item">
                   <a href="{{ route('tenant', $item->id) }}" class="tenant-info">
                     <img
                       class="tenant-avatar"
-                      src="{{ ($item->foto_profil) ? \Storage::url($item->foto_profil) : '' }}"
+                      src="{{ $cleanTPath }}"
                       onerror="this.src='{{ asset('assets/images/brand/default-tenant.png') }}'"
                       alt="Tenant"
                     >
                     <div>
                       <div class="tenant-name">{{ $item->nama_usaha }}</div>
-                      <div class="tenant-addr">{!! $item->alamat ?: '-' !!}</div>
+                      <div class="tenant-addr">{!! strip_tags($item->alamat) ?: '-' !!}</div>
                     </div>
                   </a>
                 </li>
@@ -209,7 +216,7 @@
             </ul>
           @else
             <div class="p-5 text-center">
-              <p class="tenant-empty text-center m-0 py-4" id="tenantEmpty" style="display:none;">
+              <p class="tenant-empty text-center m-0 py-4" id="tenantEmpty">
                 Tidak ada Tenant dari lembaga inkubator.
               </p>
             </div>
@@ -221,7 +228,6 @@
   </div>
 </section>
 
-{{-- ✅ PANGGIL 7 FILE MODAL (sesuai lokasi: resources/views/lembaga-inkubator/public/) --}}
 @include('lembaga-inkubator.public.legalitas')
 @include('lembaga-inkubator.public.laporan')
 @include('lembaga-inkubator.public.sarana-prasarana')
@@ -244,7 +250,6 @@
 
       if (!input || !list) return;
 
-      // Hindari submit kalau user pencet Enter (biar bener-bener live)
       if (form) {
         form.addEventListener('submit', function (e) {
           e.preventDefault();
@@ -252,48 +257,28 @@
       }
 
       const items = Array.from(list.querySelectorAll('.tenant-item'));
-
-      // util: normalisasi biar gampang match
-      const norm = (s) => (s || '')
-        .toString()
-        .toLowerCase()
-        .trim();
+      const norm = (s) => (s || '').toString().toLowerCase().trim();
 
       function applyFilter() {
         const q = norm(input.value);
-
         let shown = 0;
         items.forEach(li => {
           const name = norm(li.querySelector('.tenant-name')?.textContent);
           const addr = norm(li.querySelector('.tenant-addr')?.textContent);
-
           const ok = !q || name.includes(q) || addr.includes(q);
           li.style.display = ok ? '' : 'none';
           if (ok) shown++;
         });
-
         if (empty) empty.style.display = (shown === 0) ? '' : 'none';
       }
 
-      // Live saat ngetik
       input.addEventListener('input', applyFilter);
-
-      // Jika halaman kebuka dengan keyword lama, langsung apply
       applyFilter();
     })();
   </script>
   <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const ids = [
-      'modalLegalitas',
-      'modalLaporan',
-      'modalSaranaPrasarana',
-      'modalSpesialisasi',
-      'modalInkubasi',
-      'modalRencanaStrategis',
-      'modalGaleri'
-    ];
-
+    const ids = ['modalLegalitas','modalLaporan','modalSaranaPrasarana','modalSpesialisasi','modalInkubasi','modalRencanaStrategis','modalGaleri'];
     ids.forEach(function (id) {
       const el = document.getElementById(id);
       if (el && el.parentElement !== document.body) {

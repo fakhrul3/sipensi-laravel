@@ -27,7 +27,7 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
                                     <td align="center" style="padding: 20px 0;">
-                                        <a href="{{ route('user.verify', ['token' => $token, 'username' => $username, 'expired' => $expired]) }}" 
+                                        <a href="{{ route('verify.email', ['username' => $username, 'token' => $token]) }}" 
                                            style="background-color: #2563eb; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 16px;">
                                             Konfirmasi Alamat Email
                                         </a>
@@ -43,7 +43,9 @@
                             
                             <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 0;">
                                 Jika tombol di atas tidak berfungsi, salin dan tempel tautan berikut di browser Anda:<br>
-                                <span style="color: #2563eb; word-break: break-all;">{{ route('user.verify', ['token' => $token, 'username' => $username, 'expired' => $expired]) }}</span>
+                                <span style="color: #2563eb; word-break: break-all;">
+                                    {{ route('verify.email', ['username' => $username, 'token' => $token]) }}
+                                </span>
                             </p>
                         </td>
                     </tr>

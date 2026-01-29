@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -525,36 +526,53 @@ class RoleUserController extends Controller
     {
         try {
             $inkubator = DB::table('inkubator')->where('id', $id)->first();
-
             if (!$inkubator) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data inkubator tidak ditemukan'
-                ], 404);
+                return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
             }
-
-            $user = DB::table('users')->where('id', $inkubator->user_id)->first();
-            if ($user) {
-                DB::table('users')
-                    ->where('id', $inkubator->user_id)
-                    ->update(['is_verify' => 2]);
+    
+            $user = User::find($inkubator->user_id);
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'User terkait tidak ditemukan'], 404);
             }
-
+    
+            // Generate password HANYA sekali
+            if ($user->is_verify != 2) {
+                $plainPassword = Str::random(8);
+                $user->password = Hash::make($plainPassword);
+            } else {
+                $plainPassword = null;
+            }
+    
+            $user->is_verify = 2;
+            $user->save();
+    
+            // Kirim email hanya jika password baru dibuat
+            if (!empty($inkubator->email) && $plainPassword) {
+                Mail::send('emails.inkubator_approved', [
+                    'inkubator' => $inkubator,
+                    'username'  => $user->username,
+                    'password'  => $plainPassword
+                ], function ($message) use ($inkubator) {
+                    $message->to($inkubator->email)
+                            ->subject('✔ Akun SIPENSI Aktif');
+                });
+            }
+    
             cache()->forget('lembaga_inkubator_list');
-
+    
             return response()->json([
                 'success' => true,
-                'message' => 'Inkubator berhasil diverifikasi'
+                'message' => 'Inkubator berhasil di-ACC'
             ]);
         } catch (\Exception $e) {
-            \Log::error('Approve Inkubator Error: ' . $e->getMessage());
+            \Log::error('Approve Error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memverifikasi inkubator: ' . $e->getMessage()
+                'message' => 'Terjadi kesalahan server'
             ], 500);
         }
     }
-
+    
     /**
      * Download sertifikat inkubator (PDF)
      */
