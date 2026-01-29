@@ -37,14 +37,14 @@
   left: 0;
   top: 0;
   height: 100vh;
-  overflow-y: auto;
+  overflow: hidden; /* ✅ penting: scroll jangan di container */
   z-index: 1000;
   transition: transform 0.3s ease;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.03);
 }
 
 .admin-sidebar-header {
-  padding: 25px 20px;
+  padding: 13px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,8 +89,9 @@
 /* ========== SIDEBAR NAVIGATION ========== */
 .admin-sidebar-nav {
   flex: 1;
-  padding: 20px 0;
-  overflow-y: auto;
+  min-height: 0;     /* ✅ penting biar nav bisa scroll dalam flex */
+  padding: 10px 0;
+  overflow-y: auto;  /* ✅ scroll cuma di sini */
 }
 
 .admin-menu {
@@ -100,7 +101,7 @@
 }
 
 .admin-menu-section {
-  padding: 20px 20px 10px;
+  padding: 14px 20px 8px;
 }
 
 .admin-menu-section-title {
@@ -283,6 +284,224 @@
   min-height: 100vh;
 }
 
+    .admin-table-container {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 10px 20px rgba(200, 208, 216, 0.3);
+        padding: 20px;
+    }
+
+    .admin-table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .admin-table-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    .admin-table-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .admin-btn-add {
+        background: linear-gradient(135deg, #6c7ae0 0%, #5a6ad8 100%);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(108, 122, 224, 0.2);
+    }
+
+    .admin-btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 122, 224, 0.3);
+        color: #fff;
+    }
+
+    table.dataTable {
+        width: 100% !important;
+        border-collapse: collapse;
+    }
+
+    table.dataTable thead th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f5 100%);
+        color: #334155;
+        font-weight: 600;
+        padding: 14px;
+        text-align: center;
+        border-bottom: 2px solid rgba(226, 232, 240, 0.6);
+        font-size: 15px;
+    }
+
+    table.dataTable tbody td {
+        padding: 14px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        font-size: 15px;
+        color: #475569;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    table.dataTable tbody tr:hover {
+        background-color: rgba(108, 122, 224, 0.03);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-action-edit {
+        background: linear-gradient(135deg, #6c7ae0 0%, #5a6ad8 100%);
+        color: #fff;
+    }
+
+    .btn-action-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 122, 224, 0.3);
+        color: #fff;
+    }
+
+    .btn-action-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: #fff;
+    }
+
+    .btn-action-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        color: #fff;
+    }
+
+    .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-download:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        color: #fff;
+    }
+
+    .publish-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .publish-badge.published {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #fff;
+    }
+
+    .publish-badge.unpublished {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: #fff;
+    }
+
+    .publish-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        border-radius: 16px 16px 0 0;
+        padding: 20px 25px;
+    }
+
+    .modal-title {
+        font-weight: 700;
+        color: #334155;
+        font-size: 18px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+
+    .form-control:focus {
+        border-color: #6c7ae0;
+        box-shadow: 0 0 0 3px rgba(108, 122, 224, 0.1);
+    }
+
+    .preview-image {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+        margin-top: 10px;
+        object-fit: cover;
+    }
+
 /* ========== HEADER ========== */
 .admin-header {
   background-color: #fff;
@@ -435,4 +654,61 @@
 .admin-sidebar::-webkit-scrollbar-thumb:hover,
 .admin-content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+
+/* ===== USER DROPDOWN (foto 1 style) ===== */
+.admin-user-btn{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.admin-user-btn:hover{
+  background: rgba(0,0,0,.04);
+}
+
+.admin-user-avatar{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #1f9d55; /* hijau avatar */
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 34px;
+}
+
+.admin-user-name{
+  font-weight: 600;
+  color: #1f2a37;
+}
+
+.admin-user-menu{
+  min-width: 260px;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-user-menu-header{
+  padding: 14px 16px;
+  background: #fff;
+}
+
+.admin-user-menu-name{
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.admin-user-menu-role{
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 2px;
 }

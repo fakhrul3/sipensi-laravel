@@ -21,25 +21,41 @@
         </a>
       </li>
 
-      {{-- MANAJEMEN DATA MASTER --}}
+    {{-- MANAJEMEN DATA MASTER --}}
       <li class="admin-menu-section">
         <span class="admin-menu-section-title">MANAJEMEN DATA MASTER</span>
       </li>
+
       <li class="admin-menu-item admin-menu-item--has-dropdown {{ request()->routeIs('role-user.*') ? 'active' : '' }}">
-        <a href="#" class="admin-menu-link admin-menu-link--dropdown {{ request()->routeIs('role-user.*') ? 'active' : '' }}" data-dropdown="role-user">
+        <a href="#"
+          class="admin-menu-link admin-menu-link--dropdown {{ request()->routeIs('role-user.*') ? 'active' : '' }}"
+          data-dropdown="role-user">
           <i class="fas fa-user admin-menu-icon"></i>
           <span class="admin-menu-text">Role User</span>
           <i class="fas fa-chevron-down admin-menu-arrow"></i>
         </a>
+
         <ul class="admin-submenu" id="dropdown-role-user">
+
           <li class="admin-submenu-item">
-            <a href="{{ route('role-user.admin.index') }}" class="admin-submenu-link {{ request()->routeIs('role-user.admin.*') ? 'active' : '' }}">
+            <a href="{{ route('role-user.admin.index') }}"
+              class="admin-submenu-link {{ request()->routeIs('role-user.admin.*') ? 'active' : '' }}">
               <i class="fas fa-chevron-right admin-submenu-icon"></i>
               <span>Admin</span>
             </a>
           </li>
+
+          <li class="admin-submenu-item">
+            <a href="{{ route('role-user.inkubator.index') }}"
+              class="admin-submenu-link {{ request()->routeIs('role-user.inkubator.*') ? 'active' : '' }}">
+              <i class="fas fa-chevron-right admin-submenu-icon"></i>
+              <span>Lembaga Inkubator</span>
+            </a>
+          </li>
+
         </ul>
       </li>
+
       <li class="admin-menu-item admin-menu-item--has-dropdown {{ request()->routeIs('wilayah.*') ? 'active' : '' }}">
         <a href="#" class="admin-menu-link admin-menu-link--dropdown {{ request()->routeIs('wilayah.*') ? 'active' : '' }}" data-dropdown="wilayah">
           <i class="fas fa-map admin-menu-icon"></i>
@@ -142,12 +158,4 @@
       </li>
     </ul>
   </nav>
-
-  {{-- SEARCH BAR --}}
-  <div class="admin-sidebar-search">
-    <div class="admin-search-box">
-      <i class="fas fa-search admin-search-icon"></i>
-      <input type="text" class="admin-search-input" placeholder="Search...">
-    </div>
-  </div>
 </aside>

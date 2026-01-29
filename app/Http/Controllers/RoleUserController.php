@@ -25,6 +25,7 @@ class RoleUserController extends Controller
                 try {
                     return DB::table('users')
                         ->select('id', 'username', 'password', 'is_admin', 'is_verify', 'created_at', 'updated_at')
+                        ->where('is_admin', 1)
                         ->orderBy('id', 'asc')
                         ->get();
                 } catch (\Exception $e) {
@@ -205,6 +206,246 @@ class RoleUserController extends Controller
     }
 
     /**
+     * Menampilkan daftar User Inkubator (Role User)
+     * Route: role-user/inkubator -> name role-user.inkubator.index
+     */
+    public function inkubatorIndex(Request $request)
+    {
+        try {
+            $users = cache()->remember('inkubator_users_list', 10, function () {
+                try {
+                    return DB::table('users')
+                    ->leftJoin('inkubator', 'inkubator.user_id', '=', 'users.id')
+                    ->select(
+                        'users.id',
+                        'users.username',
+                        'users.password',
+                        'users.is_admin',
+                        'users.is_verify',
+                        'users.created_at',
+                        'users.updated_at',
+
+                        // tambahan dari tabel inkubator
+                        'inkubator.no_tanda_daftar',
+                        'inkubator.nama_inkubator',
+                        'inkubator.email as inkubator_email'
+                    )
+                    ->where('users.is_admin', 0)
+                    ->orderBy('users.id', 'asc')
+                    ->get();
+                } catch (\Exception $e) {
+                    \Log::error('Inkubator Users List Error: ' . $e->getMessage());
+                    return collect();
+                }
+            });
+
+            \Log::info('Total inkubator users retrieved: ' . $users->count());
+            return view('role-user.inkubator.index', compact('users'));
+        } catch (\Exception $e) {
+            \Log::error('RoleUser Inkubator Index Error: ' . $e->getMessage());
+            return view('role-user.inkubator.index', ['users' => collect()]);
+        }
+    }
+
+    /**
+     * Store - Create new inkubator user
+     */
+    public function inkubatorStore(Request $request)
+    {
+        try {
+            \Log::info('Inkubator Store Request: ', $request->all());
+
+            $validated = $request->validate([
+                'username' => 'required|string|unique:users,username',
+                'password' => 'required|string|min:6',
+            ]);
+
+            $schema = DB::getSchemaBuilder();
+            $hasIsAdmin = $schema->hasColumn('users', 'is_admin');
+            $hasIsVerify = $schema->hasColumn('users', 'is_verify');
+
+            $userData = [
+                'username' => $validated['username'],
+                'password' => Hash::make($validated['password']),
+            ];
+
+            if ($hasIsAdmin) $userData['is_admin'] = 0;
+            if ($hasIsVerify) $userData['is_verify'] = 1;
+
+            $userId = DB::table('users')->insertGetId($userData);
+
+            cache()->forget('inkubator_users_list');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User inkubator berhasil ditambahkan',
+                'id' => $userId
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Inkubator Validation Error: ', $e->errors());
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Inkubator Store Error: ' . $e->getMessage());
+            \Log::error('Stack Trace: ' . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan user inkubator: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show - Get single inkubator user
+     */
+    public function inkubatorShow($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            if ((int)($user->is_admin ?? 0) === 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User bukan inkubator'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ditemukan'
+            ], 404);
+        }
+    }
+
+    /**
+     * Update - Update inkubator user
+     */
+    public function inkubatorUpdate(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            if ((int)($user->is_admin ?? 0) === 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User bukan inkubator'
+                ], 404);
+            }
+
+            $validated = $request->validate([
+                'username' => 'required|string|unique:users,username,' . $id,
+                'password' => 'nullable|string|min:6',
+            ]);
+
+            $userData = [
+                'username' => $validated['username'],
+            ];
+
+            if (!empty($validated['password'])) {
+                $userData['password'] = Hash::make($validated['password']);
+            }
+
+            $updated = DB::table('users')->where('id', $id)->update($userData);
+
+            cache()->forget('inkubator_users_list');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User inkubator berhasil diupdate',
+                'updated' => $updated
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Inkubator Update Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupdate user inkubator: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Destroy - Delete inkubator user
+     */
+    public function inkubatorDestroy($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            if ((int)($user->is_admin ?? 0) === 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User bukan inkubator'
+                ], 404);
+            }
+
+            if ($user->id == auth()->id()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak dapat menghapus akun yang sedang digunakan'
+                ], 400);
+            }
+
+            $deleted = DB::table('users')->where('id', $id)->delete();
+
+            cache()->forget('inkubator_users_list');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User inkubator berhasil dihapus',
+                'deleted' => $deleted
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Inkubator Destroy Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus user inkubator: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Export Inkubator users data to CSV/XLSX
+     */
+    public function inkubatorExport(Request $request, $format = 'csv')
+    {
+        try {
+            $users = DB::table('users')
+                ->select('id', 'username', 'password', 'is_admin', 'is_verify', 'created_at', 'updated_at')
+                ->where('is_admin', 0)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            $filename = 'inkubator_users_' . date('Y-m-d_His');
+
+            if ($format === 'xlsx') {
+                return Excel::download(new AdminExport($users), $filename . '.xlsx');
+            }
+
+            return Excel::download(new AdminExport($users), $filename . '.csv', \Maatwebsite\Excel\Excel::CSV);
+        } catch (\Exception $e) {
+            \Log::error('Inkubator Export Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Gagal mengekspor data: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
      * Menampilkan daftar Lembaga Inkubator (Role User)
      */
     public function lembagaInkubatorIndex(Request $request)
@@ -335,94 +576,79 @@ class RoleUserController extends Controller
     /**
      * Download sertifikat inkubator (PDF)
      */
-   public function downloadSertifikat($id)
-{
-    try {
-        \Log::info('Download Sertifikat Request - ID: ' . $id);
-
-        $inkubator = DB::table('inkubator')
-            ->join('users', 'users.id', '=', 'inkubator.user_id')
-            ->select('inkubator.*', 'users.is_verify')
-            ->where('inkubator.id', $id)
-            ->first();
-
-        if (!$inkubator) {
-            \Log::warning('Inkubator not found - ID: ' . $id);
-            return redirect()->back()->with('error', 'Data inkubator tidak ditemukan');
-        }
-
-        // Verified hanya kalau 1 atau 2
-        $isVerified = ($inkubator->is_verify == 1 || $inkubator->is_verify == 2);
-        $isLegalComplete = $this->checkLegalComplete($inkubator);
-
-        \Log::info('Verification Status - Verified: ' . ($isVerified ? 'Yes' : 'No') . ', Legal Complete: ' . ($isLegalComplete ? 'Yes' : 'No'));
-
-        if (!$isVerified || !$isLegalComplete) {
-            return redirect()->back()->with('error', 'Sertifikat hanya dapat diunduh jika status terverifikasi dan dokumen legal lengkap');
-        }
-
-        $fileName = 'Sertifikat_SIPENSI-' . str_replace(' ', '_', $inkubator->nama_inkubator ?? 'Inkubator') . '.pdf';
-
-        // Prepare data untuk view
-        $data = [
-            'inkubator' => $inkubator,
-            'no_tanda_daftar' => $inkubator->no_tanda_daftar ?? '-',
-            'nama_inkubator' => $inkubator->nama_inkubator ?? '-',
-            'alamat' => $inkubator->alamat_kantor ?? '-',
-            'tanggal' => $inkubator->created_at ?? now(),
-            'nama_penandatangan' => 'Irwansyah Putra, S.STP., M.Si.',
-            'nip' => '19800814 200003 1001',
-        ];
-
-        // Generate QR Code
+    public function downloadSertifikat($id)
+    {
         try {
-            $qrCodeUrl = route('inkubators.detail', $inkubator->id);
-            $qrCodeBase64 = DNS2D::getBarcodePNG($qrCodeUrl, 'QRCODE');
-            $data['qr_code_base64'] = $qrCodeBase64;
-        } catch (\Exception $e) {
-            \Log::warning('QR Code generation failed: ' . $e->getMessage());
-            $data['qr_code_base64'] = '';
-        }
+            \Log::info('Download Sertifikat Request - ID: ' . $id);
 
-        // Render view dulu biar kalau Blade error, kebaca jelas di log
-        try {
-            $html = view('role-user.lembaga-inkubator.sertifikat', $data)->render();
-            \Log::info('View rendered OK. HTML length: ' . strlen($html));
+            $inkubator = DB::table('inkubator')
+                ->join('users', 'users.id', '=', 'inkubator.user_id')
+                ->select('inkubator.*', 'users.is_verify')
+                ->where('inkubator.id', $id)
+                ->first();
+
+            if (!$inkubator) {
+                \Log::warning('Inkubator not found - ID: ' . $id);
+                return redirect()->back()->with('error', 'Data inkubator tidak ditemukan');
+            }
+
+            $isVerified = ($inkubator->is_verify == 1 || $inkubator->is_verify == 2);
+            $isLegalComplete = $this->checkLegalComplete($inkubator);
+
+            \Log::info('Verification Status - Verified: ' . ($isVerified ? 'Yes' : 'No') . ', Legal Complete: ' . ($isLegalComplete ? 'Yes' : 'No'));
+
+            if (!$isVerified || !$isLegalComplete) {
+                return redirect()->back()->with('error', 'Sertifikat hanya dapat diunduh jika status terverifikasi dan dokumen legal lengkap');
+            }
+
+            $fileName = 'Sertifikat_SIPENSI-' . str_replace(' ', '_', $inkubator->nama_inkubator ?? 'Inkubator') . '.pdf';
+
+            $data = [
+                'inkubator' => $inkubator,
+                'no_tanda_daftar' => $inkubator->no_tanda_daftar ?? '-',
+                'nama_inkubator' => $inkubator->nama_inkubator ?? '-',
+                'alamat' => $inkubator->alamat_kantor ?? '-',
+                'tanggal' => $inkubator->created_at ?? now(),
+                'nama_penandatangan' => 'Irwansyah Putra, S.STP., M.Si.',
+                'nip' => '19800814 200003 1001',
+            ];
+
+            try {
+                $qrCodeUrl = route('inkubators.detail', $inkubator->id);
+                $qrCodeBase64 = DNS2D::getBarcodePNG($qrCodeUrl, 'QRCODE');
+                $data['qr_code_base64'] = $qrCodeBase64;
+            } catch (\Exception $e) {
+                \Log::warning('QR Code generation failed: ' . $e->getMessage());
+                $data['qr_code_base64'] = '';
+            }
+
+            try {
+                $html = view('role-user.lembaga-inkubator.sertifikat', $data)->render();
+                \Log::info('View rendered OK. HTML length: ' . strlen($html));
+            } catch (\Throwable $e) {
+                \Log::error('View render error: ' . $e->getMessage());
+                \Log::error($e->getTraceAsString());
+                return redirect()->back()->with('error', 'Template sertifikat error: ' . $e->getMessage());
+            }
+
+            $pdf = Pdf::loadView('role-user.lembaga-inkubator.sertifikat', $data)
+                ->setPaper('a4', 'landscape')
+                ->setOptions([
+                    'isRemoteEnabled' => true,
+                    'enable-local-file-access' => true,
+                    'chroot' => public_path(),
+                    'isHtml5ParserEnabled' => true,
+                    'defaultFont' => 'Arial',
+                    'isPhpEnabled' => true,
+                ]);
+
+            return $pdf->download($fileName);
         } catch (\Throwable $e) {
-            \Log::error('View render error: ' . $e->getMessage());
+            \Log::error('Download Sertifikat Error: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());
-            return redirect()->back()->with('error', 'Template sertifikat error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengunduh sertifikat: ' . $e->getMessage());
         }
-
-        // Generate PDF (INI YANG FIX)
-        $pdf = Pdf::loadView('role-user.lembaga-inkubator.sertifikat', $data)
-            ->setPaper('a4', 'landscape')
-            ->setOptions([
-                // penting buat load gambar
-                'isRemoteEnabled' => true,
-                'enable-local-file-access' => true,
-
-                // biar file public_path(...) aman kebaca
-                'chroot' => public_path(),
-
-                // parser html5
-                'isHtml5ParserEnabled' => true,
-
-                // font default
-                'defaultFont' => 'Arial',
-                
-                // Enable PHP untuk base64 images
-                'isPhpEnabled' => true,
-            ]);
-
-        return $pdf->download($fileName);
-    } catch (\Throwable $e) {
-        \Log::error('Download Sertifikat Error: ' . $e->getMessage());
-        \Log::error($e->getTraceAsString());
-        return redirect()->back()->with('error', 'Gagal mengunduh sertifikat: ' . $e->getMessage());
     }
-}
-
 
     /**
      * Check apakah semua dokumen legal sudah lengkap
