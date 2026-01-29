@@ -3,36 +3,32 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
   <style>
-    /* Biar gambar nggak numpuk pas loading */
     .slider-for:not(.slick-initialized), .slider-nav:not(.slick-initialized) {
       display: none;
     }
     .slider-for img { 
       width: 100%; 
-      max-height: 450px; 
+      max-height: 400px; 
       object-fit: contain; 
+      border-radius: 12px;
+      background: #f8f9fa;
+    }
+    .slider-nav img {
+      width: 100px;
+      height: 80px;
+      object-fit: cover;
+      cursor: pointer;
+      margin: 5px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    .slider-nav .slick-current img {
+      border-color: #2f8f9d;
     }
     .slick-prev:before, .slick-next:before {
       font-size: 30px;
-      color: #000; /* Atau warna kontras lainnya */
-      opacity: 0.7;
-    }
-    .slider-for {
-        width: 100%;
-        display: block;
-    }
-
-    /* Biar div pembungkus gambar di dalam slick jadi center */
-    .slider-for .slick-slide {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        outline: none;
-    }
-    .slider-for p {
-        margin-top: 10px;
-        font-weight: bold;
+      color: #22466C;
     }
   </style>
 @endpush
@@ -41,69 +37,67 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalSopLabel">Sarana Prasarana</h5>
+        <h5 class="modal-title" id="modalSopLabel">Sarana & Prasarana Lembaga</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         @php
-          $toArr = function ($val) {
-            if (is_array($val)) return $val;
+          // Fungsi Helper buat beresin path dan JSON
+          $getCleanPaths = function ($val) {
             if (is_string($val)) {
               $decoded = json_decode($val, true);
-              return is_array($decoded) ? $decoded : [];
+              $files = is_array($decoded) ? $decoded : [$val];
+            } else {
+              $files = is_array($val) ? $val : [];
             }
-            return [];
+            
+            // Bersihkan 'public/' dari setiap item
+            return array_map(function($path) {
+                return str_replace('public/', '', $path);
+            }, $files);
           };
 
-          $kantorFiles         = $toArr($inkubator->path_kantor ?? []);
-          $ruangUsahaFiles      = $toArr($inkubator->path_ruang_usaha ?? []);
-          $ruangRapatFiles      = $toArr($inkubator->path_ruang_rapat ?? []);
-          $ruangPelatihanFiles  = $toArr($inkubator->path_ruang_pelatihan ?? []);
-          $ruangKomunikasiFiles = $toArr($inkubator->path_ruang_komunikasi ?? []);
-          
-          $totalFiles = count($kantorFiles) + count($ruangUsahaFiles) + count($ruangRapatFiles) + count($ruangPelatihanFiles) + count($ruangKomunikasiFiles);
+          // Ambil semua file dengan path yang sudah bersih
+          $allMedia = [
+            'Gedung / Kantor'  => $getCleanPaths($inkubator->path_kantor ?? []),
+            'Ruang Usaha'      => $getCleanPaths($inkubator->path_ruang_usaha ?? []),
+            'Ruang Rapat'      => $getCleanPaths($inkubator->path_ruang_rapat ?? []),
+            'Ruang Pelatihan'  => $getCleanPaths($inkubator->path_ruang_pelatihan ?? []),
+            'Ruang Komunikasi' => $getCleanPaths($inkubator->path_ruang_komunikasi ?? []),
+          ];
+
+          $hasFiles = false;
+          foreach($allMedia as $files) { if(count($files) > 0) $hasFiles = true; }
         @endphp
 
-        @if($totalFiles > 0)
-          {{-- SLIDER UTAMA --}}
+        @if($hasFiles)
+          {{-- SLIDER UTAMA (Foto Gede) --}}
           <div class="slider-for mb-3">
-            @foreach($kantorFiles as $kantor)
-              <div class="text-center"><img src="{{ \Storage::url($kantor) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'"><p>Gedung</p></div>
-            @endforeach
-            @foreach($ruangUsahaFiles as $ruang_usaha)
-              <div class="text-center"><img src="{{ \Storage::url($ruang_usaha) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'"><p>Ruang Usaha</p></div>
-            @endforeach
-            @foreach($ruangRapatFiles as $ruang_rapat)
-              <div class="text-center"><img src="{{ \Storage::url($ruang_rapat) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'"><p>Ruang Rapat</p></div>
-            @endforeach
-            @foreach($ruangPelatihanFiles as $ruang_pelatihan)
-              <div class="text-center"><img src="{{ \Storage::url($ruang_pelatihan) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'"><p>Ruang Pelatihan</p></div>
-            @endforeach
-            @foreach($ruangKomunikasiFiles as $ruang_komunikasi)
-              <div class="text-center"><img src="{{ \Storage::url($ruang_komunikasi) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'"><p>Ruang Komunikasi</p></div>
+            @foreach($allMedia as $label => $files)
+              @foreach($files as $file)
+                <div class="text-center px-2">
+                  <img src="{{ asset('storage/' . $file) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'">
+                  <p class="mt-2 fw-bold text-primary">{{ $label }}</p>
+                </div>
+              @endforeach
             @endforeach
           </div>
 
-          {{-- SLIDER NAVIGATION --}}
-          <div class="slider-nav text-center mt-5">
-            @foreach($kantorFiles as $kantor)
-              <img src="{{ \Storage::url($kantor) }}" class="p-1" style="width:100px;height:120px;object-fit:contain;" onerror="this.src='{{ asset('theme/images/default.png') }}'">
-            @endforeach
-            @foreach($ruangUsahaFiles as $ruang_usaha)
-              <img src="{{ \Storage::url($ruang_usaha) }}" class="p-1" style="width:100px;height:120px;object-fit:contain;" onerror="this.src='{{ asset('theme/images/default.png') }}'">
-            @endforeach
-            @foreach($ruangRapatFiles as $ruang_rapat)
-              <img src="{{ \Storage::url($ruang_rapat) }}" class="p-1" style="width:100px;height:120px;object-fit:contain;" onerror="this.src='{{ asset('theme/images/default.png') }}'">
-            @endforeach
-            @foreach($ruangPelatihanFiles as $ruang_pelatihan)
-              <img src="{{ \Storage::url($ruang_pelatihan) }}" class="p-1" style="width:100px;height:120px;object-fit:contain;" onerror="this.src='{{ asset('theme/images/default.png') }}'">
-            @endforeach
-            @foreach($ruangKomunikasiFiles as $ruang_komunikasi)
-              <img src="{{ \Storage::url($ruang_komunikasi) }}" class="p-1" style="width:100px;height:120px;object-fit:contain;" onerror="this.src='{{ asset('theme/images/default.png') }}'">
+          {{-- SLIDER NAVIGATION (Thumbnail) --}}
+          <div class="slider-nav mt-4">
+            @foreach($allMedia as $label => $files)
+              @foreach($files as $file)
+                <div class="px-1">
+                  <img src="{{ asset('storage/' . $file) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'">
+                </div>
+              @endforeach
             @endforeach
           </div>
         @else
-          <p class="text-center">Data sarana prasarana belum tersedia.</p>
+          <div class="text-center py-5 text-muted">
+            <i class="fa-regular fa-images d-block mb-3" style="font-size: 3rem;"></i>
+            <p>Data foto sarana prasarana belum tersedia.</p>
+          </div>
         @endif
       </div>
     </div>
@@ -111,7 +105,6 @@
 </div>
 
 @push('scripts')
-  {{-- LOAD JQUERY & SLICK JS DARI CDN --}}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
@@ -120,12 +113,12 @@
       var modalSaranaPrasarana = document.getElementById('modalSaranaPrasarana');
       
       modalSaranaPrasarana.addEventListener('shown.bs.modal', function () {
-        // Slider Utama (Foto Gede)
         $('.slider-for').not('.slick-initialized').slick({
           slidesToShow: 1,
           slidesToScroll: 1,
           arrows: true,
           fade: true,
+          adaptiveHeight: true,
           asNavFor: '.slider-nav'
         });
 
@@ -134,12 +127,15 @@
           slidesToScroll: 1,
           asNavFor: '.slider-for',
           dots: false,
-          arrows : false,
+          arrows: false,
           centerMode: true,
           focusOnSelect: true,
-          autoplay: true
+          responsive: [
+            { breakpoint: 768, settings: { slidesToShow: 3 } }
+          ]
         });
 
+        // Paksa refresh posisi slick agar tidak gepeng
         $('.slider-for').slick('setPosition');
         $('.slider-nav').slick('setPosition');
       });

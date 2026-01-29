@@ -15,22 +15,26 @@
         align-items: center !important;
         outline: none;
         background: #f8f9fa;
-        border-radius: 8px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 15px;
     }
 
     #modalGaleri .slider-for img {
         width: 100%;
-        max-height: 450px;
+        max-height: 400px;
         object-fit: contain;
         margin-bottom: 15px;
+        border-radius: 8px;
     }
 
     #modalGaleri .slider-for p {
-        font-weight: 600;
+        font-weight: 700;
         font-size: 1.1rem;
-        color: #333;
+        color: #22466C;
         margin: 0;
+        padding: 5px 15px;
+        background: rgba(34, 70, 108, 0.05);
+        border-radius: 20px;
     }
 
     /* Thumbnail bawah */
@@ -42,23 +46,24 @@
 
     #modalGaleri .slider-nav img {
         width: 100%;
-        height: 80px;
+        height: 70px;
         object-fit: cover;
-        border-radius: 4px;
-        opacity: 0.5;
+        border-radius: 6px;
+        opacity: 0.6;
         transition: 0.3s;
+        border: 2px solid transparent;
     }
 
     #modalGaleri .slider-nav .slick-current img {
         opacity: 1;
-        border: 2px solid #0d6efd;
+        border: 2px solid #2f8f9d;
     }
 
     /* Arrow Style */
     #modalGaleri .slick-prev:before, 
     #modalGaleri .slick-next:before {
-        color: #000 !important;
-        font-size: 24px;
+        color: #22466C !important;
+        font-size: 28px;
     }
 </style>
 @endpush
@@ -75,7 +80,7 @@
                     // Ambil data aktifitas dari $row (Inkubator)
                     $aktifitas = $row->aktifitas ?? collect();
                     
-                    // Cek apakah ada foto di dalam koleksi aktifitas
+                    // Cek ketersediaan foto
                     $hasFoto = false;
                     foreach ($aktifitas as $act) {
                         $pics = json_decode($act->path_photo, true);
@@ -95,10 +100,16 @@
                     {{-- Slider Utama --}}
                     <div class="slider-for mb-3">
                         @foreach ($aktifitas as $item)
-                            @php $photos = json_decode($item->path_photo, true) ?: []; @endphp
+                            @php 
+                                $photos = json_decode($item->path_photo, true) ?: []; 
+                            @endphp
                             @foreach ($photos as $img)
-                                <div>
-                                    <img src="{{ \Storage::url($img) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'">
+                                @php 
+                                    // FIX PATH: Bersihkan prefix public/
+                                    $cleanImg = str_replace('public/', '', $img);
+                                @endphp
+                                <div class="text-center">
+                                    <img src="{{ asset('storage/' . $cleanImg) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'">
                                     <p>{{ $item->nama_kegiatan ?? 'Kegiatan' }}</p>
                                 </div>
                             @endforeach
@@ -108,10 +119,15 @@
                     {{-- Slider Navigasi --}}
                     <div class="slider-nav mt-3">
                         @foreach ($aktifitas as $item)
-                            @php $photos = json_decode($item->path_photo, true) ?: []; @endphp
+                            @php 
+                                $photos = json_decode($item->path_photo, true) ?: []; 
+                            @endphp
                             @foreach ($photos as $img)
+                                @php 
+                                    $cleanImg = str_replace('public/', '', $img);
+                                @endphp
                                 <div class="thumb-item">
-                                    <img src="{{ \Storage::url($img) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'">
+                                    <img src="{{ asset('storage/' . $cleanImg) }}" onerror="this.src='{{ asset('theme/images/default.png') }}'">
                                 </div>
                             @endforeach
                         @endforeach
@@ -122,49 +138,49 @@
     </div>
 </div>
 
-{{-- JS sudah di-handle di show.blade.php melalui push scripts, 
-     tapi kita butuh inisialisasi Slick saat modal terbuka --}}
 @push('scripts')
 <script>
 $(document).ready(function() {
     const modalGaleri = document.getElementById('modalGaleri');
     
-    modalGaleri.addEventListener('shown.bs.modal', function () {
-        // Init Slider Utama
-        $('#modalGaleri .slider-for').not('.slick-initialized').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: true,
-            fade: true,
-            asNavFor: '#modalGaleri .slider-nav'
+    if (modalGaleri) {
+        modalGaleri.addEventListener('shown.bs.modal', function () {
+            // Init Slider Utama
+            $('#modalGaleri .slider-for').not('.slick-initialized').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: true,
+                fade: true,
+                asNavFor: '#modalGaleri .slider-nav'
+            });
+
+            // Init Slider Navigasi
+            $('#modalGaleri .slider-nav').not('.slick-initialized').slick({
+                slidesToShow: 5,
+                slidesToScroll: 1,
+                asNavFor: '#modalGaleri .slider-for',
+                dots: false,
+                arrows: false,
+                centerMode: true,
+                focusOnSelect: true,
+                responsive: [
+                    { breakpoint: 768, settings: { slidesToShow: 3 } }
+                ]
+            });
+
+            // Force Refresh posisi agar tidak gepeng
+            $('#modalGaleri .slider-for').slick('setPosition');
+            $('#modalGaleri .slider-nav').slick('setPosition');
         });
 
-        // Init Slider Navigasi
-        $('#modalGaleri .slider-nav').not('.slick-initialized').slick({
-            slidesToShow: 5,
-            slidesToScroll: 1,
-            asNavFor: '#modalGaleri .slider-for',
-            dots: false,
-            arrows: false,
-            centerMode: true,
-            focusOnSelect: true,
-            responsive: [
-                { breakpoint: 768, settings: { slidesToShow: 3 } }
-            ]
+        // Hancurkan slick saat ditutup
+        modalGaleri.addEventListener('hidden.bs.modal', function () {
+            if ($('#modalGaleri .slider-for').hasClass('slick-initialized')) {
+                $('#modalGaleri .slider-for').slick('unslick');
+                $('#modalGaleri .slider-nav').slick('unslick');
+            }
         });
-
-        // Refresh posisi
-        $('#modalGaleri .slider-for').slick('setPosition');
-        $('#modalGaleri .slider-nav').slick('setPosition');
-    });
-
-    // Hancurkan slick saat modal ditutup agar tidak berat/error saat dibuka lagi
-    modalGaleri.addEventListener('hidden.bs.modal', function () {
-        if ($('#modalGaleri .slider-for').hasClass('slick-initialized')) {
-            $('#modalGaleri .slider-for').slick('unslick');
-            $('#modalGaleri .slider-nav').slick('unslick');
-        }
-    });
+    }
 });
 </script>
 @endpush
