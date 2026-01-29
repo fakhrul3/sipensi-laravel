@@ -49,23 +49,33 @@
             @endif
           </div>
           <div class="admin-header-right">
-            <div class="admin-user-dropdown">
-              <button class="admin-user-btn" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="admin-user-dropdown dropdown">
+            <button class="admin-user-btn" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="admin-user-avatar">
+                <i class="fas fa-user"></i>
+              </span>
+              <span class="admin-user-name">
                 {{ Auth::user()->username ?? 'User' }}
-                <i class="fas fa-chevron-down ms-2"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                  <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> Logout</button>
-                  </form>
-                </li>
-              </ul>
-            </div>
+              </span>
+              <i class="fas fa-chevron-down ms-2"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end admin-user-menu" aria-labelledby="userDropdown">
+              <li class="admin-user-menu-header">
+                <div class="admin-user-menu-name">{{ Auth::user()->username ?? 'User' }}</div>
+                <div class="admin-user-menu-role">Administrator</div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                  @csrf
+                  <button type="submit" class="dropdown-item">
+                    Logout
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
           </div>
         </div>
       </header>

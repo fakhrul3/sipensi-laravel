@@ -110,7 +110,16 @@ Route::middleware('auth')->group(function () {
         Route::put('/admin/{id}', [RoleUserController::class, 'adminUpdate'])->name('admin.update');
         Route::delete('/admin/{id}', [RoleUserController::class, 'adminDestroy'])->name('admin.destroy');
         Route::get('/admin/export/{format}', [RoleUserController::class, 'adminExport'])->name('admin.export');
+
+        // Inkubator (Role User) - user management (tampilan sama seperti admin)
+        Route::get('/inkubator', [RoleUserController::class, 'inkubatorIndex'])->name('inkubator.index');
+        Route::post('/inkubator', [RoleUserController::class, 'inkubatorStore'])->name('inkubator.store');
+        Route::get('/inkubator/{id}', [RoleUserController::class, 'inkubatorShow'])->name('inkubator.show');
+        Route::put('/inkubator/{id}', [RoleUserController::class, 'inkubatorUpdate'])->name('inkubator.update');
+        Route::delete('/inkubator/{id}', [RoleUserController::class, 'inkubatorDestroy'])->name('inkubator.destroy');
+        Route::get('/inkubator/export/{format}', [RoleUserController::class, 'inkubatorExport'])->name('inkubator.export');
     });
+
     
     // LEMBAGA INKUBATOR (Admin) - menggunakan /admin/lembaga-inkubator untuk menghindari konflik dengan route public
     Route::prefix('admin/lembaga-inkubator')->name('lembaga-inkubator.')->group(function () {
@@ -191,13 +200,12 @@ Route::middleware('auth')->group(function () {
     // MANAJEMEN GAMBAR (Admin)
     Route::prefix('manajemen-gambar')->name('manajemen-gambar.')->group(function () {
         Route::get('/', [ManajemenGambarController::class, 'index'])->name('index');
-        Route::post('/', [ManajemenGambarController::class, 'store'])->name('store');
         Route::get('/{id}', [ManajemenGambarController::class, 'show'])->name('show');
         Route::put('/{id}', [ManajemenGambarController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ManajemenGambarController::class, 'destroy'])->name('destroy');
         Route::post('/toggle-publish/{id}', [ManajemenGambarController::class, 'togglePublish'])->name('toggle-publish');
         Route::get('/download/{id}', [ManajemenGambarController::class, 'download'])->name('download');
     });
+    
     
     // BERITA (Admin)
     Route::prefix('admin/berita')->name('admin.berita.')->group(function () {
