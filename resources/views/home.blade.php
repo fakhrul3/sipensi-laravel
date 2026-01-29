@@ -42,7 +42,7 @@
                      class="hero-logo">
               </div>
               <p class="fs-6 mb-4 text-white reveal d-1">
-                Akses informasi Inkubator dan Usaha Rintisan Indonesia
+                Akses Informasi Inkubator dan Usaha Rintisan Indonesia
               </p>
               <a href="{{ url('/lembaga-inkubator') }}"
                  class="btn btn-selengkapnya reveal d-2">

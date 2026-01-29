@@ -9,7 +9,7 @@ use App\Http\Controllers\TentangController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\LembagaInkubatorController;
 use App\Http\Controllers\Auth\NewVerifyController;
-use App\Http\Controllers\TenantController; // ✅ tambah ini
+use App\Http\Controllers\TenantController; 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleUserController;
 use App\Http\Controllers\WilayahController;
@@ -20,14 +20,25 @@ use App\Http\Controllers\PersetujuanController;
 use App\Http\Controllers\PemeringkatanController;
 use App\Http\Controllers\ManajemenGambarController;
 
-
-// Halaman tunggu/resend setelah register
-Route::get('/verify-resend/{username}', [AuthController::class, 'showResendPage'])->name('resend.verify');
-Route::get('/verify-resend-mail/{username}', [AuthController::class, 'resendEmail'])->name('resend.mail');
-Route::get('/verify-email/{token}/{username}/{expired}', [NewVerifyController::class, 'verify'])->name('user.verify');
 /*
 |--------------------------------------------------------------------------
-| ROUTE UTAMA
+| VERIFIKASI & AUTH FLOW
+|--------------------------------------------------------------------------
+*/
+
+// ✅ UTAMA: Route ini yang dipanggil dari tombol email baru. 
+// Pastiin nembak AuthController biar email ke admin terkirim.
+Route::get('/verify-email/{username}/{token}', [AuthController::class, 'verifyEmail'])->name('verify.email');
+
+Route::get('/verify-resend/{username}', [AuthController::class, 'showResendPage'])->name('resend.verify');
+Route::get('/verify-resend-mail/{username}', [AuthController::class, 'resendEmail'])->name('resend.mail');
+
+// Route lama (Biarin aja biar nggak error kalau ada link lama yang masih nyangkut)
+Route::get('/verify-email/{token}/{username}/{expired}', [NewVerifyController::class, 'verify'])->name('user.verify');
+
+/*
+|--------------------------------------------------------------------------
+| ROUTE UTAMA & INFORMASI
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -35,75 +46,51 @@ Route::get('/api/berita', [HomeController::class, 'getBerita'])->name('api.berit
 Route::get('/api/galeri', [HomeController::class, 'getGaleri'])->name('api.galeri');
 Route::get('/api/sebaran-inkubator', [HomeController::class, 'getSebaranInkubator'])->name('api.sebaran-inkubator');
 
-/*
-|--------------------------------------------------------------------------
-| INFORMASI
-|--------------------------------------------------------------------------
-*/
 Route::get('/tentang', [TentangController::class, 'index'])->name('tentang');
-
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
 
-/*
-|--------------------------------------------------------------------------
-| BERITA
-|--------------------------------------------------------------------------
-*/
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
 Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.detail');
-
-/*
-|--------------------------------------------------------------------------
-| LAINNYA
-|--------------------------------------------------------------------------
-*/
 Route::get('/mitra-kolaborator', [MitraController::class, 'index'])->name('mitra.index');
 
-// LIST INKUBATOR
-// Route public lembaga-inkubator (harus sebelum route protected dengan prefix yang sama)
-Route::get('/lembaga-inkubator', [LembagaInkubatorController::class, 'index'])->name('lembaga.index');
-
-// DETAIL INKUBATOR
-Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'])->name('lembaga.show');
 /*
 |--------------------------------------------------------------------------
-| AUTH & REGISTER ROUTES
+| LEMBAGA & TENANT PUBLIC
 |--------------------------------------------------------------------------
 */
-
-// ✅ TAMBAHAN: search tenant di halaman detail inkubator (dipakai di show.blade.php versi live)
-Route::get('/lembaga-inkubator/{id}/cari-tenant', [LembagaInkubatorController::class, 'cariTenantDetail'])
-    ->name('inkubators.cari-tenant.detail');
-
-// ✅ TAMBAHAN: detail tenant (dipakai di list tenant)
+Route::get('/lembaga-inkubator', [LembagaInkubatorController::class, 'index'])->name('lembaga.index');
+Route::get('/lembaga-inkubator/{id}', [LembagaInkubatorController::class, 'show'])->name('lembaga.show');
+Route::get('/lembaga-inkubator/{id}/cari-tenant', [LembagaInkubatorController::class, 'cariTenantDetail'])->name('inkubators.cari-tenant.detail');
 Route::get('/tenant/{id}', [TenantController::class, 'show'])->name('tenant');
 
-// AUTH
+/*
+|--------------------------------------------------------------------------
+| AUTH GROUP
+|--------------------------------------------------------------------------
+*/
 Route::controller(AuthController::class)->group(function () {
-    // Auth
     Route::get('/login', 'showLogin')->name('login');
     Route::post('/login', 'login')->name('login.post');
     Route::get('/forgot-password', 'showForgotPassword')->name('forgot-password');
     Route::post('/logout', 'logout')->name('logout');
-
-    // Register
     Route::get('/register', 'showRegister')->name('register');
     Route::post('/register', 'register')->name('register.post');
-
-    // AJAX Wilayah - Pastikan NAME route ini diingat untuk dipakai di View
     Route::get('/get-kabupaten/{provinsi_id}', 'getKabupaten')->name('get.kabupaten');
 });
 
-// DASHBOARD (Protected)
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD PROTECTED (MIDDLEWARE AUTH)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/top-inkubator', [DashboardController::class, 'getTopInkubator'])->name('dashboard.top-inkubator');
     Route::get('/dashboard/top-tenant', [DashboardController::class, 'getTopTenant'])->name('dashboard.top-tenant');
     
-    // ROLE USER
+    // ADMIN - ROLE USER
     Route::prefix('role-user')->name('role-user.')->group(function () {
-        // Admin CRUD
         Route::get('/admin', [RoleUserController::class, 'adminIndex'])->name('admin.index');
         Route::post('/admin', [RoleUserController::class, 'adminStore'])->name('admin.store');
         Route::get('/admin/{id}', [RoleUserController::class, 'adminShow'])->name('admin.show');
@@ -112,7 +99,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/export/{format}', [RoleUserController::class, 'adminExport'])->name('admin.export');
     });
     
-    // LEMBAGA INKUBATOR (Admin) - menggunakan /admin/lembaga-inkubator untuk menghindari konflik dengan route public
+    // ADMIN - LEMBAGA INKUBATOR
     Route::prefix('admin/lembaga-inkubator')->name('lembaga-inkubator.')->group(function () {
         Route::get('/', [RoleUserController::class, 'lembagaInkubatorIndex'])->name('index');
         Route::get('/export/{format}', [RoleUserController::class, 'lembagaInkubatorExport'])->name('export');
@@ -122,14 +109,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [RoleUserController::class, 'lembagaInkubatorDestroy'])->name('destroy');
     });
     
-    // LAPORAN (Admin)
+    // ADMIN - LAPORAN
     Route::prefix('laporan')->name('laporan.')->group(function () {
         Route::get('/', [LaporanController::class, 'index'])->name('index');
         Route::get('/download-laporan/{id}', [LaporanController::class, 'downloadLaporan'])->name('download-laporan');
         Route::get('/download-lampiran/{id}', [LaporanController::class, 'downloadLampiran'])->name('download-lampiran');
     });
     
-    // PERSETUJUAN (Admin)
+    // ADMIN - PERSETUJUAN
     Route::prefix('persetujuan')->name('persetujuan.')->group(function () {
         Route::get('/', [PersetujuanController::class, 'index'])->name('index');
         Route::get('/{id}', [PersetujuanController::class, 'show'])->name('show');
@@ -137,7 +124,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/reject/{id}', [PersetujuanController::class, 'reject'])->name('reject');
     });
     
-    // PEMERINGKATAN (Admin)
+    // ADMIN - PEMERINGKATAN
     Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
         Route::get('/', [PemeringkatanController::class, 'index'])->name('index');
         Route::get('/{id}', [PemeringkatanController::class, 'show'])->name('show');
@@ -146,23 +133,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/download-file/{id}/{type}', [PemeringkatanController::class, 'downloadFile'])->name('download-file');
     });
     
-    // WILAYAH (Admin)
+    // ADMIN - MASTER WILAYAH
     Route::prefix('wilayah')->name('wilayah.')->group(function () {
-        // Provinsi CRUD
         Route::get('/provinsi', [WilayahController::class, 'provinsiIndex'])->name('provinsi.index');
         Route::post('/provinsi', [WilayahController::class, 'provinsiStore'])->name('provinsi.store');
         Route::get('/provinsi/{id}', [WilayahController::class, 'provinsiShow'])->name('provinsi.show');
         Route::put('/provinsi/{id}', [WilayahController::class, 'provinsiUpdate'])->name('provinsi.update');
         Route::delete('/provinsi/{id}', [WilayahController::class, 'provinsiDestroy'])->name('provinsi.destroy');
         
-        // Kabupaten CRUD
         Route::get('/kabupaten', [WilayahController::class, 'kabupatenIndex'])->name('kabupaten.index');
         Route::post('/kabupaten', [WilayahController::class, 'kabupatenStore'])->name('kabupaten.store');
         Route::get('/kabupaten/{id}', [WilayahController::class, 'kabupatenShow'])->name('kabupaten.show');
         Route::put('/kabupaten/{id}', [WilayahController::class, 'kabupatenUpdate'])->name('kabupaten.update');
         Route::delete('/kabupaten/{id}', [WilayahController::class, 'kabupatenDestroy'])->name('kabupaten.destroy');
         
-        // Kecamatan CRUD
         Route::get('/kecamatan', [WilayahController::class, 'kecamatanIndex'])->name('kecamatan.index');
         Route::post('/kecamatan', [WilayahController::class, 'kecamatanStore'])->name('kecamatan.store');
         Route::get('/kecamatan/{id}', [WilayahController::class, 'kecamatanShow'])->name('kecamatan.show');
@@ -170,7 +154,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/kecamatan/{id}', [WilayahController::class, 'kecamatanDestroy'])->name('kecamatan.destroy');
     });
     
-    // BIDANG USAHA TENANT (Admin)
+    // ADMIN - BIDANG USAHA
     Route::prefix('bidang-usaha')->name('bidang-usaha.')->group(function () {
         Route::get('/', [BidangUsahaController::class, 'index'])->name('index');
         Route::post('/', [BidangUsahaController::class, 'store'])->name('store');
@@ -179,7 +163,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [BidangUsahaController::class, 'destroy'])->name('destroy');
     });
     
-    // KLASIFIKASI BISNIS TENANT (Admin)
+    // ADMIN - KLASIFIKASI BISNIS
     Route::prefix('klasifikasi-bisnis')->name('klasifikasi-bisnis.')->group(function () {
         Route::get('/', [KlasifikasiBisnisController::class, 'index'])->name('index');
         Route::post('/', [KlasifikasiBisnisController::class, 'store'])->name('store');
@@ -188,7 +172,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [KlasifikasiBisnisController::class, 'destroy'])->name('destroy');
     });
     
-    // MANAJEMEN GAMBAR (Admin)
+    // ADMIN - MANAJEMEN GAMBAR
     Route::prefix('manajemen-gambar')->name('manajemen-gambar.')->group(function () {
         Route::get('/', [ManajemenGambarController::class, 'index'])->name('index');
         Route::post('/', [ManajemenGambarController::class, 'store'])->name('store');
@@ -199,7 +183,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{id}', [ManajemenGambarController::class, 'download'])->name('download');
     });
     
-    // BERITA (Admin)
+    // ADMIN - BERITA
     Route::prefix('admin/berita')->name('admin.berita.')->group(function () {
         Route::get('/', [BeritaController::class, 'adminIndex'])->name('index');
         Route::post('/', [BeritaController::class, 'store'])->name('store');
@@ -211,7 +195,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/toggle-highlight/{id}', [BeritaController::class, 'toggleHighlight'])->name('toggle-highlight');
     });
     
-    // KONTAK KAMI (Admin)
+    // ADMIN - KONTAK
     Route::prefix('admin/kontak')->name('admin.kontak.')->group(function () {
         Route::get('/', [KontakController::class, 'adminIndex'])->name('index');
         Route::get('/{id}', [KontakController::class, 'adminShow'])->name('show');
